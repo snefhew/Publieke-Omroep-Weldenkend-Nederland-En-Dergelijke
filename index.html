@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PowNed Redactie Agent — een AI-powered concept voor de PowNed redactie. HvA Smart Media Production · Blok 4 Growth Hacking.">
+<title>PowNed Redactie Agent — Concept Demo</title>
+<link rel="icon" type="image/png" href="assets/powned-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --pow-magenta:#e2148b;
+  --pow-purple:#9c2d8f;
+  --pow-gradient:linear-gradient(135deg,#9c2d8f,#e2148b);
+  --pow-gradient-h:linear-gradient(90deg,#e2148b,#9c2d8f);
+  --pow-black:#000000;
+  --pow-dark:#0a0a0a;
+  --pow-darker:#050505;
+  --pow-gray:#363636;
+  --pow-light-gray:#aaaaaa;
+  --pow-white:#f2f2f1;
+  --pow-border:rgba(255,255,255,.08);
+  --pow-border-strong:rgba(255,255,255,.16);
+  --font-display:'Space Grotesk',system-ui,sans-serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto;background:var(--pow-dark)}
+body{
+  font-family:var(--font-body);
+  background:var(--pow-dark);
+  color:var(--pow-white);
+  line-height:1.5;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+body::selection,*::selection{background:var(--pow-magenta);color:#fff}
+
+/* ============ SCROLL PROGRESS ============ */
+.scroll-progress{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:var(--pow-gradient-h);
+  z-index:1000;will-change:width;
+  box-shadow:0 0 10px rgba(226,20,139,.6);
+}
+
+/* ============ TOP NAV ============ */
+.topnav{
+  position:fixed;top:0;left:0;right:0;height:48px;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--pow-border);
+  z-index:900;display:flex;align-items:center;
+  padding:0 24px;
+}
+.topnav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;max-width:1600px;margin:0 auto;
+}
+.nav-dots{display:flex;gap:6px;align-items:center}
+.nav-item{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 12px;border-radius:0;cursor:pointer;
+  font-family:var(--font-display);font-size:11px;letter-spacing:.12em;
+  font-weight:500;color:var(--pow-light-gray);
+  background:transparent;border:none;text-transform:uppercase;
+  transition:color .25s ease;position:relative;
+}
+.nav-item:hover{color:var(--pow-white)}
+.nav-item .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--pow-light-gray);transition:all .25s ease;
+}
+.nav-item.active{color:var(--pow-white)}
+.nav-item.active .dot{
+  background:var(--pow-magenta);
+  box-shadow:0 0 8px var(--pow-magenta);
+}
+.nav-item.active::after{
+  content:'';position:absolute;left:12px;right:12px;bottom:2px;height:1px;
+  background:var(--pow-gradient-h);
+}
+.nav-logo{
+  font-family:var(--font-display);font-weight:700;font-size:18px;
+  letter-spacing:-.02em;
+  background:var(--pow-gradient);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;cursor:pointer;
+}
+
+/* ============ COMMON SECTION HEADING ============ */
+.sec-eyebrow{
+  font-family:var(--font-display);font-size:11px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--pow-magenta);margin-bottom:12px;
+  display:inline-block;
+}
+.sec-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(2rem,5vw,4rem);letter-spacing:-.02em;
+  line-height:1.05;margin-bottom:20px;
+  position:relative;display:inline-block;
+}
+.sec-title::after{
+  content:'';position:absolute;left:0;bottom:-10px;width:0%;height:3px;
+  background:var(--pow-gradient-h);transition:width 1s cubic-bezier(.2,.8,.2,1);
+}
+.sec-title.in-view::after{width:60%}
+.sec-sub{
+  font-family:var(--font-body);color:var(--pow-light-gray);
+  font-size:15px;max-width:640px;margin-top:24px;
+}
+
+/* ============ SECTION 1: DEBRIEF (PINNED) ============ */
+#debrief{
+  position:relative;height:400vh;background:var(--pow-darker);
+}
+.debrief-pin{
+  position:relative;height:100vh;width:100%;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.debrief-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(156,45,143,.18),transparent 50%),
+    radial-gradient(circle at 80% 70%,rgba(226,20,139,.14),transparent 50%);
+  pointer-events:none;
+}
+.debrief-bg::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(circle at center,black 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(circle at center,black 30%,transparent 80%);
+}
+.debrief-phase{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;text-align:center;padding:0 32px;opacity:0;
+  will-change:transform,opacity;
+}
+.debrief-phase.p1 .pow-mega{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(8rem,22vw,18rem);
+  letter-spacing:-.06em;line-height:.85;
+  background:var(--pow-gradient);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:32px;
+}
+.debrief-phase.p1 .pow-fullname{
+  font-family:var(--font-display);letter-spacing:.4em;font-weight:600;
+  font-size:clamp(.7rem,1.2vw,1rem);text-transform:uppercase;color:var(--pow-white);
+  margin-bottom:24px;
+}
+.pow-fullname .ltr{display:inline-block;opacity:0;transform:translateY(8px)}
+.debrief-phase.p1 .pow-tag{
+  font-family:var(--font-body);font-size:14px;color:var(--pow-light-gray);
+  letter-spacing:.05em;
+}
+
+/* phase 2 quote + pains */
+.debrief-phase.p2{padding:0 8vw}
+.bigquote{
+  font-family:var(--font-display);font-weight:600;
+  font-size:clamp(1.6rem,3.2vw,3rem);line-height:1.15;
+  letter-spacing:-.015em;max-width:1100px;margin:0 auto 56px;
+  color:var(--pow-white);
+}
+.bigquote .qword{display:inline-block;opacity:0;transform:translateY(20px) rotateX(40deg);
+  transform-origin:bottom;margin-right:.25em;will-change:transform,opacity;}
+.bigquote .qmark{
+  background:var(--pow-gradient);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.pains{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.pain{
+  background:rgba(255,255,255,.03);border:1px solid var(--pow-border);
+  padding:18px 24px;min-width:240px;
+  font-family:var(--font-display);font-size:14px;font-weight:500;
+  color:var(--pow-white);opacity:0;transform:translateY(30px);
+  border-left:3px solid var(--pow-magenta);
+}
+
+/* phase 3 JTBD */
+.debrief-phase.p3{padding:0 8vw}
+.jtbd-label{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.03em;
+  background:var(--pow-gradient);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:32px;
+}
+.jtbd-text{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(1.1rem,2vw,1.7rem);line-height:1.4;
+  max-width:1000px;color:var(--pow-white);
+}
+.jtbd-text .jword{display:inline-block;opacity:0;transform:translateY(12px);margin-right:.22em}
+
+/* phase 4 columns */
+.debrief-phase.p4{padding:0 6vw;align-items:flex-start;justify-content:center;flex-direction:column}
+.cols-title{
+  font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--pow-light-gray);margin-bottom:32px;text-align:center;width:100%;
+}
+.cols{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;width:100%;max-width:1300px;margin:0 auto;
+}
+.col-card{
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--pow-border);
+  border-left:3px solid var(--pow-magenta);
+  padding:28px 28px;opacity:0;transform:translateY(60px);
+  will-change:transform,opacity;
+}
+.col-card h4{
+  font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--pow-magenta);margin-bottom:14px;
+}
+.col-card p{
+  font-family:var(--font-body);font-size:15px;line-height:1.55;color:var(--pow-white);
+}
+
+/* ============ SECTION 2: HC AI CANVAS ============ */
+#canvas{padding:120px 32px 100px;background:var(--pow-dark);position:relative}
+.canvas-head{max-width:1300px;margin:0 auto 56px;text-align:left}
+.hcai-grid{
+  max-width:1300px;margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:auto auto auto;
+  gap:14px;
+}
+/* Top row: 4 boxes */
+.cb{
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--pow-border);
+  padding:20px;cursor:pointer;
+  transition:transform .3s ease,border-color .3s ease,background .3s ease;
+  position:relative;overflow:hidden;
+  min-height:140px;display:flex;flex-direction:column;
+  opacity:0;transform:translateY(20px);
+}
+.cb::before{
+  content:'';position:absolute;inset:0;padding:1px;
+  background:var(--pow-gradient-h);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .3s ease;pointer-events:none;
+}
+.cb:hover::before{opacity:1}
+.cb:hover{
+  transform:translateY(-3px);
+  background:rgba(255,255,255,.04);
+  box-shadow:0 8px 30px rgba(226,20,139,.15);
+}
+.cb-tag{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.25em;
+  color:var(--pow-magenta);text-transform:uppercase;font-weight:600;margin-bottom:10px;
+}
+.cb-title{
+  font-family:var(--font-display);font-weight:700;font-size:18px;line-height:1.2;
+  color:var(--pow-white);margin-bottom:10px;letter-spacing:-.01em;
+}
+.cb-preview{
+  font-family:var(--font-body);font-size:13px;line-height:1.45;color:var(--pow-light-gray);
+  display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+/* Specific positions */
+.cb.b1{grid-column:1;grid-row:1}
+.cb.b2{grid-column:2;grid-row:1}
+.cb.b3{grid-column:3;grid-row:1}
+.cb.b4{grid-column:4;grid-row:1}
+.cb.b5{grid-column:1;grid-row:2}
+.cb.b6{grid-column:2;grid-row:2}
+.cb.b7{grid-column:3 / span 2;grid-row:2;background:rgba(226,20,139,.06);border-color:rgba(226,20,139,.3)}
+.cb.b8{grid-column:1;grid-row:3}
+.cb.b9{grid-column:2 / span 2;grid-row:3}
+.cb.b10{grid-column:4;grid-row:3}
+.cb.b7 .cb-tag{color:var(--pow-magenta)}
+.cb.b7 .cb-title{
+  background:var(--pow-gradient);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.canvas-hint{
+  text-align:center;font-family:var(--font-display);font-size:11px;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--pow-light-gray);margin-top:32px;
+}
+.canvas-hint span{color:var(--pow-magenta)}
+
+/* Modal expanded card */
+.cb-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;z-index:950;padding:32px;
+  opacity:0;
+}
+.cb-modal.open{display:flex}
+.cb-modal-inner{
+  max-width:680px;width:100%;background:var(--pow-darker);
+  border:1px solid var(--pow-border-strong);border-left:4px solid var(--pow-magenta);
+  padding:40px;position:relative;
+  transform:translateY(20px);
+}
+.cb-modal-tag{
+  font-family:var(--font-display);font-size:11px;letter-spacing:.25em;
+  color:var(--pow-magenta);text-transform:uppercase;font-weight:600;margin-bottom:12px;
+}
+.cb-modal-title{
+  font-family:var(--font-display);font-weight:700;font-size:28px;
+  margin-bottom:20px;letter-spacing:-.01em;
+}
+.cb-modal-body{
+  font-family:var(--font-body);font-size:15px;line-height:1.65;color:var(--pow-white);
+  white-space:pre-line;
+}
+.cb-modal-close{
+  position:absolute;top:16px;right:16px;width:32px;height:32px;
+  border:1px solid var(--pow-border);background:transparent;color:var(--pow-white);
+  cursor:pointer;font-family:var(--font-display);font-size:14px;
+}
+.cb-modal-close:hover{border-color:var(--pow-magenta);color:var(--pow-magenta)}
+
+/* ============ SECTION 3: PIPELINE (HORIZONTAL) ============ */
+#pipeline{
+  position:relative;background:var(--pow-darker);overflow:hidden;
+}
+.ph-head{
+  padding:120px 32px 40px;max-width:1300px;margin:0 auto;
+}
+.ph-track{
+  position:relative;height:100vh;width:100%;display:flex;align-items:center;
+  overflow:hidden;
+}
+.ph-flex{
+  display:flex;align-items:center;height:80vh;padding:0 8vw;gap:8vw;will-change:transform;
+}
+.ph-step{
+  flex-shrink:0;width:80vw;max-width:1100px;height:100%;
+  display:flex;flex-direction:column;justify-content:center;position:relative;
+  padding:32px;border:1px solid var(--pow-border);background:rgba(255,255,255,.02);
+}
+.ph-step-num{
+  font-family:var(--font-display);font-weight:700;font-size:90px;
+  letter-spacing:-.04em;line-height:1;
+  background:var(--pow-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+  position:absolute;top:24px;right:32px;opacity:.4;
+}
+.ph-step-tag{
+  font-family:var(--font-display);font-size:11px;letter-spacing:.3em;
+  color:var(--pow-magenta);text-transform:uppercase;font-weight:600;margin-bottom:8px;
+}
+.ph-step-title{
+  font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,4vw,3rem);
+  letter-spacing:-.02em;line-height:1;margin-bottom:24px;
+}
+.ph-step-desc{
+  font-family:var(--font-body);color:var(--pow-light-gray);font-size:15px;
+  max-width:520px;margin-bottom:32px;
+}
+/* Step 1: source grid */
+.src-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:720px}
+.src-card{
+  background:rgba(0,0,0,.3);border:1px solid var(--pow-border);
+  padding:18px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;
+  font-family:var(--font-display);font-weight:600;font-size:12px;
+  transition:all .3s ease;
+}
+.src-card .icon{font-size:24px}
+.src-card:hover{border-color:var(--pow-magenta);transform:translateY(-2px)}
+
+/* Step 2: data rain */
+.rain{
+  position:relative;height:280px;max-width:720px;
+  background:rgba(0,0,0,.4);border:1px solid var(--pow-border);overflow:hidden;
+}
+.rain-col{
+  position:absolute;top:-100%;font-family:'Courier New',monospace;font-size:11px;
+  color:var(--pow-magenta);writing-mode:vertical-rl;text-orientation:mixed;
+  white-space:nowrap;line-height:1;letter-spacing:.05em;
+  animation:rainfall linear infinite;opacity:.6;
+}
+@keyframes rainfall{
+  0%{top:-100%}
+  100%{top:200%}
+}
+.rain-labels{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;pointer-events:none;
+}
+.rain-counter{
+  font-family:var(--font-display);font-weight:700;font-size:48px;letter-spacing:-.02em;
+  background:var(--pow-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.rain-counter-label{font-family:var(--font-display);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--pow-white)}
+.rain-tags{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+.rain-tags span{
+  font-family:var(--font-display);font-size:10px;padding:4px 10px;letter-spacing:.15em;
+  background:rgba(0,0,0,.6);border:1px solid var(--pow-border-strong);text-transform:uppercase;
+}
+
+/* Step 3: funnel */
+.funnel-wrap{display:flex;align-items:center;gap:32px;max-width:720px}
+.funnel{
+  width:280px;height:240px;position:relative;
+}
+.funnel svg{width:100%;height:100%}
+.funnel-stats{display:flex;flex-direction:column;gap:14px}
+.funnel-stat{
+  font-family:var(--font-display);font-size:13px;color:var(--pow-light-gray);
+  display:flex;align-items:center;gap:10px;
+}
+.funnel-stat::before{content:'';width:8px;height:8px;background:var(--pow-magenta);display:inline-block}
+.funnel-in,.funnel-out{
+  position:absolute;font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;
+}
+.funnel-in{top:8px;left:50%;transform:translateX(-50%);font-size:32px;color:var(--pow-white)}
+.funnel-out{
+  bottom:0px;left:50%;transform:translateX(-50%);font-size:42px;
+  background:var(--pow-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* Step 4: ranking */
+.rank-list{display:flex;flex-direction:column;gap:10px;max-width:720px}
+.rank-item{
+  display:flex;align-items:center;gap:16px;
+  background:rgba(0,0,0,.3);border:1px solid var(--pow-border);
+  padding:14px 18px;border-left:3px solid var(--pow-magenta);
+  font-family:var(--font-body);font-size:14px;
+  transition:transform .3s ease;
+}
+.rank-item:hover{transform:translateX(6px);border-left-color:var(--pow-white)}
+.rank-num{
+  font-family:var(--font-display);font-weight:700;font-size:18px;
+  color:var(--pow-light-gray);min-width:24px;
+}
+.rank-title{flex:1;color:var(--pow-white)}
+.rank-score{
+  font-family:var(--font-display);font-weight:700;font-size:14px;
+  background:var(--pow-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+  letter-spacing:.05em;
+}
+
+/* Step 5: output */
+.out-wrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap;max-width:720px}
+.out-mini{
+  width:280px;height:180px;background:rgba(0,0,0,.4);
+  border:1px solid var(--pow-border-strong);
+  display:flex;flex-direction:column;
+}
+.out-mini-bar{
+  height:18px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--pow-border);
+  display:flex;align-items:center;padding:0 8px;gap:5px;
+}
+.out-mini-bar span{width:6px;height:6px;border-radius:50%;background:var(--pow-gray)}
+.out-mini-content{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.out-mini-row{
+  height:14px;background:rgba(255,255,255,.04);
+  position:relative;
+}
+.out-mini-row::before{
+  content:'';position:absolute;left:0;top:0;height:100%;
+  background:var(--pow-magenta);width:30%;
+}
+.out-info{flex:1;min-width:240px;display:flex;flex-direction:column;gap:14px}
+.out-info-row{
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--font-display);font-size:14px;
+}
+.out-info-row .ic{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  background:rgba(226,20,139,.12);border:1px solid var(--pow-magenta);font-size:18px;
+}
+.push-mock{
+  background:rgba(0,0,0,.5);border:1px solid var(--pow-border-strong);
+  padding:12px 14px;font-family:var(--font-body);font-size:13px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.push-mock-app{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.2em;color:var(--pow-magenta);
+  text-transform:uppercase;
+}
+.push-mock-msg{color:var(--pow-white)}
+
+/* connecting dashed lines */
+.ph-connector{
+  flex-shrink:0;width:8vw;display:flex;align-items:center;justify-content:center;height:80vh;
+}
+.ph-connector svg{width:100%;height:6px;overflow:visible}
+.ph-connector path{
+  stroke:url(#dashGrad);stroke-width:2;fill:none;
+  stroke-dasharray:8 8;
+  animation:dashflow 1s linear infinite;
+}
+@keyframes dashflow{
+  to{stroke-dashoffset:-16}
+}
+
+/* ============ SECTION 4: FEED ============ */
+#feed{padding:120px 32px 120px;background:var(--pow-dark)}
+.feed-head{max-width:1300px;margin:0 auto 40px}
+.browser-window{
+  max-width:1300px;margin:0 auto;
+  background:var(--pow-darker);border:1px solid var(--pow-border-strong);
+  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 60px rgba(226,20,139,.08);
+}
+.browser-chrome{
+  height:40px;background:#1a1a1a;border-bottom:1px solid var(--pow-border);
+  display:flex;align-items:center;padding:0 16px;gap:12px;
+}
+.browser-dots{display:flex;gap:6px}
+.browser-dots span{width:11px;height:11px;border-radius:50%;background:#444}
+.browser-dots span:nth-child(1){background:#ff5f57}
+.browser-dots span:nth-child(2){background:#ffbd2e}
+.browser-dots span:nth-child(3){background:#28ca42}
+.browser-url{
+  flex:1;background:#0a0a0a;border:1px solid var(--pow-border);
+  padding:6px 12px;font-family:'Courier New',monospace;font-size:12px;
+  color:var(--pow-light-gray);max-width:420px;
+}
+.browser-url::before{content:'🔒 ';opacity:.6}
+.browser-body{display:flex;min-height:680px}
+.feed-sidebar{
+  width:240px;border-right:1px solid var(--pow-border);
+  padding:24px 20px;display:flex;flex-direction:column;gap:24px;
+  background:rgba(0,0,0,.3);
+}
+.filter-group{display:flex;flex-direction:column;gap:8px}
+.filter-label{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--pow-light-gray);font-weight:600;
+}
+.filter-select{
+  background:#000;border:1px solid var(--pow-border);
+  padding:8px 10px;color:var(--pow-white);font-family:var(--font-body);font-size:13px;
+  cursor:pointer;
+}
+.filter-select:focus{outline:none;border-color:var(--pow-magenta)}
+.feed-stat{
+  margin-top:auto;padding-top:20px;border-top:1px solid var(--pow-border);
+  font-family:var(--font-display);font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--pow-light-gray);
+}
+.feed-stat .num{
+  display:block;font-size:32px;letter-spacing:-.02em;
+  background:var(--pow-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:4px;
+}
+.feed-chart{margin-top:14px;height:90px;position:relative}
+.feed-main{
+  flex:1;padding:24px;display:flex;flex-direction:column;gap:12px;
+  max-height:680px;overflow-y:auto;
+}
+.feed-main::-webkit-scrollbar{width:6px}
+.feed-main::-webkit-scrollbar-track{background:transparent}
+.feed-main::-webkit-scrollbar-thumb{background:var(--pow-border-strong)}
+.feed-toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding-bottom:12px;border-bottom:1px solid var(--pow-border);margin-bottom:8px;
+}
+.feed-toolbar h3{
+  font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:-.01em;
+}
+.feed-toolbar .count{
+  font-family:var(--font-display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--pow-light-gray);
+}
+.feed-card{
+  background:rgba(255,255,255,.025);border:1px solid var(--pow-border);
+  padding:18px;display:flex;flex-direction:column;gap:10px;
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
+  position:relative;
+}
+.feed-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(226,20,139,.4);
+  box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 1px rgba(226,20,139,.2);
+}
+.fc-top{display:flex;align-items:flex-start;gap:14px}
+.fc-score{
+  font-family:var(--font-display);font-weight:700;font-size:13px;
+  padding:5px 9px;letter-spacing:.04em;line-height:1;flex-shrink:0;
+}
+.fc-score.s-hi{background:#1f5d2e;color:#7be09a}
+.fc-score.s-mid{background:#5d4d1f;color:#e0c97b}
+.fc-score.s-lo{background:#333;color:#aaa}
+.fc-title{
+  font-family:var(--font-display);font-weight:700;font-size:16px;line-height:1.25;
+  flex:1;letter-spacing:-.005em;
+}
+.fc-fav{
+  background:transparent;border:none;cursor:pointer;font-size:18px;color:var(--pow-gray);
+  line-height:1;padding:0 2px;transition:transform .2s ease,color .2s ease;
+}
+.fc-fav:hover{transform:scale(1.15)}
+.fc-fav.on{color:#ffcc33;text-shadow:0 0 12px rgba(255,204,51,.6)}
+.fc-meta{
+  font-family:var(--font-body);font-size:12px;color:var(--pow-light-gray);
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+.fc-meta .dot{opacity:.5}
+.fc-summary{
+  font-family:var(--font-body);font-size:13.5px;line-height:1.5;color:var(--pow-white);
+}
+.fc-why{
+  font-family:var(--font-body);font-size:12.5px;font-style:italic;
+  color:var(--pow-magenta);padding:8px 12px;
+  background:rgba(226,20,139,.06);border-left:2px solid var(--pow-magenta);
+}
+.fc-why::before{content:'PowNed-DNA · ';font-style:normal;font-family:var(--font-display);
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--pow-magenta);font-weight:600;
+  display:block;margin-bottom:4px;
+}
+.fc-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.fc-tags{display:flex;gap:6px;flex-wrap:wrap}
+.fc-tag{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  padding:3px 8px;background:rgba(255,255,255,.05);border:1px solid var(--pow-border);
+  color:var(--pow-light-gray);font-weight:600;
+}
+.fc-insteek-btn{
+  font-family:var(--font-display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  padding:6px 12px;background:transparent;border:1px solid var(--pow-magenta);
+  color:var(--pow-magenta);cursor:pointer;font-weight:600;
+  transition:all .2s ease;
+}
+.fc-insteek-btn:hover{background:var(--pow-magenta);color:#fff}
+
+/* feed empty */
+.feed-empty{
+  text-align:center;padding:60px 20px;color:var(--pow-light-gray);
+  font-family:var(--font-display);font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+}
+
+/* ============ SECTION 5: INSTEEK ============ */
+#insteek{padding:120px 32px 140px;background:var(--pow-darker);position:relative}
+.in-head{max-width:1300px;margin:0 auto 50px}
+.in-split{
+  max-width:1300px;margin:0 auto;display:grid;grid-template-columns:40fr 60fr;gap:32px;
+}
+.in-source{
+  background:rgba(255,255,255,.025);border:1px solid var(--pow-border);
+  padding:28px;display:flex;flex-direction:column;gap:14px;align-self:flex-start;
+  position:sticky;top:80px;
+}
+.in-source-tag{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--pow-magenta);font-weight:600;
+}
+.in-source-title{
+  font-family:var(--font-display);font-weight:700;font-size:22px;line-height:1.25;
+  letter-spacing:-.01em;
+}
+.in-source-meta{
+  font-family:var(--font-body);font-size:12px;color:var(--pow-light-gray);
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+.in-source-summary{
+  font-family:var(--font-body);font-size:13.5px;line-height:1.5;color:var(--pow-white);
+}
+.in-source-why{
+  font-family:var(--font-body);font-size:12.5px;font-style:italic;
+  color:var(--pow-magenta);padding:10px 12px;
+  background:rgba(226,20,139,.06);border-left:2px solid var(--pow-magenta);
+}
+.in-output-wrap{
+  background:rgba(0,0,0,.35);border:1px solid var(--pow-border);
+  padding:36px;border-left:3px solid var(--pow-magenta);position:relative;min-height:560px;
+}
+.in-output-head{
+  font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--pow-magenta);margin-bottom:18px;
+  display:flex;align-items:center;gap:10px;
+}
+.in-output-head .pulse{
+  width:8px;height:8px;border-radius:50%;background:var(--pow-magenta);
+  animation:pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(226,20,139,.6);transform:scale(1)}
+  50%{box-shadow:0 0 0 12px rgba(226,20,139,0);transform:scale(1.3)}
+}
+.in-output{
+  font-family:var(--font-body);font-size:14.5px;line-height:1.7;color:var(--pow-white);
+  white-space:pre-wrap;word-wrap:break-word;min-height:380px;
+}
+.in-cursor{
+  display:inline-block;width:8px;height:18px;background:var(--pow-magenta);
+  vertical-align:middle;margin-left:2px;animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+.in-empty{
+  text-align:center;padding:80px 20px;color:var(--pow-light-gray);
+  font-family:var(--font-display);font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  display:flex;flex-direction:column;align-items:center;gap:24px;
+}
+.in-empty .arrow{
+  font-size:48px;color:var(--pow-magenta);animation:bounceUp 1.2s ease-in-out infinite;
+}
+@keyframes bounceUp{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-12px)}
+}
+.in-meta-card{
+  margin-top:20px;background:rgba(0,0,0,.35);border:1px solid var(--pow-border);
+  padding:18px 22px;font-family:var(--font-body);font-size:13px;line-height:1.55;color:var(--pow-light-gray);
+}
+.in-meta-card strong{
+  display:block;font-family:var(--font-display);font-size:11px;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--pow-magenta);font-weight:700;margin-bottom:6px;
+}
+.in-actions{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
+.in-actions button{
+  font-family:var(--font-display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  padding:8px 14px;background:transparent;border:1px solid var(--pow-border-strong);
+  color:var(--pow-white);cursor:pointer;font-weight:600;transition:all .2s ease;
+}
+.in-actions button:hover{border-color:var(--pow-magenta);color:var(--pow-magenta)}
+.in-actions button.go{border-color:var(--pow-magenta);color:var(--pow-magenta)}
+.in-actions button.go:hover{background:var(--pow-magenta);color:#fff}
+
+/* footer */
+.foot{
+  padding:48px 32px;background:var(--pow-black);border-top:1px solid var(--pow-border);
+  text-align:center;font-family:var(--font-body);font-size:13px;color:var(--pow-light-gray);
+}
+.foot strong{font-family:var(--font-display);color:var(--pow-white)}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1024px){
+  .hcai-grid{grid-template-columns:repeat(2,1fr)}
+  .cb.b1,.cb.b2,.cb.b3,.cb.b4,.cb.b5,.cb.b6,.cb.b7,.cb.b8,.cb.b9,.cb.b10{
+    grid-column:auto;grid-row:auto;
+  }
+  .cb.b7{background:rgba(226,20,139,.06)}
+  .cols{grid-template-columns:1fr;gap:14px}
+  .browser-body{flex-direction:column}
+  .feed-sidebar{width:100%;border-right:none;border-bottom:1px solid var(--pow-border);
+    flex-direction:row;flex-wrap:wrap;align-items:flex-end;
+  }
+  .filter-group{flex:1;min-width:140px}
+  .feed-stat{width:100%;margin-top:0}
+  .feed-chart{display:none}
+  .in-split{grid-template-columns:1fr}
+  .in-source{position:relative;top:auto}
+}
+@media(max-width:768px){
+  .topnav{padding:0 14px;height:44px}
+  .nav-item{padding:6px 7px;font-size:9px;letter-spacing:.08em}
+  .nav-item .lbl{display:none}
+  .ph-flex{padding:0 4vw;gap:4vw}
+  .ph-step{width:90vw;padding:24px}
+  .ph-step-num{font-size:60px;top:12px;right:18px}
+  #pipeline .ph-track{height:auto}
+  .ph-flex{flex-direction:column;height:auto;padding:32px 4vw}
+  .ph-step{width:100%;height:auto;min-height:360px}
+  .ph-connector{width:100%;height:60px;transform:rotate(90deg)}
+  .src-grid{grid-template-columns:repeat(3,1fr)}
+  .funnel-wrap{flex-direction:column;gap:20px}
+  #debrief{height:auto}
+  .debrief-pin{height:auto;min-height:100vh;padding:80px 20px}
+  .debrief-phase{position:relative;opacity:1!important;transform:none!important;padding:60px 20px}
+  .cols{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="nav-dots">
+      <button class="nav-item active" data-target="debrief"><span class="dot"></span><span class="lbl">Debrief</span></button>
+      <button class="nav-item" data-target="canvas"><span class="dot"></span><span class="lbl">Canvas</span></button>
+      <button class="nav-item" data-target="pipeline"><span class="dot"></span><span class="lbl">Pipeline</span></button>
+      <button class="nav-item" data-target="feed"><span class="dot"></span><span class="lbl">Feed</span></button>
+      <button class="nav-item" data-target="insteek"><span class="dot"></span><span class="lbl">Open Opdracht</span></button>
+    </div>
+    <div class="nav-logo" data-target="debrief">POW</div>
+  </div>
+</nav>
+
+<!-- ===================== SECTION 1: DEBRIEF ===================== -->
+<section id="debrief">
+  <div class="debrief-pin">
+    <div class="debrief-bg"></div>
+
+    <div class="debrief-phase p1">
+      <div class="pow-mega">POW</div>
+      <div class="pow-fullname" id="powFullname"></div>
+      <div class="pow-tag">Satirische nieuwsomroep · 910K YouTube · 124K TikTok · NPO</div>
+    </div>
+
+    <div class="debrief-phase p2">
+      <div class="bigquote" id="bigquote"></div>
+      <div class="pains">
+        <div class="pain">30+ bronnen handmatig checken</div>
+        <div class="pain">Paywalls blokkeren toegang</div>
+        <div class="pain">Relevante stories gemist</div>
+      </div>
+    </div>
+
+    <div class="debrief-phase p3">
+      <div class="jtbd-label">JOBS TO BE DONE</div>
+      <div class="jtbd-text" id="jtbdText"></div>
+    </div>
+
+    <div class="debrief-phase p4">
+      <div class="cols-title">Het Project · Brief</div>
+      <div class="cols">
+        <div class="col-card">
+          <h4>Kernvraag</h4>
+          <p>Hoe kunnen we met AI automatisch relevante nieuwsitems spotten, filteren op PowNed-waarde, en presenteren aan de redactie?</p>
+        </div>
+        <div class="col-card">
+          <h4>Doel</h4>
+          <p>Een werkende Redactie Agent die dagelijks 50+ relevante items toont, gesorteerd op PowNed-relevantie, met AI-uitleg waarom.</p>
+        </div>
+        <div class="col-card">
+          <h4>Randvoorwaarden</h4>
+          <p>Paywalls omzeilen · Uitbreidbaar · Lerende filtering · Inlog voor redactie · Dagelijks + op aanvraag</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 2: HC AI CANVAS ===================== -->
+<section id="canvas">
+  <div class="canvas-head">
+    <div class="sec-eyebrow">Concept · Methodologie</div>
+    <h2 class="sec-title">Human-Centered AI Canvas</h2>
+    <p class="sec-sub">Onze concept-aanpak gevisualiseerd op het HC&nbsp;AI Canvas. AI&nbsp;suggereert, mens beslist — de redactie blijft in de lead. Klik op een blok voor de volledige inhoud.</p>
+  </div>
+
+  <div class="hcai-grid" id="hcaiGrid">
+    <!-- Top row -->
+    <div class="cb b1" data-modal="jtbd">
+      <div class="cb-tag">Jobs-to-be-Done</div>
+      <div class="cb-title">Wat de redactie wil</div>
+      <div class="cb-preview">De redactie mist dagelijks lokale verhalen met landelijk potentieel.</div>
+    </div>
+    <div class="cb b2" data-modal="promise">
+      <div class="cb-tag">AI Promise</div>
+      <div class="cb-title">Wat de AI belooft</div>
+      <div class="cb-preview">Continu monitoring, scoring op PowNed-DNA, paywalls omzeilen, dagelijkse feed.</div>
+    </div>
+    <div class="cb b3" data-modal="hact">
+      <div class="cb-tag">Human Activities</div>
+      <div class="cb-title">Wat de mens doet</div>
+      <div class="cb-preview">Eindredactie, invalshoek, ethiek, bronverificatie, verhaal vertellen.</div>
+    </div>
+    <div class="cb b4" data-modal="hreinf">
+      <div class="cb-tag">Human Reinforcement</div>
+      <div class="cb-title">Wat de AI versterkt</div>
+      <div class="cb-preview">Insteek-suggesties, sprekerssuggesties, historische context.</div>
+    </div>
+    <!-- Middle row -->
+    <div class="cb b5" data-modal="benefits">
+      <div class="cb-tag">Benefits for Humans</div>
+      <div class="cb-title">Wat het de mens oplevert</div>
+      <div class="cb-preview">Geen handmatig scrollen, focus op verhalen, sneller op locatie.</div>
+    </div>
+    <div class="cb b6" data-modal="mact">
+      <div class="cb-tag">Machine Activities</div>
+      <div class="cb-title">Wat de machine doet</div>
+      <div class="cb-preview">Scraping, NLP, scoring, deduplicatie, categorisering, trending detectie.</div>
+    </div>
+    <div class="cb b7" data-modal="collab">
+      <div class="cb-tag">Collaboration</div>
+      <div class="cb-title">Mens × Machine</div>
+      <div class="cb-preview">Redactie geeft feedback, model leert. Human-in-the-loop: AI suggereert, mens beslist.</div>
+    </div>
+    <!-- Bottom row -->
+    <div class="cb b8" data-modal="bias">
+      <div class="cb-tag">Critical Thinking & Biases</div>
+      <div class="cb-title">Risico's & blinde vlekken</div>
+      <div class="cb-preview">Filterbubbel, transparantie, bias in trainingsdata.</div>
+    </div>
+    <div class="cb b9" data-modal="implications">
+      <div class="cb-tag">Considerations & Implications</div>
+      <div class="cb-title">Juridisch · Ethisch · Praktisch</div>
+      <div class="cb-preview">Paywall-bypass, scraping, privacy, kosten en bias.</div>
+    </div>
+    <div class="cb b10" data-modal="change">
+      <div class="cb-tag">Change Management</div>
+      <div class="cb-title">Hoe we het invoeren</div>
+      <div class="cb-preview">Pilotfase, training, feedback loop, geleidelijke uitbreiding.</div>
+    </div>
+  </div>
+
+  <div class="canvas-hint">Klik op een blok <span>↓</span> voor details</div>
+</section>
+
+<!-- Modal -->
+<div class="cb-modal" id="cbModal">
+  <div class="cb-modal-inner">
+    <button class="cb-modal-close" id="cbModalClose">×</button>
+    <div class="cb-modal-tag" id="cbModalTag"></div>
+    <div class="cb-modal-title" id="cbModalTitle"></div>
+    <div class="cb-modal-body" id="cbModalBody"></div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: PIPELINE ===================== -->
+<section id="pipeline">
+  <div class="ph-head">
+    <div class="sec-eyebrow">Architectuur · Datapijplijn</div>
+    <h2 class="sec-title">Redactie Agent Pipeline</h2>
+    <p class="sec-sub">Van bronnen naar redactiefeed in vijf stappen. Scrol horizontaal door de pipeline.</p>
+  </div>
+
+  <div class="ph-track" id="phTrack">
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <linearGradient id="dashGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#9c2d8f"/>
+          <stop offset="100%" stop-color="#e2148b"/>
+        </linearGradient>
+        <linearGradient id="funnelGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#9c2d8f" stop-opacity=".7"/>
+          <stop offset="100%" stop-color="#e2148b" stop-opacity=".9"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div class="ph-flex" id="phFlex">
+
+      <div class="ph-step">
+        <div class="ph-step-num">01</div>
+        <div class="ph-step-tag">Stap 01 · Bronnen</div>
+        <div class="ph-step-title">Bronnen monitoren</div>
+        <div class="ph-step-desc">30+ bronnen worden continu in de gaten gehouden — van landelijke titels tot regionale omroepen, social en politie­berichten.</div>
+        <div class="src-grid">
+          <div class="src-card"><div class="icon">📰</div>De Telegraaf</div>
+          <div class="src-card"><div class="icon">📺</div>NOS</div>
+          <div class="src-card"><div class="icon">📻</div>NH Nieuws</div>
+          <div class="src-card"><div class="icon">📡</div>Omroep Brabant</div>
+          <div class="src-card"><div class="icon">🐦</div>X / Twitter</div>
+          <div class="src-card"><div class="icon">🚓</div>Politie.nl</div>
+          <div class="src-card"><div class="icon">🏛️</div>Gemeente Feeds</div>
+          <div class="src-card"><div class="icon">📱</div>TikTok Trends</div>
+        </div>
+      </div>
+
+      <div class="ph-connector">
+        <svg viewBox="0 0 100 6" preserveAspectRatio="none"><path d="M0 3 L100 3"/></svg>
+      </div>
+
+      <div class="ph-step">
+        <div class="ph-step-num">02</div>
+        <div class="ph-step-tag">Stap 02 · Scraping</div>
+        <div class="ph-step-title">Data verzamelen</div>
+        <div class="ph-step-desc">RSS, sitemap­crawl en gerichte API-calls. Paywalls worden waar mogelijk omzeild via cache- en print-versies.</div>
+        <div class="rain" id="rainBox">
+          <div class="rain-labels">
+            <div class="rain-counter" id="rainCounter">0</div>
+            <div class="rain-counter-label">items verzameld</div>
+            <div class="rain-tags"><span>RSS</span><span>Sitemap</span><span>API</span><span>Paywall bypass</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ph-connector">
+        <svg viewBox="0 0 100 6" preserveAspectRatio="none"><path d="M0 3 L100 3"/></svg>
+      </div>
+
+      <div class="ph-step">
+        <div class="ph-step-num">03</div>
+        <div class="ph-step-tag">Stap 03 · AI Filtering</div>
+        <div class="ph-step-title">PowNed-DNA scoring</div>
+        <div class="ph-step-desc">Onze AI vergelijkt elk item met de PowNed YouTube-dataset. Alleen wat 'PowNed-relevant' is, gaat door.</div>
+        <div class="funnel-wrap">
+          <div class="funnel">
+            <svg viewBox="0 0 200 200">
+              <polygon points="10,20 190,20 130,140 70,140" fill="url(#funnelGrad)" opacity=".25"/>
+              <polygon points="10,20 190,20 130,140 70,140" fill="none" stroke="url(#funnelGrad)" stroke-width="2"/>
+              <line x1="100" y1="140" x2="100" y2="190" stroke="url(#funnelGrad)" stroke-width="2"/>
+            </svg>
+            <div class="funnel-in">247</div>
+            <div class="funnel-out">52</div>
+          </div>
+          <div class="funnel-stats">
+            <div class="funnel-stat">PowNed-DNA match</div>
+            <div class="funnel-stat">Deduplicatie</div>
+            <div class="funnel-stat">Relevantie scoring</div>
+            <div class="funnel-stat">Trending boost</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ph-connector">
+        <svg viewBox="0 0 100 6" preserveAspectRatio="none"><path d="M0 3 L100 3"/></svg>
+      </div>
+
+      <div class="ph-step">
+        <div class="ph-step-num">04</div>
+        <div class="ph-step-tag">Stap 04 · Ranking</div>
+        <div class="ph-step-title">Top items voor vandaag</div>
+        <div class="ph-step-desc">De hoogst scorende items komen bovenaan, met een korte uitleg: waarom is dit een PowNed-verhaal?</div>
+        <div class="rank-list" id="rankList">
+          <div class="rank-item" data-target-score="94"><div class="rank-num">1</div><div class="rank-title">Snackbarpersoneel slaat overvaller met frituurmand</div><div class="rank-score">SCORE 94</div></div>
+          <div class="rank-item" data-target-score="89"><div class="rank-num">2</div><div class="rank-title">Buurtbewoners blokkeren asielbus in Drenthe</div><div class="rank-score">SCORE 89</div></div>
+          <div class="rank-item" data-target-score="85"><div class="rank-num">3</div><div class="rank-title">Agent schiet hond neer na bijtincident Tilburg</div><div class="rank-score">SCORE 85</div></div>
+          <div class="rank-item" data-target-score="82"><div class="rank-num">4</div><div class="rank-title">Wethouder Den Haag opgepakt voor fraude</div><div class="rank-score">SCORE 82</div></div>
+          <div class="rank-item" data-target-score="78"><div class="rank-num">5</div><div class="rank-title">Festival zonder vergunning ontruimd door ME</div><div class="rank-score">SCORE 78</div></div>
+        </div>
+      </div>
+
+      <div class="ph-connector">
+        <svg viewBox="0 0 100 6" preserveAspectRatio="none"><path d="M0 3 L100 3"/></svg>
+      </div>
+
+      <div class="ph-step">
+        <div class="ph-step-num">05</div>
+        <div class="ph-step-tag">Stap 05 · Output</div>
+        <div class="ph-step-title">De redactie­feed</div>
+        <div class="ph-step-desc">Iedere ochtend vóór 08:30 staat de feed klaar — webapp + push­notificatie. Op aanvraag opnieuw te draaien.</div>
+        <div class="out-wrap">
+          <div class="out-mini">
+            <div class="out-mini-bar"><span></span><span></span><span></span></div>
+            <div class="out-mini-content">
+              <div class="out-mini-row"></div>
+              <div class="out-mini-row" style="width:80%"></div>
+              <div class="out-mini-row" style="width:65%"></div>
+              <div class="out-mini-row" style="width:90%"></div>
+            </div>
+          </div>
+          <div class="out-info">
+            <div class="out-info-row"><div class="ic">🕗</div>Elke ochtend vóór 08:30</div>
+            <div class="out-info-row"><div class="ic">🌐</div>redactie.powned.tv/feed</div>
+            <div class="push-mock">
+              <div class="push-mock-app">PowNed Redactie · zojuist</div>
+              <div class="push-mock-msg">52 nieuwe items voor de redactie · 12 met score &gt; 80</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 4: FEED UI ===================== -->
+<section id="feed">
+  <div class="feed-head">
+    <div class="sec-eyebrow">Output · Redactie­tool</div>
+    <h2 class="sec-title">De Redactie Feed</h2>
+    <p class="sec-sub">Een live mock-up van de webapp die de redactie elke ochtend ontvangt. Filter op regio of categorie, markeer favorieten, en open de Insteek-generator per item.</p>
+  </div>
+
+  <div class="browser-window">
+    <div class="browser-chrome">
+      <div class="browser-dots"><span></span><span></span><span></span></div>
+      <div class="browser-url">https://redactie.powned.tv/feed</div>
+    </div>
+    <div class="browser-body">
+      <aside class="feed-sidebar">
+        <div class="filter-group">
+          <label class="filter-label">Regio</label>
+          <select class="filter-select" id="fRegio">
+            <option value="all">Alle regio's</option>
+            <option>Noord-Holland</option>
+            <option>Zuid-Holland</option>
+            <option>Brabant</option>
+            <option>Drenthe</option>
+            <option>Groningen</option>
+            <option>Utrecht</option>
+            <option>Zeeland</option>
+            <option>Landelijk</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Categorie</label>
+          <select class="filter-select" id="fCat">
+            <option value="all">Alle categorieën</option>
+            <option>Misdaad</option>
+            <option>Politiek</option>
+            <option>Evenement</option>
+            <option>Bizar</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Datum</label>
+          <select class="filter-select" id="fDate">
+            <option>Vandaag</option>
+            <option>Gisteren</option>
+            <option>Afgelopen 7 dagen</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Sorteer op</label>
+          <select class="filter-select" id="fSort">
+            <option value="score">Relevantie</option>
+            <option value="time">Nieuwste eerst</option>
+          </select>
+        </div>
+        <div class="feed-stat">
+          <span class="num" id="feedStatNum">52</span>
+          items vandaag
+          <div class="feed-chart"><canvas id="feedChart"></canvas></div>
+        </div>
+      </aside>
+
+      <main class="feed-main">
+        <div class="feed-toolbar">
+          <h3>Vandaag · 03 mei 2026</h3>
+          <div class="count" id="feedCount">10 items</div>
+        </div>
+        <div id="feedList"></div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 5: INSTEEK GENERATOR ===================== -->
+<section id="insteek">
+  <div class="in-head">
+    <div class="sec-eyebrow">Open Opdracht · Verras-ons automatisering</div>
+    <h2 class="sec-title">Verhaalinsteek Generator</h2>
+    <p class="sec-sub">Onze vierde automatisering: een AI die in seconden een complete journalistieke aanpak suggereert — invalshoek, vragen, sprekers en visuele tips. Selecteer een item links of via de feed-sectie.</p>
+  </div>
+
+  <div class="in-split">
+    <div class="in-source" id="inSource">
+      <div class="in-source-tag">Geselecteerd item</div>
+      <div class="in-source-title" id="inTitle">Snackbarpersoneel slaat overvaller met frituurmand</div>
+      <div class="in-source-meta" id="inMeta">📍 Apeldoorn · MISDAAD · Score 94</div>
+      <div class="in-source-summary" id="inSummary">Twee medewerkers van snackbar 'De Gildehof' overmeesterden gisteravond een gewapende overvaller met een gloeiend hete frituurmand. De man (32) zit in voorlopige hechtenis.</div>
+      <div class="in-source-why" id="inWhy">Gewone burger versus crimineel — typisch PowNed-underdog verhaal. Visueel sterk, viral potentie hoog.</div>
+      <div class="in-actions">
+        <button class="go" id="inGo">▶ Start insteek</button>
+        <button id="inReset">Reset</button>
+      </div>
+    </div>
+
+    <div class="in-output-wrap">
+      <div class="in-output-head"><span class="pulse"></span>AI Insteek Generator</div>
+      <div class="in-output" id="inOutput"></div>
+      <div class="in-meta-card">
+        <strong>Wat is dit?</strong>
+        Dit is een demo van de Verhaalinsteek Generator — onze vierde automatisering. De AI analyseert het nieuwsitem en genereert een complete journalistieke aanpak in PowNed-stijl, inclusief vragen, sprekers en visuele suggesties.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div><strong>PowNed Redactie Agent</strong> — concept-demo</div>
+  <div style="margin-top:8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase">HvA Smart Media Production · Blok 4 · Growth Hacking · 2026</div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+/* ==================== DATA ==================== */
+const FEED_DATA = [
+  {id:1, score:94, cat:'Misdaad', regio:'Noord-Holland', loc:'Apeldoorn', src:'De Stentor', time:'06:42',
+    title:'Snackbarpersoneel slaat overvaller met frituurmand',
+    summary:"Twee medewerkers van snackbar 'De Gildehof' overmeesterden gisteravond een gewapende overvaller met een gloeiend hete frituurmand. De man (32) zit in voorlopige hechtenis.",
+    why:'Gewone burger versus crimineel — typisch PowNed-underdog verhaal. Visueel sterk, viral potentie hoog.'},
+  {id:2, score:89, cat:'Politiek', regio:'Drenthe', loc:'Hoogeveen', src:'RTV Drenthe', time:'07:11',
+    title:"Buurtbewoners blokkeren asielbus: 'Wij zijn niet gehoord'",
+    summary:'Tientallen omwonenden voorkwamen vanmorgen de aankomst van een bus met asielzoekers bij een tijdelijke noodopvang. De gemeente zegt geen andere optie te hebben.',
+    why:'Asiel + burgerprotest + lokaal bestuur = PowNed-goud. Confrontatie­potentieel hoog.'},
+  {id:3, score:85, cat:'Misdaad', regio:'Brabant', loc:'Tilburg', src:'Omroep Brabant', time:'05:58',
+    title:'Agent schiet hond neer na bijtincident, baasje woedend',
+    summary:"Een politieagent schoot dinsdag­avond een Stafford­shire dood die zijn collega had aangevallen. De eigenaar spreekt van 'moord op mijn beste vriend' en eist excuses.",
+    why:'Emotioneel, visueel, confrontatie met autoriteit. Hond + politie = klikvee.'},
+  {id:4, score:82, cat:'Politiek', regio:'Zuid-Holland', loc:'Den Haag', src:'AD Den Haag', time:'06:17',
+    title:'Wethouder opgepakt voor subsidie-fraude van €2,3 miljoen',
+    summary:"Wethouder M. (48, GroenLinks-PvdA) is op verdenking van langdurige fraude in voorlopige hechtenis genomen. Het Openbaar Ministerie spreekt van 'systematische zelfverrijking'.",
+    why:'Corruptie + politiek + belastinggeld = PowNed-kernthema. Vraagt om confrontatie.'},
+  {id:5, score:78, cat:'Bizar', regio:'Zuid-Holland', loc:'Rotterdam', src:'Rijnmond', time:'04:33',
+    title:'Festival zonder vergunning ontruimd door ME, bezoekers in boom',
+    summary:'Een illegaal techno-festival in het Kralingse Bos werd vannacht ontruimd. Enkele bezoekers verschansten zich urenlang in een eik en moesten door de brandweer worden bevrijd.',
+    why:'Absurd beeld + handhaving = viral. PowNed-verhaal in één foto.'},
+  {id:6, score:75, cat:'Evenement', regio:'Noord-Holland', loc:'Amsterdam', src:'AT5', time:'07:45',
+    title:'Extinction Rebellion blokkeert A10 tijdens spits',
+    summary:'Ongeveer 200 activisten zijn vanmorgen de snelweg opgelopen ter hoogte van de RAI. Het verkeer staat al twee uur muurvast; de politie heeft 47 mensen aangehouden.',
+    why:'Activisme + overlast + maatschappelijk debat. Polariserend, dus klikt.'},
+  {id:7, score:71, cat:'Misdaad', regio:'Groningen', loc:'Groningen', src:'Sikkom', time:'06:02',
+    title:"Inbraakgolf studenten: 12 woningen in één nacht",
+    summary:'In de Korrewegwijk werden afgelopen nacht twaalf studenten­huizen overvallen door een groep van vermoedelijk vier daders. Politie tast nog in het duister.',
+    why:'Lokale reeks, menselijk leed, veiligheid. Sterk regio-verhaal.'},
+  {id:8, score:68, cat:'Politiek', regio:'Landelijk', loc:'Den Haag', src:'NOS', time:'07:30',
+    title:"Wilders reageert op Schoof: 'Dit is verraad'",
+    summary:'PVV-leider Geert Wilders heeft op X fel uitgehaald naar premier Schoof na het uitlekken van een interne notitie over migratiequota. Een breuk dreigt.',
+    why:'Politieke confrontatie, herkenbare figuren. Standaard PowNed-onderwerp.'},
+  {id:9, score:62, cat:'Bizar', regio:'Zeeland', loc:'Goes', src:'PZC', time:'06:58',
+    title:'Man rijdt met tractor door drive-through McDonald\'s',
+    summary:'Een 67-jarige boer reed gistermiddag met zijn John Deere door de drive-through van de Goese McDonald\'s. Volgens hemzelf had hij gewoon trek in een McKroket.',
+    why:'Licht, grappig, deelbaar op socials. Goed voor een korte item.'},
+  {id:10, score:55, cat:'Evenement', regio:'Utrecht', loc:'Utrecht', src:'RTV Utrecht', time:'07:22',
+    title:'Demonstratie tegen woningnood trekt 5000 mensen',
+    summary:'Op het Domplein verzamelden zich gisteren ongeveer 5000 demonstranten. De organisatoren eisen een bouwoffensief en een einde aan beleggers­hypotheken.',
+    why:'Groot maatschappelijk thema maar minder PowNed-specifiek. Achterhand­optie.'}
+];
+
+/* ==================== NAV ==================== */
+const navItems = document.querySelectorAll('.nav-item');
+navItems.forEach(item=>{
+  item.addEventListener('click',()=>{
+    const t = document.getElementById(item.dataset.target);
+    if(t) gsap.to(window,{duration:1,scrollTo:{y:t,offsetY:0},ease:'power2.inOut'});
+  });
+});
+document.querySelector('.nav-logo').addEventListener('click',()=>{
+  gsap.to(window,{duration:1,scrollTo:{y:0},ease:'power2.inOut'});
+});
+
+/* update active nav on scroll */
+function updateNav(){
+  const sections = ['debrief','canvas','pipeline','feed','insteek'];
+  const sy = window.scrollY + window.innerHeight*0.4;
+  let active = sections[0];
+  sections.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el && el.offsetTop <= sy) active = id;
+  });
+  navItems.forEach(it=>it.classList.toggle('active', it.dataset.target===active));
+}
+window.addEventListener('scroll',updateNav,{passive:true});
+
+/* scroll progress */
+const progressEl = document.getElementById('scrollProgress');
+function updateProgress(){
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const p = Math.min(1, Math.max(0, window.scrollY / h));
+  progressEl.style.width = (p*100)+'%';
+}
+window.addEventListener('scroll',updateProgress,{passive:true});
+
+/* ==================== SECTION 1: DEBRIEF (PINNED) ==================== */
+// stagger letters of pow-fullname
+const fullName = "PUBLIEKE OMROEP WELDENKEND NEDERLAND";
+document.getElementById('powFullname').innerHTML =
+  fullName.split('').map(c=> c===' ' ? '<span class="ltr" style="width:.3em;display:inline-block">&nbsp;</span>' : `<span class="ltr">${c}</span>`).join('');
+
+// quote words for phase 2
+const quoteText = "Lokaal nieuws bevat veel potentie om uit te groeien tot landelijke verhalen — maar wordt nu te weinig en te laat gezien.";
+document.getElementById('bigquote').innerHTML =
+  quoteText.split(' ').map(w=>{
+    const cls = (w==='—') ? 'qword qmark' : 'qword';
+    return `<span class="${cls}">${w}</span>`;
+  }).join(' ');
+
+// jtbd words
+const jtbdText = "De PowNed-redactie wil elke ochtend vóór 08:30 een overzicht van de meest kansrijke lokale nieuwsverhalen die landelijk potentieel hebben — zonder handmatig tientallen bronnen te hoeven checken.";
+document.getElementById('jtbdText').innerHTML =
+  jtbdText.split(' ').map(w=>`<span class="jword">${w}</span>`).join(' ');
+
+// only run pinned timeline on desktop
+if(window.matchMedia('(min-width: 769px)').matches){
+  const debriefTL = gsap.timeline({
+    scrollTrigger:{
+      trigger:'#debrief',
+      start:'top top',
+      end:'bottom bottom',
+      pin:'.debrief-pin',
+      scrub:.6,
+      anticipatePin:1,
+    }
+  });
+
+  // PHASE 1 in
+  debriefTL
+    .fromTo('.debrief-phase.p1',{autoAlpha:0},{autoAlpha:1,duration:.4})
+    .fromTo('.debrief-phase.p1 .pow-mega',{scale:.6,autoAlpha:0},{scale:1,autoAlpha:1,duration:1,ease:'power3.out'},'<')
+    .fromTo('.pow-fullname .ltr',{autoAlpha:0,y:8},{autoAlpha:1,y:0,duration:1,stagger:.02},'<.3')
+    .fromTo('.debrief-phase.p1 .pow-tag',{autoAlpha:0,y:10},{autoAlpha:1,y:0,duration:.6},'<.4')
+    // hold
+    .to({},{duration:1.2})
+    // PHASE 1 out (left)
+    .to('.debrief-phase.p1',{autoAlpha:0,x:-80,duration:.7,ease:'power2.in'})
+
+    // PHASE 2 in
+    .fromTo('.debrief-phase.p2',{autoAlpha:0,x:80},{autoAlpha:1,x:0,duration:.7,ease:'power2.out'},'<.1')
+    .fromTo('.bigquote .qword',{y:20,autoAlpha:0,rotateX:40},{y:0,autoAlpha:1,rotateX:0,duration:.5,stagger:.04,ease:'back.out(1.4)'},'<.2')
+    .fromTo('.pain',{y:30,autoAlpha:0},{y:0,autoAlpha:1,duration:.5,stagger:.12,ease:'power2.out'},'>-.4')
+    .to({},{duration:1.4})
+    .to('.debrief-phase.p2',{autoAlpha:0,x:-80,duration:.7,ease:'power2.in'})
+
+    // PHASE 3 in
+    .fromTo('.debrief-phase.p3',{autoAlpha:0,scale:.95},{autoAlpha:1,scale:1,duration:.7,ease:'power2.out'},'<.1')
+    .fromTo('.jtbd-label',{y:30,autoAlpha:0},{y:0,autoAlpha:1,duration:.6,ease:'power2.out'},'<.1')
+    .fromTo('.jtbd-text .jword',{y:12,autoAlpha:0},{y:0,autoAlpha:1,duration:.4,stagger:.025,ease:'power2.out'},'<.2')
+    .to({},{duration:1.5})
+    .to('.debrief-phase.p3',{autoAlpha:0,y:-40,duration:.7,ease:'power2.in'})
+
+    // PHASE 4 in
+    .fromTo('.debrief-phase.p4',{autoAlpha:0},{autoAlpha:1,duration:.5,ease:'power2.out'},'<.1')
+    .fromTo('.cols-title',{y:20,autoAlpha:0},{y:0,autoAlpha:1,duration:.5},'<')
+    .fromTo('.col-card',{y:60,autoAlpha:0},{y:0,autoAlpha:1,duration:.7,stagger:.18,ease:'power2.out'},'<.1')
+    .to({},{duration:2});
+} else {
+  // mobile: just show all phases stacked
+  gsap.set('.debrief-phase',{autoAlpha:1});
+  gsap.set('.pow-fullname .ltr, .bigquote .qword, .jtbd-text .jword, .pain, .col-card',{autoAlpha:1,y:0,x:0,scale:1,rotateX:0});
+}
+
+/* trigger sec-title underline */
+ScrollTrigger.batch('.sec-title',{
+  start:'top 75%',
+  onEnter:el=>el.forEach(e=>e.classList.add('in-view'))
+});
+
+/* ==================== SECTION 2: CANVAS ==================== */
+gsap.from('#hcaiGrid .cb',{
+  y:24,opacity:0,duration:.6,stagger:.06,ease:'power2.out',
+  scrollTrigger:{trigger:'#hcaiGrid',start:'top 70%'}
+});
+
+const CB_CONTENT = {
+  jtbd:{tag:'Jobs-to-be-Done',title:'Wat de redactie wil',body:
+    "De redactie mist dagelijks relevante lokale verhalen die landelijk potentieel hebben, omdat ze handmatig tientallen bronnen moeten checken en paywalls in de weg staan.\n\nElke ochtend opnieuw begint het door­vlooien — kostbare tijd die niet aan échte journalistiek wordt besteed."},
+  promise:{tag:'AI Promise',title:'Wat de AI belooft',body:
+    "Continu 30+ bronnen monitoren\nAutomatisch relevantie scoren op basis van PowNed-DNA\nPaywalls omzeilen waar mogelijk\nDeduplicatie tussen bronnen\nDagelijkse feed klaar vóór 08:30"},
+  hact:{tag:'Human Activities',title:'Wat de mens doet',body:
+    "Eindredactie beslissing\nInvalshoek bepalen\nVerslaggever aansturen\nEthische afweging\nBronverificatie\nInterviewvragen formuleren\nVerhaal vertellen"},
+  hreinf:{tag:'Human Reinforcement',title:'Wat de AI versterkt',body:
+    "Journalistieke insteek-suggesties\nSprekerssuggesties\nHistorische context bij items\n\nDe redactie wordt sneller en scherper door de AI-inzichten, zonder dat die de regie overneemt."},
+  benefits:{tag:'Benefits for Humans',title:'Wat het de mens oplevert',body:
+    "Redactie hoeft niet meer handmatig te scrollen\nFocus verschuift naar verhalen maken\nSneller op locatie\nGeen stories meer missen\nMinder frustratie over paywalls"},
+  mact:{tag:'Machine Activities',title:'Wat de machine doet',body:
+    "RSS / sitemap scraping\nPaywall omzeiling\nNLP-analyse\nRelevantie scoring op basis van PowNed YouTube dataset\nDeduplicatie\nCategorisering\nTrending topic detectie"},
+  collab:{tag:'Collaboration',title:'Mens × Machine',body:
+    "Redactie markeert items als favoriet of irrelevant → het model leert van deze feedback → de filtering wordt steeds scherper.\n\nHuman-in-the-loop: AI suggereert, mens beslist. Altijd."},
+  bias:{tag:'Critical Thinking & Biases',title:"Risico's & blinde vlekken",body:
+    "Filterbubbel risico: AI toont alleen wat het 'kent' als PowNed-relevant.\n\nOplossing: diverse bronnenlijst + 'wildcard' sectie met onverwachte items.\n\nTransparantie: altijd uitleg waarom een item hoog scoort."},
+  implications:{tag:'Considerations & Implications',title:'Juridisch · Ethisch · Praktisch',body:
+    "Paywall omzeiling: juridisch grijs gebied — alleen voor redactioneel gebruik\nScraping: respecteer robots.txt waar mogelijk\nPrivacy: geen persoons­gegevens opslaan\nBias: trainingsdata bevat bestaande PowNed-bias\nKosten: API calls en hosting"},
+  change:{tag:'Change Management',title:'Hoe we het invoeren',body:
+    "Introductie via pilotfase met 3-5 redactieleden\nTraining: korte handleiding + walkthrough\nFeedback loop: dagelijks 'was dit nuttig?' knop\nGeleidelijke uitbreiding van bronnen\nRedactieleden worden 'bot-trainers' door items te beoordelen"}
+};
+const cbModal = document.getElementById('cbModal');
+const cbModalInner = cbModal.querySelector('.cb-modal-inner');
+document.querySelectorAll('.cb').forEach(c=>{
+  c.addEventListener('click',()=>{
+    const k = c.dataset.modal;
+    const data = CB_CONTENT[k]; if(!data) return;
+    document.getElementById('cbModalTag').textContent = data.tag;
+    document.getElementById('cbModalTitle').textContent = data.title;
+    document.getElementById('cbModalBody').textContent = data.body;
+    cbModal.classList.add('open');
+    gsap.fromTo(cbModal,{opacity:0},{opacity:1,duration:.25});
+    gsap.fromTo(cbModalInner,{y:20,opacity:0},{y:0,opacity:1,duration:.4,ease:'power2.out'});
+  });
+});
+document.getElementById('cbModalClose').addEventListener('click',closeModal);
+cbModal.addEventListener('click',e=>{ if(e.target===cbModal) closeModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && cbModal.classList.contains('open')) closeModal(); });
+function closeModal(){
+  gsap.to(cbModal,{opacity:0,duration:.2,onComplete:()=>cbModal.classList.remove('open')});
+}
+
+/* ==================== SECTION 3: PIPELINE (HORIZONTAL) ==================== */
+function setupPipeline(){
+  if(!window.matchMedia('(min-width: 769px)').matches) return;
+  const flex = document.getElementById('phFlex');
+  // measure scroll distance
+  function dist(){
+    return flex.scrollWidth - window.innerWidth;
+  }
+  const trig = ScrollTrigger.create({
+    trigger:'#pipeline',
+    start:'top top',
+    end:()=> '+=' + (dist() + window.innerHeight*.5),
+    pin:true,
+    scrub:.5,
+    invalidateOnRefresh:true,
+    animation: gsap.to(flex,{x:()=> -dist(), ease:'none'})
+  });
+
+  // counter for rain
+  const counterEl = document.getElementById('rainCounter');
+  ScrollTrigger.create({
+    trigger:'#pipeline',
+    start:'top top',
+    end:()=> '+=' + (dist() + window.innerHeight*.5),
+    onUpdate:self=>{
+      // animate counter when rain step is roughly in view
+      const v = Math.min(247, Math.round(self.progress * 247 * 1.4));
+      counterEl.textContent = v;
+    }
+  });
+}
+setupPipeline();
+
+// Build rain columns
+(function buildRain(){
+  const box = document.getElementById('rainBox');
+  if(!box) return;
+  const chars = 'POWNED 010110 RSS API NIEUWS DATA SCRAPE';
+  const cols = 18;
+  for(let i=0;i<cols;i++){
+    const c = document.createElement('div');
+    c.className='rain-col';
+    c.style.left = (i*(100/cols)) + '%';
+    c.style.animationDuration = (4 + Math.random()*5) + 's';
+    c.style.animationDelay = (-Math.random()*8) + 's';
+    let txt='';
+    for(let j=0;j<22;j++){
+      txt += chars.charAt(Math.floor(Math.random()*chars.length));
+    }
+    c.textContent = txt;
+    box.appendChild(c);
+  }
+})();
+
+/* ==================== SECTION 4: FEED ==================== */
+const feedListEl = document.getElementById('feedList');
+const feedCountEl = document.getElementById('feedCount');
+const fRegio = document.getElementById('fRegio');
+const fCat = document.getElementById('fCat');
+const fSort = document.getElementById('fSort');
+let favorites = new Set();
+
+function scoreClass(s){ return s>=80?'s-hi':(s>=60?'s-mid':'s-lo'); }
+
+function renderFeed(){
+  const r = fRegio.value;
+  const c = fCat.value;
+  const s = fSort.value;
+  let list = FEED_DATA.filter(it=>{
+    if(r!=='all' && it.regio !== r) return false;
+    if(c!=='all' && it.cat !== c) return false;
+    return true;
+  });
+  if(s==='time') list.sort((a,b)=> b.time.localeCompare(a.time));
+  else list.sort((a,b)=> b.score - a.score);
+
+  feedCountEl.textContent = list.length + ' items';
+
+  if(list.length===0){
+    feedListEl.innerHTML = '<div class="feed-empty">Geen items voor deze filters</div>';
+    return;
+  }
+  feedListEl.innerHTML = list.map(it=>`
+    <article class="feed-card" data-id="${it.id}">
+      <div class="fc-top">
+        <div class="fc-score ${scoreClass(it.score)}">${it.score}</div>
+        <div class="fc-title">${it.title}</div>
+        <button class="fc-fav ${favorites.has(it.id)?'on':''}" data-fav="${it.id}" aria-label="Favoriet">${favorites.has(it.id)?'★':'☆'}</button>
+      </div>
+      <div class="fc-meta">
+        <span>📍 ${it.loc}</span><span class="dot">·</span>
+        <span>${it.src}</span><span class="dot">·</span>
+        <span>${it.time}</span>
+      </div>
+      <div class="fc-summary">${it.summary}</div>
+      <div class="fc-why">${it.why}</div>
+      <div class="fc-bottom">
+        <div class="fc-tags">
+          <span class="fc-tag">${it.cat}</span>
+          <span class="fc-tag">${it.regio}</span>
+        </div>
+        <button class="fc-insteek-btn" data-insteek="${it.id}">⚡ Insteek</button>
+      </div>
+    </article>
+  `).join('');
+  // animate in
+  gsap.from('.feed-card',{y:14,opacity:0,duration:.4,stagger:.04,ease:'power2.out',clearProps:'all'});
+
+  // wire favorites
+  feedListEl.querySelectorAll('[data-fav]').forEach(b=>{
+    b.addEventListener('click',e=>{
+      e.stopPropagation();
+      const id = parseInt(b.dataset.fav);
+      if(favorites.has(id)){ favorites.delete(id); b.classList.remove('on'); b.textContent='☆'; }
+      else { favorites.add(id); b.classList.add('on'); b.textContent='★';
+        gsap.fromTo(b,{scale:1.4},{scale:1,duration:.3,ease:'back.out(2)'});
+      }
+    });
+  });
+  // wire insteek buttons
+  feedListEl.querySelectorAll('[data-insteek]').forEach(b=>{
+    b.addEventListener('click',e=>{
+      e.stopPropagation();
+      const id = parseInt(b.dataset.insteek);
+      selectForInsteek(id);
+      gsap.to(window,{duration:1,scrollTo:{y:'#insteek',offsetY:0},ease:'power2.inOut',
+        onComplete:()=> setTimeout(()=> startInsteek(), 300)
+      });
+    });
+  });
+}
+[fRegio,fCat,fSort].forEach(el=> el.addEventListener('change',renderFeed));
+renderFeed();
+
+/* feed mini chart */
+(function chart(){
+  const ctx = document.getElementById('feedChart');
+  if(!ctx || !window.Chart) return;
+  new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:['ma','di','wo','do','vr','za','zo'],
+      datasets:[{
+        data:[42,51,38,47,52,29,33],
+        borderColor:'#e2148b',
+        backgroundColor:'rgba(226,20,139,.2)',
+        fill:true,tension:.4,pointRadius:0,borderWidth:2,
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{x:{display:false},y:{display:false}},
+      animation:{duration:1200}
+    }
+  });
+})();
+
+/* animated number for stat */
+ScrollTrigger.create({
+  trigger:'#feed',start:'top 70%',
+  onEnter:()=>{
+    const obj={v:0};
+    gsap.to(obj,{v:52,duration:1.2,ease:'power2.out',onUpdate:()=>{
+      document.getElementById('feedStatNum').textContent = Math.round(obj.v);
+    }});
+  }
+});
+
+/* ==================== SECTION 5: INSTEEK ==================== */
+const INSTEEK_OUTPUTS = {
+  1:`📍 LOCATIE: Snackbar De Gildehof, Apeldoorn
+
+🎯 INVALSHOEK
+Straatinterview + confrontatie. Ga naar de snackbar, interview het personeel over het moment zelf. Vraag naar de emotie, de angst, en het heldengevoel. Confronteer daarna de politie: waarom duurt het zo lang voordat ze er zijn?
+
+❓ VRAGEN VOOR VERSLAGGEVER
+• "Wat ging er door je heen toen je die man zag?"
+• "Had je het gevoel dat je geen keus had?"
+• "Hoe snel was de politie er?"
+• "Voelt u zich veilig in deze buurt?"
+
+🎤 SPREKERS
+• Personeel snackbar (held van het verhaal)
+• Eigenaar snackbar
+• Buurtbewoners (veiligheids­gevoel)
+• Wijkagent (reactietijd)
+
+📱 VISUEEL
+Beveiligings­camera beelden (check of beschikbaar). Straat­interview voor de snackbar. B-roll van de buurt. Sluit af met het personeel achter de toonbank — terug aan het werk alsof er niks is gebeurd.
+
+⏱️ Geschatte productietijd: 1 dag
+📊 Viral potentie: HOOG (held-verhaal, visueel sterk)`,
+  2:`📍 LOCATIE: Hoogeveen, opvanglocatie noodgebouw
+
+🎯 INVALSHOEK
+Twee kanten van het verhaal. De buurt: waarom voelen ze zich niet gehoord? De gemeente: waarom kon het niet anders? Geen oordeel, wél confrontatie. Laat de spanning zien zonder te kiezen.
+
+❓ VRAGEN VOOR VERSLAGGEVER
+• "Wat is precies uw bezwaar tegen deze opvang?"
+• "Wanneer bent u door de gemeente geïnformeerd?"
+• "Wat zou u doen als de gemeente had overlegd?"
+• "Hoe kijkt u naar de mensen in de bus?"
+
+🎤 SPREKERS
+• Bewoner uit de eerste rij (organisator van de blokkade)
+• Burgemeester of wethouder (verantwoording)
+• Een asielzoeker uit de bus (gezicht achter het cijfer)
+• COA-woordvoerder
+
+📱 VISUEEL
+Drone-shot van de blokkade, close-ups van borden. Interview met bewoners ín de menigte. Tegenshot: bus die wegrijdt. Slot­beeld: lege parkeerplaats bij avond.
+
+⏱️ Geschatte productietijd: 1-2 dagen
+📊 Viral potentie: HOOG (polariserend, herkenbaar)`,
+  3:`📍 LOCATIE: Reeshofpark, Tilburg
+
+🎯 INVALSHOEK
+Emotie centraal. Het baasje aan het woord, foto's en filmpjes van de hond, de plek waar het gebeurde. Daarna: confrontatie met de politie. Mocht het direct? Zijn er protocollen geschonden?
+
+❓ VRAGEN VOOR VERSLAGGEVER
+• "Hoe heeft uw hond zich gisteren gedragen?"
+• "Was er ruimte om hem te bedwingen zonder schot?"
+• "Wat doet dit met u?"
+• "Wat verwacht u van de politie nu?"
+
+🎤 SPREKERS
+• Eigenaar van de hond (centraal)
+• Getuige van het incident
+• Politiewoordvoerder of betrokken agent
+• Hondengedrags­deskundige (context)
+
+📱 VISUEEL
+Foto's van de hond bij leven. De plek met bloemen en kaarsjes. Eigenaar met halsband in de hand. Politiebureau van buiten. Parallel­montage tussen verdriet en officieel statement.
+
+⏱️ Geschatte productietijd: 1 dag
+📊 Viral potentie: HOOG (emotioneel, dier + autoriteit)`
+};
+const INSTEEK_META = {
+  1:{title:'Snackbarpersoneel slaat overvaller met frituurmand',meta:'📍 Apeldoorn · MISDAAD · Score 94',
+     summary:"Twee medewerkers van snackbar 'De Gildehof' overmeesterden gisteravond een gewapende overvaller met een gloeiend hete frituurmand. De man (32) zit in voorlopige hechtenis.",
+     why:'Gewone burger versus crimineel — typisch PowNed-underdog verhaal. Visueel sterk, viral potentie hoog.'},
+  2:{title:"Buurtbewoners blokkeren asielbus: 'Wij zijn niet gehoord'",meta:'📍 Hoogeveen · POLITIEK · Score 89',
+     summary:'Tientallen omwonenden voorkwamen vanmorgen de aankomst van een bus met asielzoekers bij een tijdelijke noodopvang. De gemeente zegt geen andere optie te hebben.',
+     why:'Asiel + burgerprotest + lokaal bestuur = PowNed-goud. Confrontatie­potentieel hoog.'},
+  3:{title:'Agent schiet hond neer na bijtincident, baasje woedend',meta:'📍 Tilburg · MISDAAD · Score 85',
+     summary:"Een politieagent schoot dinsdag­avond een Stafford­shire dood die zijn collega had aangevallen. De eigenaar spreekt van 'moord op mijn beste vriend' en eist excuses.",
+     why:'Emotioneel, visueel, confrontatie met autoriteit. Hond + politie = klikvee.'}
+};
+let currentInsteek = 1;
+let typingHandle = null;
+
+function selectForInsteek(id){
+  if(!INSTEEK_META[id]){
+    // unsupported item: show empty state
+    currentInsteek = id;
+    document.getElementById('inTitle').textContent = 'Geen demo-insteek beschikbaar';
+    document.getElementById('inMeta').textContent = `Item #${id}`;
+    document.getElementById('inSummary').textContent = 'Voor deze demo zijn alleen items 1, 2 en 3 voorzien van een gegenereerde insteek.';
+    document.getElementById('inWhy').textContent = 'Selecteer item 1, 2 of 3 om de Verhaal­insteek Generator te starten.';
+    showInEmpty();
+    return;
+  }
+  currentInsteek = id;
+  const m = INSTEEK_META[id];
+  document.getElementById('inTitle').textContent = m.title;
+  document.getElementById('inMeta').textContent = m.meta;
+  document.getElementById('inSummary').textContent = m.summary;
+  document.getElementById('inWhy').textContent = m.why;
+  // clear output
+  resetInsteekOutput();
+}
+function showInEmpty(){
+  resetInsteekOutput();
+  document.getElementById('inOutput').innerHTML =
+    `<div class="in-empty"><div class="arrow">↑</div><div>Selecteer item 1, 2 of 3 in de feed-sectie</div></div>`;
+}
+function resetInsteekOutput(){
+  if(typingHandle){clearTimeout(typingHandle);typingHandle=null;}
+  document.getElementById('inOutput').innerHTML='';
+}
+function startInsteek(){
+  if(!INSTEEK_OUTPUTS[currentInsteek]){ showInEmpty(); return; }
+  resetInsteekOutput();
+  const outEl = document.getElementById('inOutput');
+  const txt = INSTEEK_OUTPUTS[currentInsteek];
+  let i = 0;
+  function type(){
+    if(i > txt.length){
+      outEl.innerHTML = txt + '<span class="in-cursor"></span>';
+      return;
+    }
+    outEl.innerHTML = txt.slice(0,i) + '<span class="in-cursor"></span>';
+    i += (txt[i]==='\n' ? 1 : 1);
+    // slow on punctuation
+    let delay = 18;
+    const ch = txt[i-1];
+    if(ch==='\n') delay = 80;
+    else if(ch==='.' || ch==='!' || ch==='?') delay = 220;
+    else if(ch===',') delay = 100;
+    else if(ch===' ') delay = 14;
+    typingHandle = setTimeout(type, delay);
+  }
+  type();
+}
+document.getElementById('inGo').addEventListener('click',startInsteek);
+document.getElementById('inReset').addEventListener('click',resetInsteekOutput);
+
+// auto-start when section enters view (only first time)
+let insteekAutoStarted = false;
+ScrollTrigger.create({
+  trigger:'#insteek',start:'top 50%',
+  onEnter:()=>{
+    if(!insteekAutoStarted){
+      insteekAutoStarted = true;
+      startInsteek();
+    }
+  }
+});
+
+/* ==================== INIT ==================== */
+updateNav();
+updateProgress();
+
+// Refresh on resize for ScrollTrigger
+let resizeT;
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeT);
+  resizeT = setTimeout(()=> ScrollTrigger.refresh(), 200);
+});
+
+// console banner
+console.log('%cPowNed Redactie Agent — Concept Demo','background:linear-gradient(90deg,#9c2d8f,#e2148b);color:#fff;font-weight:700;font-size:14px;padding:6px 12px');
+console.log('HvA Smart Media Production · Blok 4 · Growth Hacking · 2026');
+</script>
+</body>
+</html>
