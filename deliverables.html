@@ -202,10 +202,19 @@ nav.topnav {
 .dg-sub { font-size: 13px; color: var(--graphite); line-height: 1.4; }
 
 /* Demographics table */
-.demo-table {
-  background: var(--bone); border: 1px solid var(--fog);
-  border-radius: var(--r-card); overflow: hidden;
+.demo-table-wrap {
+  position: relative;
   margin-bottom: 40px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--r-card);
+  border: 1px solid var(--fog);
+  background: var(--bone);
+}
+.demo-table {
+  background: var(--bone);
+  border-radius: var(--r-card); overflow: hidden;
+  min-width: 640px;
 }
 .demo-row {
   display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -497,6 +506,19 @@ nav.topnav {
 }
 .endbar-secondary:hover { border-color: #fff; color: #fff; }
 
+/* Scroll cue (right-edge fade) for horizontally scrollable tables on mobile.
+   Wrapper is non-scrolling, fade overlay sits on wrapper, inner div scrolls. */
+.scroll-cue { position: relative; }
+.scroll-cue::after {
+  content: ""; position: absolute; top: 1px; right: 1px; bottom: 1px;
+  width: 32px; pointer-events: none;
+  background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,.95));
+  border-top-right-radius: var(--r-card);
+  border-bottom-right-radius: var(--r-card);
+  opacity: 0; transition: opacity .2s ease;
+  z-index: 2;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 1024px) {
   .section-head { grid-template-columns: 1fr; gap: 24px; }
@@ -504,7 +526,6 @@ nav.topnav {
   .dg-personas { grid-template-columns: 1fr; }
   .dlist { grid-template-columns: 1fr; }
   .cost-grid { grid-template-columns: repeat(2, 1fr); }
-  .demo-row { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
   .wf-detail { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
@@ -522,8 +543,16 @@ nav.topnav {
   .nav-link { display: none; }
   .endbar-secondary { margin-left: 0; margin-top: 12px; }
   .demo-cell { padding: 10px 12px; font-size: 12px; }
-  .demo-row { grid-template-columns: 1fr 1fr; }
-  .demo-cell.head:nth-child(n+3), .demo-cell:nth-child(n+3) { display: none; }
+  .scroll-cue::after { opacity: 1; }
+}
+@media (max-width: 480px) {
+  .hero { padding: 84px 16px 56px; }
+  .section { padding: 48px 16px; }
+  .endbar { padding: 40px 16px; }
+  nav.topnav { padding: 12px 16px; }
+  .tools-conclusion { padding: 28px 22px; }
+  .endbar-secondary { display: flex; justify-content: center; }
+  .endbar-cta { display: inline-flex; }
 }
 </style>
 </head>
@@ -611,6 +640,7 @@ nav.topnav {
       </div>
     </div>
 
+    <div class="demo-table-wrap scroll-cue">
     <div class="demo-table">
       <div class="demo-row">
         <div class="demo-cell head">Demografie</div>
@@ -648,6 +678,7 @@ nav.topnav {
         <div class="demo-cell">Gemiddeld</div>
         <div class="demo-cell">Hoog</div>
       </div>
+    </div>
     </div>
 
     <div class="dg-personas">
@@ -727,7 +758,7 @@ nav.topnav {
       </p>
     </div>
 
-    <div class="compare">
+    <div class="compare scroll-cue">
       <table>
         <thead>
           <tr>
@@ -987,10 +1018,18 @@ renderWorkflow(1);
 
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
+    const href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    if (href === '#top') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
-      window.scrollTo({ top: target.offsetTop - 60, behavior: 'smooth' });
+      const navH = document.querySelector('nav.topnav')?.offsetHeight || 60;
+      window.scrollTo({ top: target.offsetTop - navH - 8, behavior: 'smooth' });
     }
   });
 });

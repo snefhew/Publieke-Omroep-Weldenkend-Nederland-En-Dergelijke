@@ -30,7 +30,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 body {
   font-family: var(--ff);
   background: var(--paper);
@@ -434,8 +434,8 @@ body {
   gap: 22px;
   cursor: pointer;
   transition: transform 0.3s var(--easing);
+  transform: translate(0, 0);
 }
-.logo-mark-large:hover { transform: scale(1.04); }
 .logo-mark-large .mark-svg {
   width: 88px;
   height: 88px;
@@ -673,6 +673,10 @@ body {
   font-weight: 600;
   transition: flex 0.6s var(--easing);
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+  padding: 0 4px;
 }
 .color-ratio-explainer {
   font-size: 14px;
@@ -779,10 +783,31 @@ body {
   border-radius: 999px;
   cursor: pointer;
 }
+.type-slider input { height: 24px; padding: 0; background: transparent; }
+.type-slider input::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--mist);
+  border-radius: 999px;
+}
+.type-slider input::-moz-range-track {
+  height: 2px;
+  background: var(--mist);
+  border-radius: 999px;
+}
 .type-slider input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
+  margin-top: -10px;
+  background: var(--signal);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s var(--easing);
+}
+.type-slider input::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
   background: var(--signal);
   border: 2px solid var(--ink);
   border-radius: 50%;
@@ -790,6 +815,11 @@ body {
   transition: transform 0.15s var(--easing);
 }
 .type-slider input::-webkit-slider-thumb:hover { transform: scale(1.2); }
+@media (pointer: coarse) {
+  .type-slider input { height: 44px; }
+  .type-slider input::-webkit-slider-thumb { width: 28px; height: 28px; margin-top: -13px; }
+  .type-slider input::-moz-range-thumb { width: 28px; height: 28px; }
+}
 .type-slider-value {
   font-family: var(--ff-mono);
   font-size: 12px;
@@ -1069,27 +1099,47 @@ body {
   .principle-content { padding-right: 0; }
 }
 @media (max-width: 768px) {
+  html { scroll-padding-top: 64px; }
   .nav { padding: 12px 20px; }
   .nav-right { display: none; }
   .nav-side { display: none; }
   .hero { padding: 100px 20px 60px; }
+  .hero-title { letter-spacing: -0.04em; }
   .section { padding: 80px 20px; }
   .footer { padding: 60px 20px 32px; }
   .color-grid { grid-template-columns: 1fr; }
   .logo-rules { grid-template-columns: 1fr; }
   .logo-grid { grid-template-columns: 1fr; }
+  .logo-display { min-height: 280px; padding: 24px; }
+  .logo-mark-large .mark-svg { width: 64px; height: 64px; }
+  .logo-mark-large .word { font-size: 60px; }
+  .logo-mark-large { gap: 16px; }
   .type-grid { grid-template-columns: 1fr; }
   .tone-grid { grid-template-columns: 1fr; }
+  .tone-pair { padding: 24px; }
   .principle { grid-template-columns: 1fr; gap: 12px; padding: 28px 0; }
   .principle-num { padding-top: 0; }
   .principle-content { padding-right: 0; }
   .hero-meta { gap: 24px; }
   .footer-mark { font-size: 96px; }
   .color-card-vis { height: 140px; }
+  .color-card[data-hex="#DCFF00"] .color-card-vis { height: 180px; }
   .type-card { padding: 24px; }
+  .type-preview { font-size: clamp(40px, 11vw, 72px); }
   .color-usage { padding: 24px; }
-  .color-bar { height: 60px; }
+  .color-bar { height: auto; flex-direction: column; }
+  .color-bar-segment { padding: 14px 12px; }
+  .footer-cta { font-size: 14px; padding: 14px 20px; }
   .gha-block, .footer-meta { gap: 16px; }
+  .type-scale-row { flex-wrap: wrap; gap: 12px; padding: 14px 0; }
+  .type-scale-text { width: 100%; flex-basis: 100%; }
+  .type-scale-text[style*="font-size: 56px"] { font-size: 36px !important; }
+  .type-scale-text[style*="font-size: 36px"] { font-size: 28px !important; }
+}
+@media (max-width: 480px) {
+  .hero-eyebrow { font-size: 11px; }
+  .section-title { letter-spacing: -0.025em; }
+  .footer-meta-item { font-size: 10px; }
 }
 </style>
 </head>
@@ -1187,7 +1237,7 @@ body {
     <div class="logo-grid reveal">
       <div class="logo-display display-primary" id="logoDisplay">
         <div class="logo-mark-large" id="logoMain">
-          <svg class="mark-svg"><use href="#lede-mark"/></svg>
+          <svg class="mark-svg" viewBox="0 0 32 32" aria-hidden="true"><use href="#lede-mark"/></svg>
           <span class="word">Lede<span class="dot">.</span></span>
         </div>
       </div>
@@ -1196,7 +1246,7 @@ body {
         <button type="button" class="logo-variant active" data-variant="primary">
           <span class="logo-variant-label">Primair  ·  Licht oppervlak</span>
           <div class="logo-variant-vis">
-            <svg class="mark-svg"><use href="#lede-mark"/></svg>
+            <svg class="mark-svg" viewBox="0 0 32 32" aria-hidden="true"><use href="#lede-mark"/></svg>
             <span class="word-mini">Lede<span class="dot">.</span></span>
           </div>
         </button>
@@ -1204,7 +1254,7 @@ body {
         <button type="button" class="logo-variant dark" data-variant="dark">
           <span class="logo-variant-label">Mono  ·  Donker oppervlak</span>
           <div class="logo-variant-vis">
-            <svg class="mark-svg"><use href="#lede-mark"/></svg>
+            <svg class="mark-svg" viewBox="0 0 32 32" aria-hidden="true"><use href="#lede-mark"/></svg>
             <span class="word-mini">Lede<span class="dot">.</span></span>
           </div>
         </button>
@@ -1212,7 +1262,7 @@ body {
         <button type="button" class="logo-variant signal" data-variant="signal">
           <span class="logo-variant-label">Signal  ·  Op accentkleur</span>
           <div class="logo-variant-vis">
-            <svg class="mark-svg"><use href="#lede-mark"/></svg>
+            <svg class="mark-svg" viewBox="0 0 32 32" aria-hidden="true"><use href="#lede-mark"/></svg>
             <span class="word-mini">Lede<span class="dot">.</span></span>
           </div>
         </button>
@@ -1604,18 +1654,21 @@ document.querySelectorAll('.logo-variant').forEach(v => {
   });
 });
 
-// ====== Logo cursor follow ======
+// ====== Logo cursor follow (skip on touch / coarse pointers) ======
 const logoMain = document.getElementById('logoMain');
 const logoDisplay = logoMain.parentElement;
-logoDisplay.addEventListener('mousemove', e => {
-  const rect = logoDisplay.getBoundingClientRect();
-  const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
-  const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-  logoMain.style.transform = `translate(${x * 14}px, ${y * 14}px) scale(1.02)`;
-});
-logoDisplay.addEventListener('mouseleave', () => {
-  logoMain.style.transform = '';
-});
+const isFinePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+if (isFinePointer) {
+  logoDisplay.addEventListener('mousemove', e => {
+    const rect = logoDisplay.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+    const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+    logoMain.style.transform = `translate(${x * 14}px, ${y * 14}px) scale(1.02)`;
+  });
+  logoDisplay.addEventListener('mouseleave', () => {
+    logoMain.style.transform = '';
+  });
+}
 
 // ====== Color bar grow animation on view ======
 const colorBar = document.getElementById('colorBar');
@@ -1636,10 +1689,18 @@ colorBarIO.observe(colorBar);
 // ====== Smooth scroll for anchor nav ======
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
+    const href = a.getAttribute('href');
+    if (!href || href === '#' || href.length < 2) {
+      // brand link -> scroll to top
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    let target;
+    try { target = document.querySelector(href); } catch (_) { return; }
     if (target) {
       e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth' });
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
 });
