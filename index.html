@@ -79,9 +79,11 @@ nav.scrolled .nav-link { color: var(--graphite); }
 nav.scrolled .nav-link:hover { color: var(--ink); }
 nav.scrolled .nav-link.active { background: var(--ink); color: #fff; }
 nav.scrolled .nav-brand { color: var(--ink); }
-.nav-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.nav-brand { font-weight: 700; font-size: 18px; letter-spacing: -0.02em; color: #fff; cursor: pointer; transition: color .3s; display: flex; align-items: center; gap: 8px; }
+.nav-inner { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
+.nav-brand { font-weight: 700; font-size: 18px; letter-spacing: -0.02em; color: #fff; cursor: pointer; transition: color .3s; display: flex; align-items: center; gap: 8px; justify-self: center; }
 .nav-brand-mark { display: inline-block; width: 22px; height: 22px; background: var(--grad-pow); border-radius: 5px; }
+.nav-left { display: flex; gap: 4px; align-items: center; justify-self: start; }
+.nav-right { display: flex; gap: 4px; align-items: center; justify-self: end; }
 .nav-links { display: flex; gap: 4px; align-items: center; }
 .nav-link { background: none; border: none; cursor: pointer; font-family: var(--ff); font-size: 13px; font-weight: 500; color: rgba(255,255,255,.7); padding: 8px 14px; border-radius: var(--r-pill); transition: all .2s; letter-spacing: -0.005em; }
 .nav-link:hover { color: #fff; }
@@ -1703,8 +1705,7 @@ nav.scrolled .nav-brand { color: var(--ink); }
   transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .25s, opacity .35s, filter .35s;
   will-change: transform;
   box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.12);
-  left: var(--x); top: var(--y);
-  transform: translate(-50%, -50%) translate(calc(cos(var(--ang, 0) * 1deg) * var(--rad, 0) * 1px), calc(sin(var(--ang, 0) * 1deg) * var(--rad, 0) * 1px));
+  /* left/top set by JS based on --ang and --rad */
 }
 .hcc-node .label {
   font-family: var(--ff-mono); font-size: 9px; font-weight: 500;
@@ -1722,7 +1723,7 @@ nav.scrolled .nav-brand { color: var(--ink); }
 }
 .hcc-node:hover {
   border-color: var(--magenta);
-  transform: translate(-50%, -50%) translate(calc(cos(var(--ang, 0) * 1deg) * var(--rad, 0) * 1px), calc(sin(var(--ang, 0) * 1deg) * var(--rad, 0) * 1px)) scale(1.06);
+  transform: scale(1.06);
   box-shadow: 0 4px 12px rgba(226,20,139,.25), 0 18px 42px -16px rgba(226,20,139,.35);
   z-index: 6;
 }
@@ -2120,6 +2121,10 @@ nav.scrolled .nav-brand { color: var(--ink); }
   .nav { padding: 12px 20px; }
   .nav-links { display: none; }
   .nav-cta { display: none; }
+  .nav-inner { grid-template-columns: 1fr auto; gap: 12px; }
+  .nav-left { display: none; }
+  .nav-right { display: none; }
+  .nav-brand { justify-self: end; }
   .jtbd-block { padding: 32px 24px; }
   .jtbd-block .quote { font-size: 22px; }
   .insteek-output { padding: 24px; max-height: 600px; }
@@ -2179,22 +2184,24 @@ nav.scrolled .nav-brand { color: var(--ink); }
 <!-- Nav -->
 <nav id="nav">
   <div class="nav-inner">
+    <div class="nav-left">
+      <a class="nav-link" href="deliverables.html">Deliverables</a>
+      <a class="nav-link" href="brand-guide.html">Brand Guide</a>
+    </div>
     <div class="nav-brand" data-to="hero">
       <span class="nav-brand-mark"></span>
       <span>Redactie Agent</span>
     </div>
-    <div class="nav-links">
+    <div class="nav-right">
       <button class="nav-link active" data-to="brief">Brief</button>
       <button class="nav-link" data-to="canvas">Canvas</button>
       <button class="nav-link" data-to="auto-3">Feed</button>
       <button class="nav-link" data-to="auto-4">Insteek</button>
-      <a class="nav-link" href="deliverables.html">Deliverables</a>
-      <a class="nav-link" href="brand-guide.html">Brand Guide</a>
+      <button class="nav-cta" data-to="auto-3">
+        <span>Bekijk de feed</span>
+        <svg class="icon-sm"><use href="#i-arrow-right"/></svg>
+      </button>
     </div>
-    <button class="nav-cta" data-to="auto-3">
-      <span>Bekijk de feed</span>
-      <svg class="icon-sm"><use href="#i-arrow-right"/></svg>
-    </button>
   </div>
 </nav>
 
@@ -3729,7 +3736,7 @@ function runPipelineStages(callback) {
     stages[i].classList.add('active');
     pipeBar.style.width = `${((i + 1) / stages.length) * 100}%`;
     i++;
-    pipeTimer = setTimeout(next, 600);
+    pipeTimer = setTimeout(next, 320);
   }
   next();
 }
@@ -3758,11 +3765,11 @@ function startType() {
     inOut.innerHTML = formatInsteek(txt.slice(0, i)) + '<span class="cursor-blink"></span>';
     i++;
     const ch = txt[i - 1];
-    let d = 8;
-    if (ch === '\n') d = 30;
-    else if ('.!?'.includes(ch)) d = 80;
-    else if (ch === ',') d = 40;
-    else if (ch === ' ') d = 5;
+    let d = 3;
+    if (ch === '\n') d = 14;
+    else if ('.!?'.includes(ch)) d = 38;
+    else if (ch === ',') d = 18;
+    else if (ch === ' ') d = 2;
     else if (ch === '*') d = 0;
     typeTimer = setTimeout(type, d);
   }
@@ -3812,6 +3819,22 @@ ScrollTrigger.create({
     impl:    ['mact','change'],
     change:  ['impl','reinf']
   };
+
+  function positionNodes() {
+    const sR = stage.getBoundingClientRect();
+    const cx = sR.width / 2;
+    const cy = sR.height / 2;
+    nodes.forEach(n => {
+      const ang = parseFloat(n.style.getPropertyValue('--ang')) || 0;
+      const rad = parseFloat(n.style.getPropertyValue('--rad')) || 0;
+      const r   = parseFloat(n.style.getPropertyValue('--r')) || 70;
+      const radians = ang * Math.PI / 180;
+      const x = cx + Math.cos(radians) * rad;
+      const y = cy + Math.sin(radians) * rad;
+      n.style.left = (x - r) + 'px';
+      n.style.top  = (y - r) + 'px';
+    });
+  }
 
   function nodeCenter(n) {
     const sR = stage.getBoundingClientRect();
@@ -3918,6 +3941,7 @@ ScrollTrigger.create({
   }
 
   function rebuild() {
+    positionNodes();
     buildEdges();
     if (reading) {
       stopRead();

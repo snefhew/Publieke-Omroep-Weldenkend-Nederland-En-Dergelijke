@@ -73,34 +73,31 @@ body {
   align-items: center;
   justify-content: center;
 }
-.nav-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
-  background: var(--ink);
-  color: var(--paper);
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: transform .15s var(--easing), background .15s var(--easing), color .15s var(--easing);
-}
-.nav-back:hover { transform: translateX(-2px); background: var(--signal); color: var(--ink); }
-.nav-back svg { width: 12px; height: 12px; }
-.nav-cluster { display: flex; align-items: center; gap: 8px; }
+.nav-cluster { display: flex; align-items: center; gap: 4px; }
 .nav-link {
   font-family: var(--ff);
   font-size: 13px;
   font-weight: 500;
-  color: var(--ink);
+  color: var(--slate);
   text-decoration: none;
-  padding: 9px 14px;
+  padding: 8px 14px;
   border-radius: 999px;
-  border: 1px solid var(--mist);
-  transition: background .15s var(--easing), border-color .15s var(--easing);
+  background: none; border: none; cursor: pointer;
+  letter-spacing: -0.005em;
+  transition: background .15s var(--easing), color .15s var(--easing);
 }
-.nav-link:hover { background: var(--signal); border-color: var(--signal-deep); }
+.nav-link:hover { color: var(--ink); background: rgba(0,0,0,.04); }
+.nav-link.active { background: var(--ink); color: var(--paper); }
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--ink); color: var(--paper);
+  padding: 8px 14px; border-radius: 999px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  border: none; cursor: pointer;
+  transition: background .15s var(--easing), color .15s var(--easing);
+}
+.nav-cta:hover { background: var(--signal); color: var(--ink); }
+.nav-cta svg { width: 12px; height: 12px; }
 @media (max-width: 640px) {
   .nav-link { display: none; }
 }
@@ -1136,12 +1133,13 @@ body {
     <span>Lede<span class="dot">.</span></span>
   </a>
   <div class="nav-cluster">
+    <a href="index.html" class="nav-link">Redactie Agent</a>
     <a href="deliverables.html" class="nav-link">Deliverables</a>
-    <a href="index.html" class="nav-back">
-      <svg viewBox="0 0 12 12" fill="none">
-        <path d="M7 2L3 6L7 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <a href="index.html#auto-3" class="nav-cta">
+      <span>Bekijk de feed</span>
+      <svg viewBox="0 0 16 16" fill="none">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      Redactie Agent
     </a>
   </div>
 </nav>
@@ -1416,29 +1414,29 @@ body {
     <div class="tone-grid reveal">
       <div class="tone-pair do">
         <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Wel</span>
-        <p class="tone-pair-quote">"De Agent vindt 247 items. Daarvan zijn er 50 relevant. De redactie kiest welke vijf vandaag worden gemaakt."</p>
+        <p class="tone-pair-quote">"247 items binnen, 50 doorgelaten, top 3 op de redactietafel om 06:42. Eindredactie wint 90 minuten per ochtend."</p>
       </div>
       <div class="tone-pair dont">
         <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M3 3L8 8M8 3L3 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>Niet</span>
-        <p class="tone-pair-quote">"Ons revolutionaire AI-platform unlockt synergieën in de moderne newsroom workflow."</p>
+        <p class="tone-pair-quote">"Ons schaalbare AI-platform tilt de redactionele workflow naar het volgende niveau."</p>
       </div>
 
       <div class="tone-pair do">
         <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Wel</span>
-        <p class="tone-pair-quote">"Score 94 omdat: lokaal, conflict, visueel sterk."</p>
+        <p class="tone-pair-quote">"Score 94. Lokaal incident, burger tegenover autoriteit, beelden zijn er al. Brabant-redactie krijgt 'm vóór 07:00."</p>
       </div>
       <div class="tone-pair dont">
         <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M3 3L8 8M8 3L3 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>Niet</span>
-        <p class="tone-pair-quote">"De AI heeft op basis van geavanceerde algoritmes een hoge relevantie-correlatie vastgesteld."</p>
+        <p class="tone-pair-quote">"De AI heeft op basis van geavanceerde algoritmes een statistisch significante relevantie-correlatie vastgesteld."</p>
       </div>
 
       <div class="tone-pair do">
         <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Wel</span>
-        <p class="tone-pair-quote">"Dit is een prototype. Het werkt, maar nog niet volledig. Hier is wat we wel hebben."</p>
+        <p class="tone-pair-quote">"We bouwen op n8n, Postgres en Claude. Code en data blijven van jullie. Geen vendor lock-in, geen blackbox."</p>
       </div>
       <div class="tone-pair dont">
         <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M3 3L8 8M8 3L3 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>Niet</span>
-        <p class="tone-pair-quote">"We zijn enthousiast om je vandaag onze visie op de toekomst van journalistiek te presenteren."</p>
+        <p class="tone-pair-quote">"Met onze proprietary AI-suite ontzorgen wij organisaties met een schaalbaar, future-proof platform."</p>
       </div>
     </div>
   </div>

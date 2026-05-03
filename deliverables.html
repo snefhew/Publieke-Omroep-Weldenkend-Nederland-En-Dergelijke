@@ -62,34 +62,43 @@ nav.topnav {
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
   border-bottom: 1px solid var(--driftwood);
-  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: 16px;
 }
 .nav-brand {
-  display: flex; align-items: center; gap: 10px;
-  font-weight: 700; font-size: 16px; letter-spacing: -0.02em;
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 18px; letter-spacing: -0.02em;
   text-decoration: none; color: var(--ink);
+  justify-self: center;
 }
 .nav-brand-mark {
-  width: 22px; height: 22px;
+  display: inline-block; width: 22px; height: 22px;
   background: var(--grad-pow); border-radius: 5px;
 }
-.nav-cluster { display: flex; align-items: center; gap: 6px; }
+.nav-left { display: flex; gap: 4px; align-items: center; justify-self: start; }
+.nav-right { display: flex; gap: 4px; align-items: center; justify-self: end; }
 .nav-link {
   font-family: var(--ff); font-size: 13px; font-weight: 500;
   color: var(--graphite); text-decoration: none;
   padding: 8px 14px; border-radius: var(--r-pill);
+  background: none; border: none; cursor: pointer;
+  letter-spacing: -0.005em;
   transition: background .15s var(--easing), color .15s var(--easing);
 }
 .nav-link:hover { color: var(--ink); background: rgba(0,0,0,.04); }
 .nav-link.active { background: var(--ink); color: #fff; }
 .nav-cta {
-  display: inline-flex; align-items: center; gap: 8px;
+  display: inline-flex; align-items: center; gap: 6px;
   background: var(--ink); color: #fff;
-  padding: 9px 14px; border-radius: var(--r-pill);
+  padding: 8px 14px; border-radius: var(--r-pill);
   font-size: 13px; font-weight: 500; text-decoration: none;
-  transition: background .15s var(--easing), transform .15s var(--easing);
+  border: none; cursor: pointer;
+  transition: background .15s var(--easing);
 }
-.nav-cta:hover { background: var(--magenta); transform: translateX(-2px); }
+.nav-cta:hover { background: var(--magenta); }
 .nav-cta svg { width: 12px; height: 12px; }
 
 /* === HERO === */
@@ -509,6 +518,9 @@ nav.topnav {
 }
 @media (max-width: 768px) {
   nav.topnav { padding: 12px 20px; }
+  .nav-inner { grid-template-columns: 1fr auto; gap: 12px; }
+  .nav-left, .nav-right { display: none; }
+  .nav-brand { justify-self: end; }
   .hero { padding: 90px 20px 60px; }
   .section { padding: 56px 20px; }
   .endbar { padding: 48px 20px; }
@@ -530,21 +542,26 @@ nav.topnav {
 <div id="progress"></div>
 
 <nav class="topnav">
-  <a href="index.html" class="nav-brand">
-    <span class="nav-brand-mark"></span>
-    <span>Redactie Agent</span>
-  </a>
-  <div class="nav-cluster">
-    <a href="#doelgroep" class="nav-link">Doelgroep</a>
-    <a href="#tools" class="nav-link">Tools</a>
-    <a href="#workflow" class="nav-link">Workflow</a>
-    <a href="brand-guide.html" class="nav-link">Brand Guide</a>
-    <a href="index.html" class="nav-cta">
-      <svg viewBox="0 0 12 12" fill="none">
-        <path d="M7 2L3 6L7 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>Naar de demo</span>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a class="nav-link" href="index.html">Redactie Agent</a>
+      <a class="nav-link" href="brand-guide.html">Brand Guide</a>
+    </div>
+    <a href="#top" class="nav-brand">
+      <span class="nav-brand-mark"></span>
+      <span>Deliverables</span>
     </a>
+    <div class="nav-right">
+      <a class="nav-link" href="#doelgroep">Doelgroep</a>
+      <a class="nav-link" href="#tools">Tools</a>
+      <a class="nav-link" href="#workflow">Workflow</a>
+      <a class="nav-cta" href="index.html#auto-3">
+        <span>Bekijk de feed</span>
+        <svg viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
   </div>
 </nav>
 
