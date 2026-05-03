@@ -51,7 +51,8 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 *::selection { background: var(--magenta); color: #fff; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+section[id] { scroll-margin-top: 72px; }
 body {
   font-family: var(--ff);
   font-feature-settings: "ss01", "cv11";
@@ -1903,8 +1904,10 @@ nav { transition: transform .3s ease; }
     counter-reset: hccstep;
   }
   .hcc-node {
-    position: relative; left: auto; top: auto;
-    width: 100%; height: auto; border-radius: 14px;
+    position: relative !important;
+    left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important;
+    border-radius: 14px;
     transform: none !important;
     text-align: left; padding: 18px; align-items: flex-start;
   }
@@ -2138,7 +2141,10 @@ nav { transition: transform .3s ease; }
 .cosine-score, .cosine-angle {
   display: flex; justify-content: space-between; align-items: baseline;
   font-family: var(--ff-mono);
+  min-width: 0; gap: 12px; flex-wrap: wrap;
 }
+.cosine-score-label, .cosine-angle-label { flex-shrink: 0; }
+.cosine-score-val, .cosine-angle-val { word-break: break-all; max-width: 100%; }
 .cosine-score-label, .cosine-angle-label {
   font-size: 11px; color: var(--graphite);
   letter-spacing: 0.04em; text-transform: uppercase;
@@ -2210,7 +2216,7 @@ nav { transition: transform .3s ease; }
   .insteek-grid { grid-template-columns: 1fr; }
   .insteek-source { position: relative; top: auto; }
   .insteek-output { max-height: none; overflow: visible; }
-  .macos-body { grid-template-columns: 1fr; height: auto; min-height: 0; }
+  .macos-body { grid-template-columns: 1fr; height: auto; min-height: 0; max-height: 85dvh; }
   .feed-side {
     border-right: none;
     border-bottom: 1px solid var(--fog);
@@ -2277,12 +2283,20 @@ nav { transition: transform .3s ease; }
   .viz-01 .src-text { font-size: 11px; }
   .viz-02 { height: 320px; }
   .viz-02-info { grid-template-columns: 1fr; gap: 10px; }
+  .dna-card { padding: 18px; }
+  .dna-row { flex-wrap: wrap; gap: 8px 10px; padding: 8px 0; }
+  .dna-text { white-space: normal; min-width: 0; flex: 1 1 auto; font-size: 13px; line-height: 1.35; }
+  .dna-bar { width: 100%; flex: 0 0 100%; }
+  .cosine-demo { padding: 16px; }
+  .cosine-demo-body { gap: 14px; }
+  .cosine-vec svg { height: 180px; }
+  .cosine-score-val, .cosine-angle-val { font-size: 20px; }
   .cosine-vec svg { height: 200px; }
   .cosine-opt { padding: 12px 14px; min-height: 44px; touch-action: manipulation; font-size: 13px; }
   .feed-side { padding: 10px 8px; gap: 4px; }
   .feed-side-item { padding: 8px 10px; font-size: 13px; min-height: 38px; }
   .feed-side-stats { padding: 12px 8px 4px; }
-  .feed-list { padding: 10px 12px 16px; max-height: none; }
+  .feed-list { padding: 10px 12px 16px; max-height: 70dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .fc { padding: 14px 14px; }
   .fc-title { font-size: 14.5px; }
   .fc-meta { font-size: 11px; }
@@ -4105,6 +4119,8 @@ ScrollTrigger.create({
   };
 
   function positionNodes() {
+    // Skip on mobile — CSS stacks the nodes vertically there.
+    if (window.matchMedia('(max-width: 880px)').matches) return;
     const sR = stage.getBoundingClientRect();
     const cx = sR.width / 2;
     const cy = sR.height / 2;
