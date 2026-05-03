@@ -1421,26 +1421,38 @@ nav {
 .in-jumper-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 6px;
 }
 .in-jumper-btn {
   font-family: var(--ff-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  padding: 4px 8px;
-  border-radius: 5px;
-  background: var(--canvas);
-  border: 1px solid var(--fog);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bone);
+  border: 1px solid var(--driftwood);
   color: var(--graphite);
   cursor: pointer;
-  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-feature-settings: "tnum";
+  transition: transform .15s ease, border-color .15s ease, color .15s ease, background .15s ease;
 }
 .in-jumper-btn:hover {
-  border-color: var(--magenta);
-  color: var(--magenta);
+  border-color: var(--ink);
+  color: var(--ink);
+  transform: translateY(-1px);
 }
 .in-jumper-btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+.in-jumper-btn.active:hover {
   background: var(--magenta);
   border-color: var(--magenta);
   color: #fff;
@@ -1757,8 +1769,8 @@ nav {
 .hcc-step-num {
   font-family: var(--ff-mono); font-size: 9px; font-weight: 600;
   letter-spacing: .08em; color: var(--graphite-soft);
-  margin-bottom: 6px; opacity: 0;
-  transition: opacity .4s var(--easing), color .25s, transform .25s, text-shadow .25s;
+  margin-bottom: 6px; opacity: 1;
+  transition: color .25s, transform .25s, text-shadow .25s;
   font-feature-settings: "tnum";
 }
 .hcc-stage.show-numbers .hcc-step-num { opacity: 1; }
@@ -2393,7 +2405,7 @@ nav {
         <div class="hcc-nodes" id="hccNodes">
           <div class="cv hcc-node hcc-core reveal" data-m="collab" data-cn="collab" data-step="7" style="--r:120px"><span class="hcc-step-num">07</span><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik.</p><span class="hcc-more">Lees meer →</span></div>
 
-          <div class="cv hcc-node hcc-found reveal" data-m="jtbd"     data-cn="jtbd"     data-step="1"  style="--r:90px;--ang:-90;--rad:240"><span class="hcc-step-num">01</span><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil</h4><p>Lokale verhalen met landelijk potentieel snel signaleren, voor 08:30.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-found reveal" data-m="jtbd"     data-cn="jtbd"     data-step="1"  style="--r:90px;--ang:-90;--rad:240"><span class="hcc-step-num">01</span><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil</h4><p>Lokale verhalen met landelijk potentieel, voor 08:30.</p><span class="hcc-more">Lees meer →</span></div>
           <div class="cv hcc-node hcc-found reveal" data-m="promise"  data-cn="promise"  data-step="2"  style="--r:90px;--ang:30;--rad:240"><span class="hcc-step-num">02</span><div class="label">AI Promise</div><h4>Wat de tech kan</h4><p>30+ bronnen monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p><span class="hcc-more">Lees meer →</span></div>
           <div class="cv hcc-node hcc-found reveal" data-m="hact"     data-cn="hact"     data-step="3"  style="--r:90px;--ang:150;--rad:240"><span class="hcc-step-num">03</span><div class="label">Human Activities</div><h4>Wat de mens doet</h4><p>Eindredactie, invalshoek, ethiek, verhaal vertellen.</p><span class="hcc-more">Lees meer →</span></div>
 
@@ -2401,9 +2413,9 @@ nav {
           <div class="cv hcc-node hcc-bridge reveal" data-m="benefits" data-cn="benefits" data-step="5"  style="--r:84px;--ang:80;--rad:365"><span class="hcc-step-num">05</span><div class="label">Benefits</div><h4>Wat het oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p><span class="hcc-more">Lees meer →</span></div>
           <div class="cv hcc-node hcc-bridge reveal" data-m="mact"     data-cn="mact"     data-step="6"  style="--r:84px;--ang:200;--rad:365"><span class="hcc-step-num">06</span><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p><span class="hcc-more">Lees meer →</span></div>
 
-          <div class="cv hcc-node hcc-frame reveal" data-m="bias"   data-cn="bias"   data-step="8"  style="--r:82px;--ang:-130;--rad:465"><span class="hcc-step-num">08</span><div class="label">Bias &amp; risico</div><h4>Blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p><span class="hcc-more">Lees meer →</span></div>
-          <div class="cv hcc-node hcc-frame reveal" data-m="impl"   data-cn="impl"   data-step="9"  style="--r:82px;--ang:0;--rad:465"><span class="hcc-step-num">09</span><div class="label">Implications</div><h4>Juridisch &amp; ethisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p><span class="hcc-more">Lees meer →</span></div>
-          <div class="cv hcc-node hcc-frame reveal" data-m="change" data-cn="change" data-step="10" style="--r:82px;--ang:130;--rad:465"><span class="hcc-step-num">10</span><div class="label">Change Mgmt</div><h4>Hoe we invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-frame reveal" data-m="bias"   data-cn="bias"   data-step="8"  style="--r:82px;--ang:-130;--rad:465"><span class="hcc-step-num">08</span><div class="label">Bias &amp; risico</div><h4>Blinde vlekken</h4><p>Filterbubbel, transparantie, bias in trainingsdata.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-frame reveal" data-m="impl"   data-cn="impl"   data-step="9"  style="--r:82px;--ang:0;--rad:465"><span class="hcc-step-num">09</span><div class="label">Implications</div><h4>Juridisch &amp; ethisch</h4><p>Paywall-bypass, privacy, scraping, kosten.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-frame reveal" data-m="change" data-cn="change" data-step="10" style="--r:82px;--ang:130;--rad:465"><span class="hcc-step-num">10</span><div class="label">Change Mgmt</div><h4>Hoe we invoeren</h4><p>Pilotfase, training, feedback, stapsgewijze uitbreiding.</p><span class="hcc-more">Lees meer →</span></div>
         </div>
 
         <aside class="hcc-detail" id="hccDetail" aria-live="polite">
@@ -3980,7 +3992,6 @@ ScrollTrigger.create({
   function playRead() {
     const { path, ord } = buildReadPath();
     readG.classList.add('on');
-    stage.classList.add('show-numbers');
     const len = path.getTotalLength();
     path.style.strokeDasharray = len;
     path.style.strokeDashoffset = len;
