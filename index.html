@@ -44,6 +44,10 @@
   --r-card: 16px;
   --r-card-lg: 24px;
   --r-pill: 999px;
+  --lego-red: #d62b2b;
+  --lego-yellow: #f5b800;
+  --lego-blue: #1e6dc7;
+  --lego-green: #2e8540;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 *::selection { background: var(--magenta); color: #fff; }
@@ -66,17 +70,11 @@ body {
 .t-h3 { font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; line-height: 1.2; letter-spacing: -0.022em; }
 .t-mono { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
 
-/* === BANNER === */
-.banner { background: var(--frame); color: #fff; padding: 12px 32px; text-align: center; position: relative; z-index: 100; }
-.banner-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 13px; font-weight: 500; }
-.banner-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--magenta); animation: pulse-dot 2s ease-in-out infinite; }
 @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(.8); } }
-.banner-link { color: rgba(255,255,255,.7); text-decoration: none; font-weight: 500; transition: color .2s; cursor: pointer; }
-.banner-link:hover { color: #fff; }
 
 /* === NAV === */
-nav { position: fixed; top: 36px; left: 0; right: 0; z-index: 90; padding: 16px 32px; transition: all .3s ease; }
-nav.scrolled { background: rgba(242, 240, 235, .85); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--driftwood); top: 0; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 90; padding: 14px 32px; transition: all .3s ease; }
+nav.scrolled { background: rgba(242, 240, 235, .85); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--driftwood); }
 nav.scrolled .nav-link { color: var(--graphite); }
 nav.scrolled .nav-link:hover { color: var(--ink); }
 nav.scrolled .nav-link.active { background: var(--ink); color: #fff; }
@@ -95,13 +93,11 @@ nav.scrolled .nav-brand { color: var(--ink); }
 #progress { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--magenta); z-index: 200; transition: width .1s; }
 
 /* === HERO === */
-.hero { position: relative; min-height: 100vh; background: var(--frame); color: #fff; overflow: hidden; padding: 140px 32px 80px; display: flex; flex-direction: column; justify-content: center; }
+.hero { position: relative; min-height: 100vh; background: var(--frame); color: #fff; overflow: hidden; padding: 100px 32px 80px; display: flex; flex-direction: column; justify-content: center; }
 .hero::before { content: ""; position: absolute; inset: 0; background: var(--grad-hero); opacity: .9; pointer-events: none; }
 .hero::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%); pointer-events: none; }
 .hero-inner { max-width: var(--max); margin: 0 auto; width: 100%; position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 .hero-content { max-width: 560px; }
-.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(255,255,255,.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-pill); font-size: 12px; font-weight: 500; color: rgba(255,255,255,.85); margin-bottom: 24px; letter-spacing: -0.005em; }
-.hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--magenta); }
 .hero h1 { margin-bottom: 20px; color: #fff; }
 .hero h1 .accent { background: var(--grad-pow); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero p.lede { font-size: 18px; font-weight: 500; line-height: 1.5; color: rgba(255,255,255,.7); margin-bottom: 36px; letter-spacing: -0.008em; max-width: 520px; }
@@ -775,7 +771,7 @@ nav.scrolled .nav-brand { color: var(--ink); }
 .macos-body {
   display: grid;
   grid-template-columns: 220px 1fr;
-  height: 720px;
+  height: clamp(560px, 75vh, 720px);
   position: relative;
   overflow: hidden;
 }
@@ -1425,9 +1421,14 @@ nav.scrolled .nav-brand { color: var(--ink); }
   border-radius: var(--r-card-lg);
   padding: 36px;
   position: relative;
-  overflow: hidden;
-  min-height: 600px;
+  overflow: hidden auto;
+  max-height: 700px;
+  min-height: 420px;
 }
+.insteek-output::-webkit-scrollbar { width: 8px; }
+.insteek-output::-webkit-scrollbar-track { background: transparent; }
+.insteek-output::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+.insteek-output::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.2); }
 .insteek-output::before {
   content: "";
   position: absolute;
@@ -1481,7 +1482,6 @@ nav.scrolled .nav-brand { color: var(--ink); }
   white-space: pre-wrap;
   word-wrap: break-word;
   position: relative;
-  min-height: 460px;
 }
 .in-output-text strong {
   display: block;
@@ -1510,29 +1510,402 @@ nav.scrolled .nav-brand { color: var(--ink); }
 }
 @keyframes blink { 50% { opacity: 0; } }
 
-/* === FOOTER === */
-footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
-.footer-inner { max-width: var(--max); margin: 0 auto; }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.08); }
-.footer-brand-mark { width: 32px; height: 32px; background: var(--grad-pow); border-radius: 8px; margin-bottom: 16px; }
-.footer-brand h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.014em; margin-bottom: 8px; }
-.footer-brand p { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.5; max-width: 320px; }
-.footer-col h4 { font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 16px; }
-.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.footer-col a { color: rgba(255,255,255,.75); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; cursor: pointer; }
-.footer-col a:hover { color: #fff; }
-.footer-bot { display: flex; justify-content: space-between; align-items: center; padding-top: 32px; font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,.4); flex-wrap: wrap; gap: 16px; }
-
 /* === UTILS === */
 .reveal { opacity: 0; transform: translateY(20px); }
 .icon { width: 16px; height: 16px; flex-shrink: 0; }
 .icon-sm { width: 12px; height: 12px; }
 .icon-lg { width: 20px; height: 20px; }
 
+/* === CANVAS REAL (HC AI Canvas as real canvas grid) === */
+.canvas-real-wrap { position: relative; }
+.canvas-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.canvas-progress-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--graphite);
+  padding: 6px 12px; background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-pill);
+}
+.canvas-progress-badge strong { color: var(--magenta); font-weight: 600; }
+.canvas-read-btn {
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  padding: 8px 16px; border-radius: var(--r-pill);
+  background: var(--ink); color: #fff; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: background .2s;
+}
+.canvas-read-btn:hover { background: var(--magenta); }
+.canvas-read-btn[disabled] { opacity: .5; cursor: not-allowed; }
+.canvas-read-btn .arrow { transition: transform .2s; }
+.canvas-read-btn:hover .arrow { transform: translateX(3px); }
+
+.canvas-real {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr auto;
+  gap: 1px;
+  background: var(--driftwood);
+  border: 1px solid var(--driftwood);
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 600px;
+  position: relative;
+}
+.canvas-real .cv {
+  background: var(--bone);
+  border-radius: 0;
+  border: none;
+  padding: 18px 18px 16px;
+  cursor: pointer;
+  position: relative;
+  transition: background .2s, transform .2s;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 2;
+  min-height: auto;
+}
+.canvas-real .cv:hover { background: var(--magenta-soft); }
+.canvas-real .cv.cv-related { background: rgba(226,20,139,.04); }
+.canvas-real .cv.cv-reading {
+  background: var(--magenta);
+  color: #fff;
+  transform: scale(1.02);
+  z-index: 5;
+  box-shadow: 0 8px 24px rgba(226,20,139,.35);
+}
+.canvas-real .cv.cv-reading .label,
+.canvas-real .cv.cv-reading h4,
+.canvas-real .cv.cv-reading p,
+.canvas-real .cv.cv-reading .more { color: #fff; }
+.canvas-real .cv .label {
+  font-family: var(--ff-mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--magenta);
+}
+.canvas-real .cv h4 {
+  font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
+  line-height: 1.2; color: var(--ink);
+}
+.canvas-real .cv p {
+  font-size: 12px; line-height: 1.45; color: var(--graphite);
+}
+.canvas-real .cv-jtbd { grid-column: 1; grid-row: 1 / span 3; }
+.canvas-real .cv-promise { grid-column: 2; grid-row: 1; }
+.canvas-real .cv-hact { grid-column: 3; grid-row: 1; }
+.canvas-real .cv-reinf { grid-column: 4; grid-row: 1 / span 3; }
+.canvas-real .cv-benefits { grid-column: 2; grid-row: 2; }
+.canvas-real .cv-mact { grid-column: 3; grid-row: 2; }
+.canvas-real .cv-collab2 {
+  grid-column: 2 / span 2; grid-row: 3;
+  background: var(--frame); color: #fff;
+}
+.canvas-real .cv-collab2:hover { background: var(--frame); filter: brightness(1.15); }
+.canvas-real .cv-collab2 h4 { color: #fff; }
+.canvas-real .cv-collab2 p { color: rgba(255,255,255,.7); }
+.canvas-real .cv-collab2 .label { color: var(--magenta); }
+.canvas-real .cv-bias { grid-column: 1; grid-row: 4; }
+.canvas-real .cv-impl { grid-column: 2 / span 2; grid-row: 4; }
+.canvas-real .cv-change { grid-column: 4; grid-row: 4; }
+.canvas-real .cv .more {
+  margin-top: auto; display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 500; color: var(--magenta);
+}
+.canvas-real-overlay {
+  position: absolute; inset: 0; pointer-events: none; z-index: 3;
+}
+.canvas-real-overlay svg { width: 100%; height: 100%; display: block; }
+.canvas-real-overlay path {
+  fill: none; stroke: rgba(226,20,139,.18);
+  stroke-width: 1.5; stroke-dasharray: 5 5;
+  transition: stroke .25s, stroke-width .25s;
+}
+.canvas-real-overlay path.cn-active {
+  stroke: var(--magenta); stroke-width: 2;
+  animation: dash-flow 1.2s linear infinite;
+}
+
+/* === DOELGROEP === */
+.dg-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 40px;
+}
+.dg-card {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); padding: 28px 24px;
+  border-top: 3px solid var(--magenta);
+}
+.dg-num {
+  font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+  letter-spacing: -0.024em; color: var(--ink); line-height: 1;
+  margin-bottom: 8px; font-feature-settings: "tnum";
+}
+.dg-label {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 8px;
+}
+.dg-sub { font-size: 13px; color: var(--graphite); line-height: 1.4; }
+.dg-personas {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.dg-persona {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); padding: 28px;
+}
+.dg-persona-label {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 8px;
+}
+.dg-persona h3 {
+  font-size: 22px; font-weight: 600; letter-spacing: -0.014em;
+  color: var(--ink); margin-bottom: 16px;
+}
+.dg-persona ul {
+  list-style: none; display: flex; flex-direction: column; gap: 8px;
+}
+.dg-persona li {
+  font-size: 13px; color: var(--graphite); line-height: 1.5;
+  padding-left: 14px; position: relative;
+}
+.dg-persona li::before {
+  content: ""; position: absolute; left: 0; top: 8px;
+  width: 6px; height: 1px; background: var(--magenta);
+}
+.dg-persona li strong { color: var(--ink); font-weight: 600; }
+
+/* === GHA AGENCY === */
+.gha-block {
+  background: var(--bone); border-radius: var(--r-card-lg);
+  padding: 48px; margin-bottom: 24px; border: 1px solid var(--fog);
+}
+.gha-label {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 16px;
+}
+.gha-quote {
+  font-size: clamp(22px, 2.6vw, 32px); font-weight: 600;
+  line-height: 1.2; letter-spacing: -0.022em; color: var(--ink);
+}
+.gha-em {
+  background: var(--grad-pow);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.gha-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+.gha-item {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); padding: 24px;
+}
+.gha-item-label {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 16px;
+}
+.gha-item p, .gha-item ul, .gha-item ol {
+  font-size: 13px; line-height: 1.5; color: var(--graphite);
+}
+.gha-item ul, .gha-item ol {
+  list-style: none; display: flex; flex-direction: column;
+  gap: 8px; padding-left: 0; counter-reset: gha-counter;
+}
+.gha-tov li, .gha-prins li { padding-left: 24px; position: relative; }
+.gha-tov li::before {
+  content: ""; position: absolute; left: 0; top: 8px;
+  width: 12px; height: 1px; background: var(--magenta);
+}
+.gha-prins li { counter-increment: gha-counter; }
+.gha-prins li::before {
+  content: counter(gha-counter); position: absolute;
+  left: 0; top: 0; font-family: var(--ff-mono);
+  font-size: 11px; font-weight: 600; color: var(--magenta);
+}
+.gha-tov li strong, .gha-prins li strong { color: var(--ink); font-weight: 600; }
+.gha-logo-demo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 18px; font-weight: 700; letter-spacing: -0.02em;
+  margin-bottom: 12px; padding: 16px;
+  background: var(--canvas); border-radius: 8px;
+}
+.gha-mark {
+  display: inline-block; width: 24px; height: 24px;
+  background: var(--grad-pow); border-radius: 6px;
+}
+.gha-colors {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px; margin-bottom: 12px;
+}
+.gha-color {
+  padding: 16px 12px; border-radius: 8px; color: #fff;
+  display: flex; flex-direction: column; gap: 4px;
+  font-family: var(--ff-mono); font-size: 10px;
+  letter-spacing: 0.04em; min-height: 80px;
+  justify-content: space-between;
+}
+.gha-color span:first-child { font-size: 12px; font-weight: 600; }
+.gha-type-row {
+  padding: 8px 0; border-bottom: 1px solid var(--fog); color: var(--ink);
+}
+.gha-type-row:last-child { border-bottom: none; }
+.gha-tools { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* === WORKFLOW MAPPING === */
+.wf-tabs {
+  display: flex; gap: 4px; margin-bottom: 32px; flex-wrap: wrap;
+}
+.wf-tab {
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  padding: 10px 16px; border-radius: var(--r-pill);
+  background: var(--bone); border: 1px solid var(--fog);
+  color: var(--graphite); cursor: pointer; transition: all .15s;
+}
+.wf-tab:hover { border-color: var(--magenta); color: var(--ink); }
+.wf-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.wf-flow {
+  display: flex; align-items: stretch; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 32px;
+}
+.wf-step {
+  flex: 1; min-width: 160px; background: var(--bone);
+  border-radius: var(--r-card); padding: 20px;
+  border-top: 4px solid var(--graphite-soft);
+  display: flex; flex-direction: column; gap: 6px;
+  border-left: 1px solid var(--fog);
+  border-right: 1px solid var(--fog);
+  border-bottom: 1px solid var(--fog);
+}
+.wf-trigger { border-top-color: var(--lego-red); }
+.wf-filter { border-top-color: var(--lego-yellow); }
+.wf-action { border-top-color: var(--lego-blue); }
+.wf-output { border-top-color: var(--lego-green); }
+.wf-step-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.wf-step-num {
+  font-family: var(--ff-mono); font-size: 11px;
+  color: var(--graphite-soft); letter-spacing: 0.06em;
+}
+.wf-step-type {
+  font-family: var(--ff-mono); font-size: 9px;
+  letter-spacing: 0.1em; color: var(--ink); font-weight: 600;
+}
+.wf-trigger .wf-step-type { color: var(--lego-red); }
+.wf-filter .wf-step-type { color: var(--lego-yellow); }
+.wf-action .wf-step-type { color: var(--lego-blue); }
+.wf-output .wf-step-type { color: var(--lego-green); }
+.wf-step-label {
+  font-size: 15px; font-weight: 600;
+  color: var(--ink); line-height: 1.3;
+}
+.wf-step-detail {
+  font-size: 12px; color: var(--graphite);
+  line-height: 1.4; margin-top: auto;
+}
+.wf-arrow {
+  display: flex; align-items: center; justify-content: center;
+  width: 24px; flex-shrink: 0;
+}
+.wf-arrow svg { width: 24px; height: 12px; }
+.wf-legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 11px; color: var(--graphite);
+  font-family: var(--ff-mono); letter-spacing: 0.04em;
+}
+.wf-leg-item { display: inline-flex; align-items: center; gap: 6px; }
+.wf-leg-dot {
+  width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+}
+
+/* === COSINE DEMO === */
+.cosine-demo {
+  margin-top: 24px; background: var(--bone);
+  border: 1px solid var(--fog); border-radius: var(--r-card-lg); padding: 24px;
+}
+.cosine-demo-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--fog);
+}
+.cosine-demo-label {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--magenta);
+}
+.cosine-demo-sub { font-size: 12px; color: var(--graphite); }
+.cosine-demo-body {
+  display: grid; grid-template-columns: 240px 1fr;
+  gap: 24px; align-items: center;
+}
+.cosine-vec svg { width: 100%; height: 240px; }
+.cosine-info { display: flex; flex-direction: column; gap: 8px; }
+.cosine-score, .cosine-angle {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--ff-mono);
+}
+.cosine-score-label, .cosine-angle-label {
+  font-size: 11px; color: var(--graphite);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.cosine-score-val, .cosine-angle-val {
+  font-size: 24px; font-weight: 700;
+  color: var(--ink); font-feature-settings: "tnum";
+}
+.cosine-decision {
+  margin-top: 8px; padding: 8px 12px; background: var(--canvas);
+  border-radius: 8px; font-size: 13px; font-weight: 500;
+  color: var(--ink); text-align: center;
+  border-left: 3px solid var(--magenta);
+}
+.cosine-options {
+  display: flex; flex-direction: column; gap: 4px; margin-top: 12px;
+}
+.cosine-opt {
+  background: var(--canvas); border: 1px solid var(--fog);
+  border-radius: 6px; padding: 8px 12px;
+  font-family: var(--ff); font-size: 12px; color: var(--ink);
+  cursor: pointer; text-align: left; transition: all .15s;
+}
+.cosine-opt:hover { border-color: var(--magenta); background: var(--magenta-soft); }
+.cosine-opt.active {
+  background: var(--magenta); color: #fff; border-color: var(--magenta);
+}
+
+/* === COSINE CONCEPT CARDS === */
+.concept-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+.concept-card {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-left: 3px solid var(--magenta); border-radius: 8px;
+  padding: 16px 18px;
+}
+.concept-card-label {
+  font-family: var(--ff-mono); font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 6px; font-weight: 600;
+}
+.concept-card-body {
+  font-size: 13px; line-height: 1.5; color: var(--graphite);
+}
+.concept-card-body strong { color: var(--ink); font-weight: 600; }
+
 /* === RESPONSIVE === */
 @media (max-width: 1024px) {
+  .canvas-real { grid-template-columns: 1fr 1fr; grid-template-rows: auto; min-height: auto; }
+  .canvas-real .cv-jtbd, .canvas-real .cv-promise, .canvas-real .cv-hact, .canvas-real .cv-reinf,
+  .canvas-real .cv-benefits, .canvas-real .cv-mact, .canvas-real .cv-collab2,
+  .canvas-real .cv-bias, .canvas-real .cv-impl, .canvas-real .cv-change {
+    grid-column: auto; grid-row: auto;
+  }
+  .canvas-real .cv-collab2 { grid-column: span 2; }
+  .canvas-real-overlay { display: none; }
+  .dg-grid { grid-template-columns: repeat(2, 1fr); }
+  .dg-personas { grid-template-columns: 1fr; }
+  .gha-grid { grid-template-columns: repeat(2, 1fr); }
+  .cosine-demo-body { grid-template-columns: 1fr; }
   .hero-inner { grid-template-columns: 1fr; gap: 40px; }
-  .hero-visual { height: 380px; }
+  .hero-visual { height: auto; display: flex; flex-direction: column; gap: 12px; }
+  .hero-panel { position: relative; top: auto; left: auto; right: auto; bottom: auto; width: 100%; }
+  .hero-trust { position: relative; left: auto; bottom: auto; transform: none; margin-top: 32px; justify-content: center; flex-wrap: wrap; }
   .auto-intro-inner { grid-template-columns: 1fr; gap: 40px; }
   .canvas-grid { grid-template-columns: repeat(2, 1fr); }
   .cv-collab { grid-column: span 2; }
@@ -1551,20 +1924,35 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
   .feed-side h5 { width: 100%; padding: 4px 10px 0; }
   .feed-side-stats { width: 100%; margin-top: 8px; padding-top: 12px; }
   .feed-list { max-height: 600px; }
-  .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
   .section-head { grid-template-columns: 1fr; gap: 24px; }
   .viz-04-grid { grid-template-columns: repeat(5, 1fr); gap: 8px; }
   .viz-04-stage::after { display: none; }
 }
 @media (max-width: 768px) {
   :root { --gap-section: 64px; }
+  .canvas-real { grid-template-columns: 1fr; }
+  .canvas-real .cv-collab2 { grid-column: auto; }
+  .dg-grid { grid-template-columns: 1fr; }
+  .gha-grid { grid-template-columns: 1fr; }
+  .gha-block { padding: 28px; }
+  .wf-flow { flex-direction: column; }
+  .wf-arrow { width: 100%; height: 24px; transform: rotate(90deg); }
+  .wf-step { min-width: auto; }
+  .section { padding: 48px 20px; }
+  .hero { padding: 90px 20px 60px; }
+  .auto { padding: 48px 20px; }
+  .auto-intro { padding: 64px 20px; }
+  .macos-wrap { padding: 24px 12px; }
+  .macos { border-radius: 8px; }
   .canvas-grid { grid-template-columns: 1fr; }
   .cv-collab { grid-column: span 1; }
   .brief-grid { grid-template-columns: 1fr; }
+  .nav { padding: 12px 20px; }
   .nav-links { display: none; }
-  .footer-top { grid-template-columns: 1fr; }
-  .jtbd-block { padding: 32px; }
+  .nav-cta { display: none; }
+  .jtbd-block { padding: 32px 24px; }
   .jtbd-block .quote { font-size: 22px; }
+  .insteek-output { padding: 24px; max-height: 600px; }
   .viz-04-grid { grid-template-columns: 1fr 1fr; }
   .feed-search input { width: 120px; }
   .sheet-body { padding: 24px 24px 80px; }
@@ -1618,15 +2006,6 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
 
 <div id="progress"></div>
 
-<!-- Banner -->
-<div class="banner">
-  <div class="banner-inner">
-    <span class="banner-dot"></span>
-    <span>Concept-demo voor PowNed, gemaakt door HvA Smart Media Production studenten</span>
-    <a class="banner-link" data-to="brief">Bekijk de brief</a>
-  </div>
-</div>
-
 <!-- Nav -->
 <nav id="nav">
   <div class="nav-inner">
@@ -1637,7 +2016,9 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
     <div class="nav-links">
       <button class="nav-link active" data-to="brief">Brief</button>
       <button class="nav-link" data-to="canvas">Canvas</button>
-      <button class="nav-link" data-to="auto-intro">Pipeline</button>
+      <button class="nav-link" data-to="doelgroep">Doelgroep</button>
+      <button class="nav-link" data-to="gha">Agency</button>
+      <button class="nav-link" data-to="workflow-mapping">Workflow</button>
       <button class="nav-link" data-to="auto-3">Feed</button>
       <button class="nav-link" data-to="auto-4">Insteek</button>
     </div>
@@ -1652,10 +2033,6 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
 <section class="hero" id="hero">
   <div class="hero-inner">
     <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-dot"></span>
-        <span>Concept-demo voor PowNed</span>
-      </div>
       <h1 class="t-display">
         Lokaal nieuws met landelijke <span class="accent">potentie</span>, klaar voor het ochtendoverleg.
       </h1>
@@ -1753,17 +2130,49 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
         Onze concept-aanpak gevisualiseerd. De AI suggereert, de mens beslist. Elke beslissing is uitlegbaar en terug te draaien.
       </p>
     </div>
-    <div class="canvas-grid">
-      <div class="cv reveal" data-m="jtbd"><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil bereiken</h4><p>Lokale verhalen met landelijk potentieel snel signaleren.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv reveal" data-m="promise"><div class="label">AI Promise</div><h4>Wat de technologie kan</h4><p>Continu monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv reveal" data-m="hact"><div class="label">Human Activities</div><h4>Wat de mens blijft doen</h4><p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv reveal" data-m="hreinf"><div class="label">Human Reinforcement</div><h4>Hoe de AI de mens versterkt</h4><p>Insteek-suggesties, sprekers aanbevelen, historische context.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv reveal" data-m="benefits"><div class="label">Benefits for Humans</div><h4>Wat het de redactie oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv reveal" data-m="mact"><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv cv-collab reveal" data-m="collab"><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik. Filtering wordt steeds preciezer, in jullie eigen redactiestijl.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv reveal" data-m="bias"><div class="label">Critical Thinking and Biases</div><h4>Risico's en blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv reveal" data-m="impl"><div class="label">Considerations and Implications</div><h4>Juridisch, ethisch, praktisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-      <div class="cv reveal" data-m="change"><div class="label">Change Management</div><h4>Hoe we het invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+
+    <div class="canvas-real-wrap">
+      <div class="canvas-toolbar">
+        <span class="canvas-progress-badge"><strong>10 / 10</strong> blokken ingevuld</span>
+        <button class="canvas-read-btn" id="canvasReadBtn">
+          <span>Lees in volgorde</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+
+      <div class="canvas-real" id="canvasReal">
+        <div class="cv cv-jtbd reveal" data-m="jtbd" data-cn="jtbd"><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil bereiken</h4><p>Lokale verhalen met landelijk potentieel snel signaleren, voor 08:30 op het ochtendoverleg.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-promise reveal" data-m="promise" data-cn="promise"><div class="label">AI Promise</div><h4>Wat de technologie kan</h4><p>Continu 30+ bronnen monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-hact reveal" data-m="hact" data-cn="hact"><div class="label">Human Activities</div><h4>Wat de mens blijft doen</h4><p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-reinf reveal" data-m="hreinf" data-cn="reinf"><div class="label">Human Reinforcement</div><h4>Hoe de AI de mens versterkt</h4><p>Insteek-suggesties, sprekers aanbevelen, historische context bij items.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-benefits reveal" data-m="benefits" data-cn="benefits"><div class="label">Benefits for Humans</div><h4>Wat het de redactie oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-mact reveal" data-m="mact" data-cn="mact"><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-collab2 reveal" data-m="collab" data-cn="collab"><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik. Filtering wordt steeds preciezer, in jullie eigen redactiestijl.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-bias reveal" data-m="bias" data-cn="bias"><div class="label">Critical Thinking & Biases</div><h4>Risico's en blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-impl reveal" data-m="impl" data-cn="impl"><div class="label">Considerations & Implications</div><h4>Juridisch, ethisch, praktisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-change reveal" data-m="change" data-cn="change"><div class="label">Change Management</div><h4>Hoe we het invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+
+        <div class="canvas-real-overlay" id="canvasOverlay">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+            <!-- JTBD ↔ AI Promise -->
+            <path data-pair="jtbd-promise" d="M 25 25 Q 30 25 37 25"/>
+            <!-- AI Promise ↔ Machine Activities (down) -->
+            <path data-pair="promise-mact" d="M 37 25 Q 50 38 62 50"/>
+            <!-- Human Activities ↔ Human Reinforcement -->
+            <path data-pair="hact-reinf" d="M 63 25 Q 68 25 75 25"/>
+            <!-- Machine Activities ↔ Human Activities -->
+            <path data-pair="mact-hact" d="M 62 50 Q 62 38 62 25"/>
+            <!-- Machine ↔ Collaboration -->
+            <path data-pair="mact-collab" d="M 62 50 Q 56 60 50 75"/>
+            <!-- Human Activities ↔ Collaboration -->
+            <path data-pair="hact-collab" d="M 62 25 Q 56 50 50 75"/>
+            <!-- Collaboration → Human Reinforcement (feedback loop) -->
+            <path data-pair="collab-reinf" d="M 50 75 Q 75 60 75 25"/>
+            <!-- Benefits ↔ JTBD -->
+            <path data-pair="benefits-jtbd" d="M 37 50 Q 30 38 25 25"/>
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1778,6 +2187,164 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
   </div>
 </div>
 
+<!-- DOELGROEP -->
+<section class="section" id="doelgroep">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Doelgroep</div>
+        <h2 class="t-h1">Wie kijkt PowNed?</h2>
+      </div>
+      <p class="section-lede">
+        De netwerkgeneratie. Millennials en Gen Z die continu online zijn, kritisch op macht en op zoek naar ongepolijste informatie.
+      </p>
+    </div>
+
+    <div class="dg-grid">
+      <div class="dg-card">
+        <div class="dg-num">2,7M</div>
+        <div class="dg-label">Gen Z in Nederland</div>
+        <div class="dg-sub">16% van de bevolking, geboren 1996-2010</div>
+      </div>
+      <div class="dg-card">
+        <div class="dg-num">71%</div>
+        <div class="dg-label">Social als nieuwsbron</div>
+        <div class="dg-sub">Bij Gen Z, vooral Instagram + TikTok</div>
+      </div>
+      <div class="dg-card">
+        <div class="dg-num">910K</div>
+        <div class="dg-label">PowNed YouTube</div>
+        <div class="dg-sub">Plus 124K TikTok en 910K Facebook</div>
+      </div>
+      <div class="dg-card">
+        <div class="dg-num">61% / 30%</div>
+        <div class="dg-label">Gen Z vs millennial</div>
+        <div class="dg-sub">Social als belangrijkste nieuwsbron</div>
+      </div>
+    </div>
+
+    <div class="dg-personas">
+      <div class="dg-persona">
+        <div class="dg-persona-label">Persona 01</div>
+        <h3>De netwerkjongere</h3>
+        <ul>
+          <li><strong>22 jaar</strong>, student of starter</li>
+          <li>Nieuws via TikTok en Instagram, niet via NOS</li>
+          <li>Wil rauw, eerlijk, herkenbaar</li>
+          <li>Wantrouwt politici en mainstream media</li>
+          <li>Volgt PowNed om "de andere kant" te zien</li>
+        </ul>
+      </div>
+      <div class="dg-persona">
+        <div class="dg-persona-label">Persona 02</div>
+        <h3>De kritische millennial</h3>
+        <ul>
+          <li><strong>32 jaar</strong>, werkt, betrokken bij maatschappij</li>
+          <li>Mix van NOS, RTL Nieuws en PowNed</li>
+          <li>Zoekt verdieping en confrontatie</li>
+          <li>Deelt PowNed-content op socials</li>
+          <li>Wil dat politici worden aangesproken op gedrag</li>
+        </ul>
+      </div>
+      <div class="dg-persona">
+        <div class="dg-persona-label">Persona 03</div>
+        <h3>De redacteur (B2B)</h3>
+        <ul>
+          <li><strong>38 jaar</strong>, eindredacteur PowNed</li>
+          <li>Vroege ochtend, koffie, ontelbare browser tabs</li>
+          <li>Wil voor 08:30 weten welke verhalen vandaag tellen</li>
+          <li>Heeft geen tijd voor 30 websites doorvlooien</li>
+          <li>Onze Redactie Agent is voor háár gemaakt</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GHA -->
+<section class="section section-warm" id="gha">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Growth Hacking Agency</div>
+        <h2 class="t-h1">Onze huisstijl.</h2>
+      </div>
+      <p class="section-lede">
+        We bouwen AI-automatiseringen voor mediaorganisaties. Heldere principes, scherpe uitvoering.
+      </p>
+    </div>
+
+    <div class="gha-block">
+      <div class="gha-label">Manifesto</div>
+      <p class="gha-quote">
+        We bouwen AI-systemen die <span class="gha-em">redacties versterken</span>, niet vervangen. De AI suggereert, de mens beslist.
+      </p>
+    </div>
+
+    <div class="gha-grid">
+      <div class="gha-item">
+        <div class="gha-item-label">Logo</div>
+        <div class="gha-logo-demo">
+          <span class="gha-mark"></span>
+          <span>Redactie Agent</span>
+        </div>
+        <p>Magenta-paars gradient mark plus Inter Variable wordmark.</p>
+      </div>
+
+      <div class="gha-item">
+        <div class="gha-item-label">Kleurpalet</div>
+        <div class="gha-colors">
+          <div class="gha-color" style="background: var(--magenta)"><span>Magenta</span><span>#e2148b</span></div>
+          <div class="gha-color" style="background: var(--purple)"><span>Paars</span><span>#9c2d8f</span></div>
+          <div class="gha-color" style="background: var(--frame); color:#fff"><span>Frame</span><span>#0a0a0a</span></div>
+          <div class="gha-color" style="background: var(--canvas); color: var(--ink); border: 1px solid var(--fog)"><span>Canvas</span><span>#f2f0eb</span></div>
+        </div>
+      </div>
+
+      <div class="gha-item">
+        <div class="gha-item-label">Typografie</div>
+        <div class="gha-type">
+          <div class="gha-type-row" style="font-family: var(--ff); font-weight: 700; font-size: 32px; letter-spacing: -0.027em;">Inter Variable</div>
+          <div class="gha-type-row" style="font-family: var(--ff); font-weight: 500;">Display + body</div>
+          <div class="gha-type-row" style="font-family: var(--ff-mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;">JetBrains Mono · labels</div>
+        </div>
+      </div>
+
+      <div class="gha-item">
+        <div class="gha-item-label">Tone of voice</div>
+        <ul class="gha-tov">
+          <li><strong>Direct.</strong> Geen marketing-fluff. We zeggen wat we bedoelen.</li>
+          <li><strong>Praktisch.</strong> Werkende prototypes boven mooie mockups.</li>
+          <li><strong>Mensgericht.</strong> AI is gereedschap, niet doel.</li>
+          <li><strong>Transparant.</strong> Elke beslissing uitlegbaar.</li>
+        </ul>
+      </div>
+
+      <div class="gha-item">
+        <div class="gha-item-label">Design principes</div>
+        <ol class="gha-prins">
+          <li>Inhoud boven decoratie</li>
+          <li>Eén accentkleur per scherm</li>
+          <li>Witruimte als ademruimte</li>
+          <li>Mono voor metadata, sans voor inhoud</li>
+        </ol>
+      </div>
+
+      <div class="gha-item">
+        <div class="gha-item-label">Tools</div>
+        <div class="gha-tools">
+          <span class="tech-pill"><span class="sig"></span>n8n</span>
+          <span class="tech-pill"><span class="sig"></span>Claude API</span>
+          <span class="tech-pill"><span class="sig"></span>PostgreSQL</span>
+          <span class="tech-pill"><span class="sig"></span>pgvector</span>
+          <span class="tech-pill"><span class="sig"></span>Trafilatura</span>
+          <span class="tech-pill"><span class="sig"></span>Docker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- AUTO INTRO -->
 <section class="auto-intro" id="auto-intro">
   <div class="auto-intro-inner">
@@ -1791,6 +2358,37 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
       <div class="auto-counter-row"><div class="auto-counter-num">02</div><div class="auto-counter-label">AI-filtering</div><div class="auto-counter-tag">PowNed-DNA scoring</div></div>
       <div class="auto-counter-row"><div class="auto-counter-num">03</div><div class="auto-counter-label">Output: redactiefeed</div><div class="auto-counter-tag">macOS-stijl webapp</div></div>
       <div class="auto-counter-row"><div class="auto-counter-num">04</div><div class="auto-counter-label">Verhaalinsteek Generator</div><div class="auto-counter-tag">Vierde automatisering</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW MAPPING -->
+<section class="section" id="workflow-mapping">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Workflow-mapping</div>
+        <h2 class="t-h1">Per automatisering, in vaktermen.</h2>
+      </div>
+      <p class="section-lede">
+        Elke automatisering bestaat uit dezelfde bouwstenen: een trigger start het proces, een filter beslist of het door mag, een actie voert het uit, een output levert het resultaat.
+      </p>
+    </div>
+
+    <div class="wf-tabs">
+      <button class="wf-tab active" data-wf="1">01 Dataverzameling</button>
+      <button class="wf-tab" data-wf="2">02 AI-filtering</button>
+      <button class="wf-tab" data-wf="3">03 Redactiefeed</button>
+      <button class="wf-tab" data-wf="4">04 Verhaalinsteek</button>
+    </div>
+
+    <div class="wf-flow" id="wfFlow"></div>
+
+    <div class="wf-legend">
+      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-red)"></span>Trigger</span>
+      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-yellow)"></span>Filter / IF</span>
+      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-blue)"></span>Actie (LLM/Tool/API)</span>
+      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-green)"></span>Output</span>
     </div>
   </div>
 </section>
@@ -1925,6 +2523,20 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
         <div class="auto-meta-row"><span class="auto-meta-key">Vector store</span><span class="auto-meta-val">pgvector</span></div>
         <div class="auto-meta-row"><span class="auto-meta-key">Lerend</span><span class="auto-meta-val">Op redactie-feedback</span></div>
       </div>
+      <div class="concept-cards">
+        <div class="concept-card">
+          <div class="concept-card-label">Cosine similarity</div>
+          <div class="concept-card-body"><strong>Hoe parallel staan twee betekenissen?</strong> Twee zinnen worden pijlen in een hoog-dimensionale ruimte. Wijzen ze dezelfde kant op = score 1. Loodrecht = 0. "Snackbar slaat overvaller" en "PowNed-video over straatzelfverdediging" staan bijna parallel.</div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-card-label">BM25</div>
+          <div class="concept-card-body"><strong>Vangt jargon, niet alleen betekenis.</strong> Een klassieker: zeldzame woorden wegen zwaarder. "Asielbus" weegt zwaarder dan "de". Cosine + BM25 samen sterker dan apart.</div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-card-label">PowNed-corpus</div>
+          <div class="concept-card-body"><strong>De bron van waarheid.</strong> Alle bestaande PowNed YouTube-titels en -beschrijvingen, omgezet naar embeddings. Een nieuw item wordt vergeleken met dit corpus om PowNed-stof te bepalen.</div>
+        </div>
+      </div>
     </aside>
     <div class="auto-content">
       <div class="viz">
@@ -1964,6 +2576,51 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
           <div class="viz-02-info-block"><div class="label">Hover</div><div class="val" id="v02hover">Wijs een dot aan</div></div>
           <div class="viz-02-info-block"><div class="label">Cosine similarity</div><div class="val" id="v02score">—</div></div>
           <div class="viz-02-info-block"><div class="label">Beslissing</div><div class="val" id="v02dec">—</div></div>
+        </div>
+      </div>
+      <div class="cosine-demo">
+        <div class="cosine-demo-head">
+          <span class="cosine-demo-label">Live demo</span>
+          <span class="cosine-demo-sub">Klik op een titel, zie de hoek</span>
+        </div>
+        <div class="cosine-demo-body">
+          <div class="cosine-vec">
+            <svg viewBox="-100 -100 200 200">
+              <defs>
+                <marker id="arrowDark" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#1a1a1a"/>
+                </marker>
+                <marker id="arrowMag" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#e2148b"/>
+                </marker>
+              </defs>
+              <line x1="-90" y1="0" x2="90" y2="0" stroke="#e3e3e2" stroke-dasharray="2 2"/>
+              <line x1="0" y1="-90" x2="0" y2="90" stroke="#e3e3e2" stroke-dasharray="2 2"/>
+              <line id="refVec" x1="0" y1="0" x2="69" y2="-40" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowDark)"/>
+              <text x="74" y="-44" font-family="JetBrains Mono, monospace" font-size="9" fill="#1a1a1a">PowNed-DNA</text>
+              <line id="itemVec" x1="0" y1="0" x2="0" y2="0" stroke="#e2148b" stroke-width="2" marker-end="url(#arrowMag)"/>
+              <text id="itemLabel" font-family="JetBrains Mono, monospace" font-size="9" fill="#e2148b"></text>
+              <path id="angleArc" d="" fill="none" stroke="rgba(226,20,139,.5)" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="cosine-info">
+            <div class="cosine-score">
+              <span class="cosine-score-label">cos(θ) =</span>
+              <span class="cosine-score-val" id="cosineVal">—</span>
+            </div>
+            <div class="cosine-angle">
+              <span class="cosine-angle-label">hoek θ =</span>
+              <span class="cosine-angle-val" id="cosineAngle">—</span>
+            </div>
+            <div class="cosine-decision" id="cosineDecision">Klik op een titel ▼</div>
+            <div class="cosine-options">
+              <button class="cosine-opt" data-angle="-5" data-text="Snackbarpersoneel slaat overvaller">Snackbar overval Apeldoorn</button>
+              <button class="cosine-opt" data-angle="-15" data-text="Buurt blokkeert asielbus Hoogeveen">Asielprotest Drenthe</button>
+              <button class="cosine-opt" data-angle="35" data-text="Aandelenkoers ASML stijgt 4%">ASML aandelenkoers</button>
+              <button class="cosine-opt" data-angle="60" data-text="Tentoonstelling Rijksmuseum">Rijksmuseum tentoonstelling</button>
+              <button class="cosine-opt" data-angle="85" data-text="EU-vergadering begroting">EU-vergadering Brussel</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="dna-card">
@@ -2209,48 +2866,6 @@ footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
     </div>
   </div>
 </section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-brand-mark"></div>
-        <h3>Redactie Agent</h3>
-        <p>Concept-demo voor PowNed, gemaakt door studenten van de HvA Smart Media Production opleiding.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Project</h4>
-        <ul>
-          <li><a data-to="brief">Brief</a></li>
-          <li><a data-to="canvas">HC AI Canvas</a></li>
-          <li><a data-to="auto-intro">Pipeline</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Demo</h4>
-        <ul>
-          <li><a data-to="auto-1">Dataverzameling</a></li>
-          <li><a data-to="auto-2">AI-filtering</a></li>
-          <li><a data-to="auto-3">Redactiefeed</a></li>
-          <li><a data-to="auto-4">Verhaalinsteek</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>School</h4>
-        <ul>
-          <li><a>Hogeschool van Amsterdam</a></li>
-          <li><a>Smart Media Production</a></li>
-          <li><a>Blok 4, Growth Hacking</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bot">
-      <span>2026, concept-demo</span>
-      <span>HvA Smart Media Production, Blok 4</span>
-    </div>
-  </div>
-</footer>
 
 <script>
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, MotionPathPlugin);
@@ -2612,8 +3227,14 @@ document.querySelectorAll('[data-to]').forEach(l => l.addEventListener('click', 
   scrollTo(l.dataset.to);
 }));
 
-const sections = ['hero','brief','canvas','auto-intro','auto-1','auto-2','auto-3','auto-4'];
-const navMap = { 'hero':'brief', 'brief':'brief', 'canvas':'canvas', 'auto-intro':'auto-intro', 'auto-1':'auto-intro', 'auto-2':'auto-intro', 'auto-3':'auto-3', 'auto-4':'auto-4' };
+const sections = ['hero','brief','canvas','doelgroep','gha','auto-intro','workflow-mapping','auto-1','auto-2','auto-3','auto-4'];
+const navMap = {
+  'hero':'brief', 'brief':'brief', 'canvas':'canvas',
+  'doelgroep':'doelgroep', 'gha':'gha',
+  'auto-intro':'workflow-mapping', 'workflow-mapping':'workflow-mapping',
+  'auto-1':'workflow-mapping', 'auto-2':'workflow-mapping',
+  'auto-3':'auto-3', 'auto-4':'auto-4'
+};
 window.addEventListener('scroll', () => {
   navEl.classList.toggle('scrolled', window.scrollY > 80);
   const h = document.documentElement.scrollHeight - window.innerHeight;
@@ -3157,6 +3778,238 @@ ScrollTrigger.create({
     }
   }
 });
+
+/* ============================================================
+   CANVAS REAL — connections + reading mode
+   ============================================================ */
+(function () {
+  const overlay = document.getElementById('canvasOverlay');
+  if (!overlay) return;
+  const paths = overlay.querySelectorAll('path');
+  const cards = document.querySelectorAll('.canvas-real .cv');
+  // adjacency from data-pair (e.g. "jtbd-promise" means jtbd <-> promise)
+  const adj = {};
+  paths.forEach(p => {
+    const [a, b] = p.dataset.pair.split('-');
+    (adj[a] = adj[a] || []).push({ other: b, path: p });
+    (adj[b] = adj[b] || []).push({ other: a, path: p });
+  });
+
+  function clearActive() {
+    paths.forEach(p => p.classList.remove('cn-active'));
+    cards.forEach(c => c.classList.remove('cv-related'));
+  }
+  function activate(cn) {
+    if (!adj[cn]) return;
+    adj[cn].forEach(({ other, path }) => {
+      path.classList.add('cn-active');
+      const otherCard = document.querySelector(`.canvas-real .cv[data-cn="${other}"]`);
+      if (otherCard) otherCard.classList.add('cv-related');
+    });
+  }
+
+  cards.forEach(c => {
+    c.addEventListener('mouseenter', () => {
+      const cn = c.dataset.cn;
+      clearActive();
+      activate(cn);
+    });
+    c.addEventListener('mouseleave', clearActive);
+  });
+
+  // Reading mode
+  const readBtn = document.getElementById('canvasReadBtn');
+  const order = ['jtbd','promise','hact','reinf','benefits','mact','collab','bias','impl','change'];
+  let reading = false;
+  if (readBtn) {
+    readBtn.addEventListener('click', () => {
+      if (reading) return;
+      reading = true;
+      readBtn.disabled = true;
+      const orig = readBtn.querySelector('span').textContent;
+      readBtn.querySelector('span').textContent = 'Aan het lezen…';
+      let i = 0;
+      function step() {
+        cards.forEach(c => c.classList.remove('cv-reading'));
+        if (i >= order.length) {
+          reading = false;
+          readBtn.disabled = false;
+          readBtn.querySelector('span').textContent = orig;
+          clearActive();
+          return;
+        }
+        const cn = order[i];
+        const card = document.querySelector(`.canvas-real .cv[data-cn="${cn}"]`);
+        if (card) {
+          card.classList.add('cv-reading');
+          // scroll into view smoothly if needed
+          const r = card.getBoundingClientRect();
+          if (r.top < 80 || r.bottom > window.innerHeight - 80) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          clearActive();
+          activate(cn);
+        }
+        i++;
+        setTimeout(step, 1600);
+      }
+      step();
+    });
+  }
+})();
+
+/* ============================================================
+   COSINE SIMILARITY DEMO
+   ============================================================ */
+(function () {
+  const itemVec = document.getElementById('itemVec');
+  if (!itemVec) return;
+  const itemLabel = document.getElementById('itemLabel');
+  const angleArc = document.getElementById('angleArc');
+  const cosineVal = document.getElementById('cosineVal');
+  const cosineAngle = document.getElementById('cosineAngle');
+  const cosineDecision = document.getElementById('cosineDecision');
+  const refAngleDeg = -30; // PowNed-DNA reference vector
+
+  function setCosineDemo(angle, text) {
+    const totalDeg = refAngleDeg + angle;
+    const rad = totalDeg * Math.PI / 180;
+    const x = 80 * Math.cos(rad);
+    const y = 80 * Math.sin(rad);
+    itemVec.setAttribute('x2', x.toFixed(1));
+    itemVec.setAttribute('y2', y.toFixed(1));
+    itemLabel.setAttribute('x', (x + (x > 0 ? 5 : -90)).toFixed(1));
+    itemLabel.setAttribute('y', (y - 5).toFixed(1));
+    itemLabel.textContent = text.length > 24 ? text.slice(0, 24) + '…' : text;
+
+    const cos = Math.cos(Math.abs(angle) * Math.PI / 180);
+    cosineVal.textContent = cos.toFixed(2);
+    cosineAngle.textContent = Math.abs(angle) + '°';
+
+    if (cos >= 0.85) {
+      cosineDecision.textContent = 'In feed (hoge match)';
+      cosineDecision.style.borderLeftColor = 'var(--magenta)';
+    } else if (cos >= 0.5) {
+      cosineDecision.textContent = 'Mogelijk (twijfelgeval)';
+      cosineDecision.style.borderLeftColor = '#d4a017';
+    } else {
+      cosineDecision.textContent = 'Afgewezen (niet PowNed-stof)';
+      cosineDecision.style.borderLeftColor = 'var(--graphite-soft)';
+    }
+
+    // arc between ref and item
+    const refRad = refAngleDeg * Math.PI / 180;
+    const sx = (30 * Math.cos(refRad)).toFixed(1);
+    const sy = (30 * Math.sin(refRad)).toFixed(1);
+    const ex = (30 * Math.cos(rad)).toFixed(1);
+    const ey = (30 * Math.sin(rad)).toFixed(1);
+    const sweep = angle > 0 ? 1 : 0;
+    angleArc.setAttribute('d', `M ${sx} ${sy} A 30 30 0 0 ${sweep} ${ex} ${ey}`);
+  }
+
+  document.querySelectorAll('.cosine-opt').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.cosine-opt').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      setCosineDemo(parseFloat(b.dataset.angle), b.dataset.text);
+    });
+  });
+
+  // Auto-trigger first option on scroll into view
+  ScrollTrigger.create({
+    trigger: '.cosine-demo',
+    start: 'top 70%',
+    once: true,
+    onEnter: () => {
+      const first = document.querySelector('.cosine-opt');
+      if (first) first.click();
+    }
+  });
+})();
+
+/* ============================================================
+   WORKFLOW MAPPING
+   ============================================================ */
+(function () {
+  const wfFlow = document.getElementById('wfFlow');
+  if (!wfFlow) return;
+
+  const WORKFLOWS = {
+    1: {
+      title: 'Dataverzameling',
+      nodes: [
+        { type: 'trigger', label: 'Cron 06:00', detail: 'Schedule trigger, dagelijks' },
+        { type: 'action', label: 'Fetch RSS/sitemap', detail: 'HTTP request, 31 bronnen parallel' },
+        { type: 'filter', label: 'Hash-deduplicatie', detail: 'IF: hash niet in DB' },
+        { type: 'action', label: 'Trafilatura extract', detail: 'Body text + metadata' },
+        { type: 'output', label: 'PostgreSQL insert', detail: '247 items opgeslagen' }
+      ]
+    },
+    2: {
+      title: 'AI-filtering',
+      nodes: [
+        { type: 'trigger', label: 'Nieuw item in DB', detail: 'Database trigger' },
+        { type: 'action', label: 'Embedding e5-large-v2', detail: 'Item naar vector (1024-dim)' },
+        { type: 'action', label: 'Cosine + BM25', detail: 'Score tegen PowNed-corpus' },
+        { type: 'filter', label: 'Score ≥ 0.6?', detail: 'IF: anders skip' },
+        { type: 'output', label: 'Update item.score', detail: 'Top 50 naar feed' }
+      ]
+    },
+    3: {
+      title: 'Redactiefeed',
+      nodes: [
+        { type: 'trigger', label: 'Redacteur opent feed', detail: 'HTTP GET /feed' },
+        { type: 'action', label: 'Query DB', detail: 'Top 50 van vandaag, sort by score' },
+        { type: 'filter', label: 'Filters toepassen', detail: 'Regio / categorie / favoriet' },
+        { type: 'action', label: 'Render UI', detail: 'macOS-style webapp' },
+        { type: 'output', label: 'Live feed in browser', detail: 'Klik = artikel + insteek' }
+      ]
+    },
+    4: {
+      title: 'Verhaalinsteek',
+      nodes: [
+        { type: 'trigger', label: 'Klik "Genereer insteek"', detail: 'POST /insteek/{itemId}' },
+        { type: 'action', label: 'RAG: vergelijkbare cases', detail: 'pgvector top 3 PowNed-precedenten' },
+        { type: 'action', label: 'Claude API call', detail: 'System prompt + few-shot + item' },
+        { type: 'filter', label: 'JSON valid?', detail: 'IF: parse succeed' },
+        { type: 'output', label: 'Insteek in UI', detail: 'Locatie / invalshoek / vragen / sprekers' }
+      ]
+    }
+  };
+
+  const TYPE_LABEL = {
+    trigger: 'TRIGGER',
+    filter: 'FILTER / IF',
+    action: 'ACTIE',
+    output: 'OUTPUT'
+  };
+
+  function renderWorkflow(id) {
+    const w = WORKFLOWS[id];
+    if (!w) return;
+    wfFlow.innerHTML = w.nodes.map((n, i) => `
+      <div class="wf-step wf-${n.type}">
+        <div class="wf-step-head">
+          <span class="wf-step-num">0${i + 1}</span>
+          <span class="wf-step-type">${TYPE_LABEL[n.type]}</span>
+        </div>
+        <div class="wf-step-label">${n.label}</div>
+        <div class="wf-step-detail">${n.detail}</div>
+      </div>
+      ${i < w.nodes.length - 1 ? '<div class="wf-arrow"><svg viewBox="0 0 24 12"><path d="M0 6h22M18 1l5 5-5 5" stroke="#8a8a8a" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>' : ''}
+    `).join('');
+    gsap.from(wfFlow.querySelectorAll('.wf-step'), { y: 12, opacity: 0, duration: .35, stagger: .06, ease: 'power2.out', clearProps: 'all' });
+  }
+
+  document.querySelectorAll('.wf-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.wf-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      renderWorkflow(t.dataset.wf);
+    });
+  });
+  renderWorkflow(1);
+})();
 
 /* ============================================================
    INIT
