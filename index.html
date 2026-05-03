@@ -73,24 +73,52 @@ body {
 @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(.8); } }
 
 /* === NAV === */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 90; padding: 14px 32px; transition: all .3s ease; }
-nav.scrolled { background: rgba(242, 240, 235, .85); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--driftwood); }
-nav.scrolled .nav-link { color: var(--graphite); }
-nav.scrolled .nav-link:hover { color: var(--ink); background: rgba(0,0,0,.04); }
-nav.scrolled .nav-link.active { background: var(--ink); color: #fff; }
-nav.scrolled .nav-cta { background: var(--ink); color: #fff; }
-nav.scrolled .nav-cta:hover { background: var(--magenta); }
-nav.scrolled .nav-brand { color: var(--ink); }
-.nav-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.nav-left { display: flex; align-items: center; gap: 16px; }
-.nav-side { display: flex; align-items: center; gap: 4px; }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+  padding: 14px 32px;
+  background: rgba(242, 240, 235, .85);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid var(--driftwood);
+}
+.nav-side {
+  position: absolute;
+  left: 32px; top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; gap: 4px;
+}
+.nav-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
 .nav-right { display: flex; align-items: center; gap: 4px; }
-.nav-brand { font-weight: 700; font-size: 18px; letter-spacing: -0.02em; color: #fff; cursor: pointer; transition: color .3s; text-decoration: none; }
-.nav-link { background: none; border: none; cursor: pointer; font-family: var(--ff); font-size: 13px; font-weight: 500; color: rgba(255,255,255,.7); padding: 8px 14px; border-radius: var(--r-pill); transition: all .2s; letter-spacing: -0.005em; text-decoration: none; display: inline-flex; align-items: center; }
-.nav-link:hover { color: #fff; background: rgba(255,255,255,.08); }
-.nav-link.active { background: rgba(255,255,255,.15); color: #fff; }
-.nav-cta { background: #fff; color: var(--ink); padding: 8px 14px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
-.nav-cta:hover { background: var(--magenta); color: #fff; }
+.nav-brand {
+  font-family: var(--ff); font-weight: 700; font-size: 18px;
+  letter-spacing: -0.02em; color: var(--ink);
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.nav-link {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  color: var(--graphite); padding: 8px 14px;
+  border-radius: var(--r-pill);
+  letter-spacing: -0.005em; text-decoration: none;
+  display: inline-flex; align-items: center;
+  transition: background .15s ease, color .15s ease;
+}
+.nav-link:hover { color: var(--ink); background: rgba(0,0,0,.05); }
+.nav-link.active { background: var(--ink); color: #fff; }
+.nav-cta {
+  background: var(--ink); color: #fff;
+  padding: 8px 14px; border-radius: var(--r-pill);
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  border: none; cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  letter-spacing: -0.005em;
+  transition: background .15s ease;
+}
+.nav-cta:hover { background: var(--magenta); }
+@media (max-width: 1280px) { .nav-side { display: none; } }
 
 /* === PROGRESS === */
 #progress { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--magenta); z-index: 200; transition: width .1s; }
@@ -1674,7 +1702,7 @@ nav.scrolled .nav-brand { color: var(--ink); }
   background: linear-gradient(180deg, var(--bone) 0%, var(--canvas) 100%);
   border: 1px solid var(--driftwood);
   border-radius: 24px; overflow: hidden;
-  height: 920px; padding: 24px;
+  height: 1000px; padding: 24px;
 }
 .hcc-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .hcc-orbits { opacity: .55; }
@@ -1709,19 +1737,44 @@ nav.scrolled .nav-brand { color: var(--ink); }
   /* left/top set by JS based on --ang and --rad */
 }
 .hcc-node .label {
-  font-family: var(--ff-mono); font-size: 9px; font-weight: 500;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--magenta); margin-bottom: 6px;
+  font-family: var(--ff-mono); font-size: 8.5px; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 4px;
+  white-space: normal; line-height: 1.15;
+  max-width: 100%;
 }
 .hcc-node h4 {
-  font-size: 13px; font-weight: 600; letter-spacing: -.01em;
-  line-height: 1.18; color: var(--ink); margin-bottom: 6px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: -.01em;
+  line-height: 1.18; color: var(--ink); margin-bottom: 5px;
+  max-width: 100%;
 }
 .hcc-node p {
-  font-size: 11px; line-height: 1.4; color: var(--graphite);
-  display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3;
+  font-size: 10.5px; line-height: 1.38; color: var(--graphite);
+  display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4;
   -webkit-box-orient: vertical; overflow: hidden;
+  max-width: 100%;
 }
+.hcc-step-num {
+  font-family: var(--ff-mono); font-size: 9px; font-weight: 600;
+  letter-spacing: .08em; color: var(--graphite-soft);
+  margin-bottom: 6px; opacity: 0;
+  transition: opacity .4s var(--easing), color .25s, transform .25s, text-shadow .25s;
+  font-feature-settings: "tnum";
+}
+.hcc-stage.show-numbers .hcc-step-num { opacity: 1; }
+.hcc-frame .hcc-step-num { color: rgba(255,255,255,.4); }
+.hcc-core .hcc-step-num { color: rgba(255,255,255,.45); }
+.hcc-node.is-reading .hcc-step-num {
+  color: #fff; transform: scale(1.25);
+  text-shadow: 0 0 8px rgba(255,255,255,.6);
+}
+.hcc-more {
+  font-family: var(--ff-mono); font-size: 9px; font-weight: 600;
+  color: var(--magenta); margin-top: 6px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  opacity: 0; transition: opacity .2s ease;
+}
+.hcc-node:hover .hcc-more { opacity: 1; }
 .hcc-node:hover {
   border-color: var(--magenta);
   transform: scale(1.06);
@@ -2180,14 +2233,12 @@ nav.scrolled .nav-brand { color: var(--ink); }
 
 <!-- Nav -->
 <nav id="nav">
+  <div class="nav-side">
+    <a class="nav-link" href="deliverables.html">Deliverables</a>
+    <a class="nav-link" href="brand-guide.html">Brand Guide</a>
+  </div>
   <div class="nav-inner">
-    <div class="nav-left">
-      <div class="nav-side">
-        <a class="nav-link" href="deliverables.html">Deliverables</a>
-        <a class="nav-link" href="brand-guide.html">Brand Guide</a>
-      </div>
-      <div class="nav-brand" data-to="hero">Redactie Agent</div>
-    </div>
+    <div class="nav-brand" data-to="hero">Redactie Agent</div>
     <div class="nav-right">
       <button class="nav-link active" data-to="brief">Brief</button>
       <button class="nav-link" data-to="canvas">Canvas</button>
@@ -2305,7 +2356,7 @@ nav.scrolled .nav-brand { color: var(--ink); }
 
     <div class="hcc-wrap">
       <div class="hcc-toolbar">
-        <span class="hcc-badge"><strong>10 / 10</strong> blokken &middot; klik een knoop</span>
+        <span class="hcc-badge"><strong>10 / 10</strong> blokken &middot; klik een knop</span>
         <div class="hcc-legend">
           <span><i class="lg lg-found"></i>Fundament</span>
           <span><i class="lg lg-bridge"></i>Brug</span>
@@ -2340,23 +2391,23 @@ nav.scrolled .nav-brand { color: var(--ink); }
         </svg>
 
         <div class="hcc-nodes" id="hccNodes">
-          <div class="cv hcc-node hcc-core reveal" data-m="collab" data-cn="collab" data-step="7" style="--x:50%;--y:50%;--r:108px"><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik.</p></div>
+          <div class="cv hcc-node hcc-core reveal" data-m="collab" data-cn="collab" data-step="7" style="--r:120px"><span class="hcc-step-num">07</span><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik.</p><span class="hcc-more">Lees meer →</span></div>
 
-          <div class="cv hcc-node hcc-found reveal" data-m="jtbd"     data-cn="jtbd"     data-step="1"  style="--r:78px;--ang:-90;--rad:215"><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil</h4><p>Lokale verhalen met landelijk potentieel snel signaleren, voor 08:30.</p></div>
-          <div class="cv hcc-node hcc-found reveal" data-m="promise"  data-cn="promise"  data-step="2"  style="--r:78px;--ang:30;--rad:215"><div class="label">AI Promise</div><h4>Wat de tech kan</h4><p>Continu 30+ bronnen monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p></div>
-          <div class="cv hcc-node hcc-found reveal" data-m="hact"     data-cn="hact"     data-step="3"  style="--r:78px;--ang:150;--rad:215"><div class="label">Human Activities</div><h4>Wat de mens doet</h4><p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p></div>
+          <div class="cv hcc-node hcc-found reveal" data-m="jtbd"     data-cn="jtbd"     data-step="1"  style="--r:90px;--ang:-90;--rad:240"><span class="hcc-step-num">01</span><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil</h4><p>Lokale verhalen met landelijk potentieel snel signaleren, voor 08:30.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-found reveal" data-m="promise"  data-cn="promise"  data-step="2"  style="--r:90px;--ang:30;--rad:240"><span class="hcc-step-num">02</span><div class="label">AI Promise</div><h4>Wat de tech kan</h4><p>30+ bronnen monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-found reveal" data-m="hact"     data-cn="hact"     data-step="3"  style="--r:90px;--ang:150;--rad:240"><span class="hcc-step-num">03</span><div class="label">Human Activities</div><h4>Wat de mens doet</h4><p>Eindredactie, invalshoek, ethiek, verhaal vertellen.</p><span class="hcc-more">Lees meer →</span></div>
 
-          <div class="cv hcc-node hcc-bridge reveal" data-m="hreinf"   data-cn="reinf"    data-step="4"  style="--r:74px;--ang:-40;--rad:330"><div class="label">Human Reinforcement</div><h4>Hoe AI versterkt</h4><p>Insteek-suggesties, sprekers, historische context bij items.</p></div>
-          <div class="cv hcc-node hcc-bridge reveal" data-m="benefits" data-cn="benefits" data-step="5"  style="--r:74px;--ang:80;--rad:330"><div class="label">Benefits</div><h4>Wat het oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p></div>
-          <div class="cv hcc-node hcc-bridge reveal" data-m="mact"     data-cn="mact"     data-step="6"  style="--r:74px;--ang:200;--rad:330"><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p></div>
+          <div class="cv hcc-node hcc-bridge reveal" data-m="hreinf"   data-cn="reinf"    data-step="4"  style="--r:84px;--ang:-40;--rad:365"><span class="hcc-step-num">04</span><div class="label">Human Reinforcement</div><h4>Hoe AI versterkt</h4><p>Insteek-suggesties, sprekers, historische context.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-bridge reveal" data-m="benefits" data-cn="benefits" data-step="5"  style="--r:84px;--ang:80;--rad:365"><span class="hcc-step-num">05</span><div class="label">Benefits</div><h4>Wat het oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-bridge reveal" data-m="mact"     data-cn="mact"     data-step="6"  style="--r:84px;--ang:200;--rad:365"><span class="hcc-step-num">06</span><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p><span class="hcc-more">Lees meer →</span></div>
 
-          <div class="cv hcc-node hcc-frame reveal" data-m="bias"   data-cn="bias"   data-step="8"  style="--r:70px;--ang:-130;--rad:430"><div class="label">Bias &amp; risico</div><h4>Blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p></div>
-          <div class="cv hcc-node hcc-frame reveal" data-m="impl"   data-cn="impl"   data-step="9"  style="--r:70px;--ang:0;--rad:430"><div class="label">Implications</div><h4>Juridisch &amp; ethisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p></div>
-          <div class="cv hcc-node hcc-frame reveal" data-m="change" data-cn="change" data-step="10" style="--r:70px;--ang:130;--rad:430"><div class="label">Change Mgmt</div><h4>Hoe we invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p></div>
+          <div class="cv hcc-node hcc-frame reveal" data-m="bias"   data-cn="bias"   data-step="8"  style="--r:82px;--ang:-130;--rad:465"><span class="hcc-step-num">08</span><div class="label">Bias &amp; risico</div><h4>Blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-frame reveal" data-m="impl"   data-cn="impl"   data-step="9"  style="--r:82px;--ang:0;--rad:465"><span class="hcc-step-num">09</span><div class="label">Implications</div><h4>Juridisch &amp; ethisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p><span class="hcc-more">Lees meer →</span></div>
+          <div class="cv hcc-node hcc-frame reveal" data-m="change" data-cn="change" data-step="10" style="--r:82px;--ang:130;--rad:465"><span class="hcc-step-num">10</span><div class="label">Change Mgmt</div><h4>Hoe we invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p><span class="hcc-more">Lees meer →</span></div>
         </div>
 
         <aside class="hcc-detail" id="hccDetail" aria-live="polite">
-          <div class="hcc-detail-eyebrow">Hover een knoop</div>
+          <div class="hcc-detail-eyebrow">Hover op een knop</div>
           <h4 class="hcc-detail-title">Het systeem in één oogopslag</h4>
           <p class="hcc-detail-body">10 concepten, één centraal collaboratie-pact. Drie ringen: fundament, brug, kader. Klik voor de volledige toelichting.</p>
         </aside>
@@ -3929,18 +3980,23 @@ ScrollTrigger.create({
   function playRead() {
     const { path, ord } = buildReadPath();
     readG.classList.add('on');
+    stage.classList.add('show-numbers');
     const len = path.getTotalLength();
     path.style.strokeDasharray = len;
     path.style.strokeDashoffset = len;
     if (readTl) readTl.kill();
     readTl = gsap.timeline();
-    readTl.to(path, { strokeDashoffset:0, duration:4, ease:'power2.inOut' });
+    readTl.to(path, { strokeDashoffset:0, duration:6.5, ease:'power2.inOut' });
     ord.forEach((n,i) => {
       readTl.call(() => {
         ord.forEach(o => o.classList.remove('is-reading'));
         n.classList.add('is-reading');
-      }, null, i * 0.4);
+      }, null, i * 0.62);
     });
+    // After the walkthrough, clear the active node so numbers remain visible without one being highlighted
+    readTl.call(() => {
+      ord.forEach(o => o.classList.remove('is-reading'));
+    }, null, '+=0.7');
   }
   function stopRead() {
     if (readTl) readTl.kill();

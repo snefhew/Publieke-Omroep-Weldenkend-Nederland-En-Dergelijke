@@ -49,42 +49,38 @@ body {
   padding: 14px 32px;
   background: rgba(250, 247, 240, 0.85);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--mist);
-  transition: transform .3s var(--easing);
+}
+.nav-side {
+  position: absolute;
+  left: 32px; top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; gap: 4px;
 }
 .nav-inner {
-  max-width: 1280px; margin: 0 auto;
+  max-width: 1200px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
-.nav-left { display: flex; align-items: center; gap: 16px; }
-.nav-side { display: flex; align-items: center; gap: 4px; }
 .nav-right { display: flex; align-items: center; gap: 4px; }
 .nav-brand {
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: -0.025em;
-  text-decoration: none;
-  color: var(--ink);
+  font-family: var(--ff); font-weight: 700; font-size: 18px;
+  letter-spacing: -0.02em; color: var(--ink);
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center;
 }
 .nav-brand .dot { color: var(--signal-deep); }
 .nav-link {
-  font-family: var(--ff);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--slate);
-  text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 999px;
   background: none; border: none; cursor: pointer;
-  letter-spacing: -0.005em;
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  color: var(--slate); padding: 8px 14px;
+  border-radius: 999px;
+  letter-spacing: -0.005em; text-decoration: none;
   display: inline-flex; align-items: center;
-  transition: background .15s var(--easing), color .15s var(--easing);
+  transition: background .15s ease, color .15s ease;
 }
-.nav-link:hover { color: var(--ink); background: rgba(0,0,0,.04); }
+.nav-link:hover { color: var(--ink); background: rgba(0,0,0,.05); }
 .nav-link.active { background: var(--ink); color: var(--paper); }
-@media (max-width: 640px) {
-  .nav-side { display: none; }
-}
+@media (max-width: 1280px) { .nav-side { display: none; } }
 
 /* ====================== SCROLL PROGRESS ====================== */
 .progress {
@@ -1110,14 +1106,12 @@ body {
 
 <!-- Nav -->
 <nav class="nav">
+  <div class="nav-side">
+    <a href="index.html" class="nav-link">Redactie Agent</a>
+    <a href="deliverables.html" class="nav-link">Deliverables</a>
+  </div>
   <div class="nav-inner">
-    <div class="nav-left">
-      <div class="nav-side">
-        <a href="index.html" class="nav-link">Redactie Agent</a>
-        <a href="deliverables.html" class="nav-link">Deliverables</a>
-      </div>
-      <a href="#" class="nav-brand">Lede<span class="dot">.</span></a>
-    </div>
+    <a href="#" class="nav-brand">Lede<span class="dot">.</span></a>
     <div class="nav-right">
       <a href="#manifesto" class="nav-link">Manifesto</a>
       <a href="#logo" class="nav-link">Logo</a>

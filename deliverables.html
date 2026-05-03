@@ -63,28 +63,34 @@ nav.topnav {
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
   border-bottom: 1px solid var(--driftwood);
 }
+.nav-side {
+  position: absolute;
+  left: 32px; top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; gap: 4px;
+}
 .nav-inner {
   max-width: var(--max); margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
-.nav-left { display: flex; align-items: center; gap: 16px; }
-.nav-side { display: flex; align-items: center; gap: 4px; }
 .nav-right { display: flex; align-items: center; gap: 4px; }
 .nav-brand {
-  font-weight: 700; font-size: 18px; letter-spacing: -0.02em;
-  text-decoration: none; color: var(--ink);
+  font-family: var(--ff); font-weight: 700; font-size: 18px;
+  letter-spacing: -0.02em; color: var(--ink);
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center;
 }
 .nav-link {
-  font-family: var(--ff); font-size: 13px; font-weight: 500;
-  color: var(--graphite); text-decoration: none;
-  padding: 8px 14px; border-radius: var(--r-pill);
   background: none; border: none; cursor: pointer;
-  letter-spacing: -0.005em;
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  color: var(--graphite); padding: 8px 14px;
+  border-radius: var(--r-pill);
+  letter-spacing: -0.005em; text-decoration: none;
   display: inline-flex; align-items: center;
-  transition: background .15s var(--easing), color .15s var(--easing);
+  transition: background .15s ease, color .15s ease;
 }
-.nav-link:hover { color: var(--ink); background: rgba(0,0,0,.04); }
+.nav-link:hover { color: var(--ink); background: rgba(0,0,0,.05); }
 .nav-link.active { background: var(--ink); color: #fff; }
+@media (max-width: 1280px) { .nav-side { display: none; } }
 
 /* === HERO === */
 .hero { padding: 140px 32px 80px; position: relative; overflow: hidden; }
@@ -526,14 +532,12 @@ nav.topnav {
 <div id="progress"></div>
 
 <nav class="topnav">
+  <div class="nav-side">
+    <a class="nav-link" href="index.html">Redactie Agent</a>
+    <a class="nav-link" href="brand-guide.html">Brand Guide</a>
+  </div>
   <div class="nav-inner">
-    <div class="nav-left">
-      <div class="nav-side">
-        <a class="nav-link" href="index.html">Redactie Agent</a>
-        <a class="nav-link" href="brand-guide.html">Brand Guide</a>
-      </div>
-      <a href="#top" class="nav-brand">Deliverables</a>
-    </div>
+    <a href="#top" class="nav-brand">Deliverables</a>
     <div class="nav-right">
       <a class="nav-link" href="#doelgroep">Doelgroep</a>
       <a class="nav-link" href="#tools">Tools</a>
