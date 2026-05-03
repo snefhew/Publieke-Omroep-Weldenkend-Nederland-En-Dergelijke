@@ -1612,17 +1612,25 @@ nav.scrolled .nav-brand { color: var(--ink); }
   font-size: 11px; font-weight: 500; color: var(--magenta);
 }
 .canvas-real-overlay {
-  position: absolute; inset: 0; pointer-events: none; z-index: 3;
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  opacity: 0; transition: opacity .4s ease;
 }
 .canvas-real-overlay svg { width: 100%; height: 100%; display: block; }
-.canvas-real-overlay path {
-  fill: none; stroke: rgba(226,20,139,.18);
-  stroke-width: 1.5; stroke-dasharray: 5 5;
-  transition: stroke .25s, stroke-width .25s;
+.canvas-real.show-order .canvas-real-overlay { opacity: 1; }
+.canvas-line {
+  fill: none;
+  stroke: var(--magenta);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 4 4;
+  opacity: .55;
 }
-.canvas-real-overlay path.cn-active {
-  stroke: var(--magenta); stroke-width: 2;
-  animation: dash-flow 1.2s linear infinite;
+.canvas-line-num {
+  fill: var(--magenta);
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 /* === DOELGROEP === */
@@ -2016,11 +2024,10 @@ nav.scrolled .nav-brand { color: var(--ink); }
     <div class="nav-links">
       <button class="nav-link active" data-to="brief">Brief</button>
       <button class="nav-link" data-to="canvas">Canvas</button>
-      <button class="nav-link" data-to="doelgroep">Doelgroep</button>
-      <button class="nav-link" data-to="gha">Agency</button>
-      <button class="nav-link" data-to="workflow-mapping">Workflow</button>
       <button class="nav-link" data-to="auto-3">Feed</button>
       <button class="nav-link" data-to="auto-4">Insteek</button>
+      <a class="nav-link" href="deliverables.html">Deliverables</a>
+      <a class="nav-link" href="brand-guide.html">Brand Guide</a>
     </div>
     <button class="nav-cta" data-to="auto-3">
       <span>Bekijk de feed</span>
@@ -2141,35 +2148,32 @@ nav.scrolled .nav-brand { color: var(--ink); }
       </div>
 
       <div class="canvas-real" id="canvasReal">
-        <div class="cv cv-jtbd reveal" data-m="jtbd" data-cn="jtbd"><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil bereiken</h4><p>Lokale verhalen met landelijk potentieel snel signaleren, voor 08:30 op het ochtendoverleg.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-promise reveal" data-m="promise" data-cn="promise"><div class="label">AI Promise</div><h4>Wat de technologie kan</h4><p>Continu 30+ bronnen monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-hact reveal" data-m="hact" data-cn="hact"><div class="label">Human Activities</div><h4>Wat de mens blijft doen</h4><p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-reinf reveal" data-m="hreinf" data-cn="reinf"><div class="label">Human Reinforcement</div><h4>Hoe de AI de mens versterkt</h4><p>Insteek-suggesties, sprekers aanbevelen, historische context bij items.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-benefits reveal" data-m="benefits" data-cn="benefits"><div class="label">Benefits for Humans</div><h4>Wat het de redactie oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-mact reveal" data-m="mact" data-cn="mact"><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-collab2 reveal" data-m="collab" data-cn="collab"><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik. Filtering wordt steeds preciezer, in jullie eigen redactiestijl.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-bias reveal" data-m="bias" data-cn="bias"><div class="label">Critical Thinking & Biases</div><h4>Risico's en blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-impl reveal" data-m="impl" data-cn="impl"><div class="label">Considerations & Implications</div><h4>Juridisch, ethisch, praktisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-change reveal" data-m="change" data-cn="change"><div class="label">Change Management</div><h4>Hoe we het invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-jtbd reveal" data-m="jtbd" data-cn="jtbd" data-step="1"><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil bereiken</h4><p>Lokale verhalen met landelijk potentieel snel signaleren, voor 08:30 op het ochtendoverleg.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-promise reveal" data-m="promise" data-cn="promise" data-step="2"><div class="label">AI Promise</div><h4>Wat de technologie kan</h4><p>Continu 30+ bronnen monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-hact reveal" data-m="hact" data-cn="hact" data-step="3"><div class="label">Human Activities</div><h4>Wat de mens blijft doen</h4><p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-reinf reveal" data-m="hreinf" data-cn="reinf" data-step="4"><div class="label">Human Reinforcement</div><h4>Hoe de AI de mens versterkt</h4><p>Insteek-suggesties, sprekers aanbevelen, historische context bij items.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-benefits reveal" data-m="benefits" data-cn="benefits" data-step="5"><div class="label">Benefits for Humans</div><h4>Wat het de redactie oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-mact reveal" data-m="mact" data-cn="mact" data-step="6"><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-collab2 reveal" data-m="collab" data-cn="collab" data-step="7"><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik. Filtering wordt steeds preciezer, in jullie eigen redactiestijl.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-bias reveal" data-m="bias" data-cn="bias" data-step="8"><div class="label">Critical Thinking & Biases</div><h4>Risico's en blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-impl reveal" data-m="impl" data-cn="impl" data-step="9"><div class="label">Considerations & Implications</div><h4>Juridisch, ethisch, praktisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+        <div class="cv cv-change reveal" data-m="change" data-cn="change" data-step="10"><div class="label">Change Management</div><h4>Hoe we het invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
 
         <div class="canvas-real-overlay" id="canvasOverlay">
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-            <!-- JTBD ↔ AI Promise -->
-            <path data-pair="jtbd-promise" d="M 25 25 Q 30 25 37 25"/>
-            <!-- AI Promise ↔ Machine Activities (down) -->
-            <path data-pair="promise-mact" d="M 37 25 Q 50 38 62 50"/>
-            <!-- Human Activities ↔ Human Reinforcement -->
-            <path data-pair="hact-reinf" d="M 63 25 Q 68 25 75 25"/>
-            <!-- Machine Activities ↔ Human Activities -->
-            <path data-pair="mact-hact" d="M 62 50 Q 62 38 62 25"/>
-            <!-- Machine ↔ Collaboration -->
-            <path data-pair="mact-collab" d="M 62 50 Q 56 60 50 75"/>
-            <!-- Human Activities ↔ Collaboration -->
-            <path data-pair="hact-collab" d="M 62 25 Q 56 50 50 75"/>
-            <!-- Collaboration → Human Reinforcement (feedback loop) -->
-            <path data-pair="collab-reinf" d="M 50 75 Q 75 60 75 25"/>
-            <!-- Benefits ↔ JTBD -->
-            <path data-pair="benefits-jtbd" d="M 37 50 Q 30 38 25 25"/>
+          <svg aria-hidden="true">
+            <defs>
+              <marker id="canvas-arrow"
+                      viewBox="0 0 10 10"
+                      refX="9" refY="5"
+                      markerWidth="6" markerHeight="6"
+                      markerUnits="strokeWidth"
+                      orient="auto">
+                <path d="M0,0 L10,5 L0,10" fill="none"
+                      stroke="#e2148b" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+              </marker>
+            </defs>
+            <g class="canvas-lines-group"></g>
           </svg>
         </div>
       </div>
@@ -2187,163 +2191,9 @@ nav.scrolled .nav-brand { color: var(--ink); }
   </div>
 </div>
 
-<!-- DOELGROEP -->
-<section class="section" id="doelgroep">
-  <div class="section-inner">
-    <div class="section-head">
-      <div>
-        <div class="section-eyebrow">Doelgroep</div>
-        <h2 class="t-h1">Wie kijkt PowNed?</h2>
-      </div>
-      <p class="section-lede">
-        De netwerkgeneratie. Millennials en Gen Z die continu online zijn, kritisch op macht en op zoek naar ongepolijste informatie.
-      </p>
-    </div>
-
-    <div class="dg-grid">
-      <div class="dg-card">
-        <div class="dg-num">2,7M</div>
-        <div class="dg-label">Gen Z in Nederland</div>
-        <div class="dg-sub">16% van de bevolking, geboren 1996-2010</div>
-      </div>
-      <div class="dg-card">
-        <div class="dg-num">71%</div>
-        <div class="dg-label">Social als nieuwsbron</div>
-        <div class="dg-sub">Bij Gen Z, vooral Instagram + TikTok</div>
-      </div>
-      <div class="dg-card">
-        <div class="dg-num">910K</div>
-        <div class="dg-label">PowNed YouTube</div>
-        <div class="dg-sub">Plus 124K TikTok en 910K Facebook</div>
-      </div>
-      <div class="dg-card">
-        <div class="dg-num">61% / 30%</div>
-        <div class="dg-label">Gen Z vs millennial</div>
-        <div class="dg-sub">Social als belangrijkste nieuwsbron</div>
-      </div>
-    </div>
-
-    <div class="dg-personas">
-      <div class="dg-persona">
-        <div class="dg-persona-label">Persona 01</div>
-        <h3>De netwerkjongere</h3>
-        <ul>
-          <li><strong>22 jaar</strong>, student of starter</li>
-          <li>Nieuws via TikTok en Instagram, niet via NOS</li>
-          <li>Wil rauw, eerlijk, herkenbaar</li>
-          <li>Wantrouwt politici en mainstream media</li>
-          <li>Volgt PowNed om "de andere kant" te zien</li>
-        </ul>
-      </div>
-      <div class="dg-persona">
-        <div class="dg-persona-label">Persona 02</div>
-        <h3>De kritische millennial</h3>
-        <ul>
-          <li><strong>32 jaar</strong>, werkt, betrokken bij maatschappij</li>
-          <li>Mix van NOS, RTL Nieuws en PowNed</li>
-          <li>Zoekt verdieping en confrontatie</li>
-          <li>Deelt PowNed-content op socials</li>
-          <li>Wil dat politici worden aangesproken op gedrag</li>
-        </ul>
-      </div>
-      <div class="dg-persona">
-        <div class="dg-persona-label">Persona 03</div>
-        <h3>De redacteur (B2B)</h3>
-        <ul>
-          <li><strong>38 jaar</strong>, eindredacteur PowNed</li>
-          <li>Vroege ochtend, koffie, ontelbare browser tabs</li>
-          <li>Wil voor 08:30 weten welke verhalen vandaag tellen</li>
-          <li>Heeft geen tijd voor 30 websites doorvlooien</li>
-          <li>Onze Redactie Agent is voor háár gemaakt</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- GHA -->
-<section class="section section-warm" id="gha">
-  <div class="section-inner">
-    <div class="section-head">
-      <div>
-        <div class="section-eyebrow">Growth Hacking Agency</div>
-        <h2 class="t-h1">Onze huisstijl.</h2>
-      </div>
-      <p class="section-lede">
-        We bouwen AI-automatiseringen voor mediaorganisaties. Heldere principes, scherpe uitvoering.
-      </p>
-    </div>
-
-    <div class="gha-block">
-      <div class="gha-label">Manifesto</div>
-      <p class="gha-quote">
-        We bouwen AI-systemen die <span class="gha-em">redacties versterken</span>, niet vervangen. De AI suggereert, de mens beslist.
-      </p>
-    </div>
-
-    <div class="gha-grid">
-      <div class="gha-item">
-        <div class="gha-item-label">Logo</div>
-        <div class="gha-logo-demo">
-          <span class="gha-mark"></span>
-          <span>Redactie Agent</span>
-        </div>
-        <p>Magenta-paars gradient mark plus Inter Variable wordmark.</p>
-      </div>
-
-      <div class="gha-item">
-        <div class="gha-item-label">Kleurpalet</div>
-        <div class="gha-colors">
-          <div class="gha-color" style="background: var(--magenta)"><span>Magenta</span><span>#e2148b</span></div>
-          <div class="gha-color" style="background: var(--purple)"><span>Paars</span><span>#9c2d8f</span></div>
-          <div class="gha-color" style="background: var(--frame); color:#fff"><span>Frame</span><span>#0a0a0a</span></div>
-          <div class="gha-color" style="background: var(--canvas); color: var(--ink); border: 1px solid var(--fog)"><span>Canvas</span><span>#f2f0eb</span></div>
-        </div>
-      </div>
-
-      <div class="gha-item">
-        <div class="gha-item-label">Typografie</div>
-        <div class="gha-type">
-          <div class="gha-type-row" style="font-family: var(--ff); font-weight: 700; font-size: 32px; letter-spacing: -0.027em;">Inter Variable</div>
-          <div class="gha-type-row" style="font-family: var(--ff); font-weight: 500;">Display + body</div>
-          <div class="gha-type-row" style="font-family: var(--ff-mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;">JetBrains Mono · labels</div>
-        </div>
-      </div>
-
-      <div class="gha-item">
-        <div class="gha-item-label">Tone of voice</div>
-        <ul class="gha-tov">
-          <li><strong>Direct.</strong> Geen marketing-fluff. We zeggen wat we bedoelen.</li>
-          <li><strong>Praktisch.</strong> Werkende prototypes boven mooie mockups.</li>
-          <li><strong>Mensgericht.</strong> AI is gereedschap, niet doel.</li>
-          <li><strong>Transparant.</strong> Elke beslissing uitlegbaar.</li>
-        </ul>
-      </div>
-
-      <div class="gha-item">
-        <div class="gha-item-label">Design principes</div>
-        <ol class="gha-prins">
-          <li>Inhoud boven decoratie</li>
-          <li>Eén accentkleur per scherm</li>
-          <li>Witruimte als ademruimte</li>
-          <li>Mono voor metadata, sans voor inhoud</li>
-        </ol>
-      </div>
-
-      <div class="gha-item">
-        <div class="gha-item-label">Tools</div>
-        <div class="gha-tools">
-          <span class="tech-pill"><span class="sig"></span>n8n</span>
-          <span class="tech-pill"><span class="sig"></span>Claude API</span>
-          <span class="tech-pill"><span class="sig"></span>PostgreSQL</span>
-          <span class="tech-pill"><span class="sig"></span>pgvector</span>
-          <span class="tech-pill"><span class="sig"></span>Trafilatura</span>
-          <span class="tech-pill"><span class="sig"></span>Docker</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- Doelgroep en GHA Brand Guide verplaatst naar aparte pagina's:
+     - aanpak.html (Doelgroep + Workflow-mapping)
+     - brand-guide.html (Lede. agency huisstijl) -->
 
 <!-- AUTO INTRO -->
 <section class="auto-intro" id="auto-intro">
@@ -2362,36 +2212,7 @@ nav.scrolled .nav-brand { color: var(--ink); }
   </div>
 </section>
 
-<!-- WORKFLOW MAPPING -->
-<section class="section" id="workflow-mapping">
-  <div class="section-inner">
-    <div class="section-head">
-      <div>
-        <div class="section-eyebrow">Workflow-mapping</div>
-        <h2 class="t-h1">Per automatisering, in vaktermen.</h2>
-      </div>
-      <p class="section-lede">
-        Elke automatisering bestaat uit dezelfde bouwstenen: een trigger start het proces, een filter beslist of het door mag, een actie voert het uit, een output levert het resultaat.
-      </p>
-    </div>
-
-    <div class="wf-tabs">
-      <button class="wf-tab active" data-wf="1">01 Dataverzameling</button>
-      <button class="wf-tab" data-wf="2">02 AI-filtering</button>
-      <button class="wf-tab" data-wf="3">03 Redactiefeed</button>
-      <button class="wf-tab" data-wf="4">04 Verhaalinsteek</button>
-    </div>
-
-    <div class="wf-flow" id="wfFlow"></div>
-
-    <div class="wf-legend">
-      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-red)"></span>Trigger</span>
-      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-yellow)"></span>Filter / IF</span>
-      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-blue)"></span>Actie (LLM/Tool/API)</span>
-      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-green)"></span>Output</span>
-    </div>
-  </div>
-</section>
+<!-- Workflow-mapping verplaatst naar deliverables.html -->
 
 <!-- AUTO 01: BRONNEN -->
 <section class="auto" id="auto-1">
@@ -3227,12 +3048,10 @@ document.querySelectorAll('[data-to]').forEach(l => l.addEventListener('click', 
   scrollTo(l.dataset.to);
 }));
 
-const sections = ['hero','brief','canvas','doelgroep','gha','auto-intro','workflow-mapping','auto-1','auto-2','auto-3','auto-4'];
+const sections = ['hero','brief','canvas','auto-intro','auto-1','auto-2','auto-3','auto-4'];
 const navMap = {
   'hero':'brief', 'brief':'brief', 'canvas':'canvas',
-  'doelgroep':'doelgroep', 'gha':'gha',
-  'auto-intro':'workflow-mapping', 'workflow-mapping':'workflow-mapping',
-  'auto-1':'workflow-mapping', 'auto-2':'workflow-mapping',
+  'auto-intro':'auto-3', 'auto-1':'auto-3', 'auto-2':'auto-3',
   'auto-3':'auto-3', 'auto-4':'auto-4'
 };
 window.addEventListener('scroll', () => {
@@ -3780,82 +3599,122 @@ ScrollTrigger.create({
 });
 
 /* ============================================================
-   CANVAS REAL — connections + reading mode
+   CANVAS REAL — clean line system + reading walkthrough
    ============================================================ */
 (function () {
+  const wrap = document.getElementById('canvasReal');
+  if (!wrap) return;
   const overlay = document.getElementById('canvasOverlay');
-  if (!overlay) return;
-  const paths = overlay.querySelectorAll('path');
+  const svg = overlay && overlay.querySelector('svg');
+  const group = svg && svg.querySelector('.canvas-lines-group');
+  const readBtn = document.getElementById('canvasReadBtn');
   const cards = document.querySelectorAll('.canvas-real .cv');
-  // adjacency from data-pair (e.g. "jtbd-promise" means jtbd <-> promise)
-  const adj = {};
-  paths.forEach(p => {
-    const [a, b] = p.dataset.pair.split('-');
-    (adj[a] = adj[a] || []).push({ other: b, path: p });
-    (adj[b] = adj[b] || []).push({ other: a, path: p });
-  });
+  const SVG_NS = 'http://www.w3.org/2000/svg';
 
-  function clearActive() {
-    paths.forEach(p => p.classList.remove('cn-active'));
+  // Adjacency (logical relations between concepts) for hover highlight
+  const adj = {
+    jtbd: ['promise', 'benefits'],
+    promise: ['jtbd', 'mact'],
+    hact: ['reinf', 'mact', 'collab'],
+    reinf: ['hact', 'collab'],
+    benefits: ['jtbd', 'collab'],
+    mact: ['promise', 'hact', 'collab'],
+    collab: ['mact', 'hact', 'reinf', 'benefits'],
+    bias: ['promise', 'mact'],
+    impl: ['mact', 'change'],
+    change: ['impl', 'reinf']
+  };
+
+  function clearRelated() {
     cards.forEach(c => c.classList.remove('cv-related'));
   }
-  function activate(cn) {
+  function highlightRelated(cn) {
     if (!adj[cn]) return;
-    adj[cn].forEach(({ other, path }) => {
-      path.classList.add('cn-active');
+    adj[cn].forEach(other => {
       const otherCard = document.querySelector(`.canvas-real .cv[data-cn="${other}"]`);
       if (otherCard) otherCard.classList.add('cv-related');
     });
   }
-
   cards.forEach(c => {
     c.addEventListener('mouseenter', () => {
-      const cn = c.dataset.cn;
-      clearActive();
-      activate(cn);
+      clearRelated();
+      highlightRelated(c.dataset.cn);
     });
-    c.addEventListener('mouseleave', clearActive);
+    c.addEventListener('mouseleave', clearRelated);
   });
 
-  // Reading mode
-  const readBtn = document.getElementById('canvasReadBtn');
-  const order = ['jtbd','promise','hact','reinf','benefits','mact','collab','bias','impl','change'];
-  let reading = false;
+  // ===== Line drawing for reading order =====
+  function drawLines() {
+    if (!svg || !group) return;
+    const cellsArr = [...wrap.querySelectorAll('.cv[data-step]')]
+      .sort((a, b) => +a.dataset.step - +b.dataset.step);
+    if (cellsArr.length < 2) return;
+
+    const wrapRect = wrap.getBoundingClientRect();
+    svg.setAttribute('viewBox', `0 0 ${wrapRect.width} ${wrapRect.height}`);
+    svg.setAttribute('width', wrapRect.width);
+    svg.setAttribute('height', wrapRect.height);
+    group.innerHTML = '';
+
+    for (let i = 0; i < cellsArr.length - 1; i++) {
+      const a = cellsArr[i].getBoundingClientRect();
+      const b = cellsArr[i + 1].getBoundingClientRect();
+      const ax = (a.left + a.right) / 2 - wrapRect.left;
+      const ay = (a.top + a.bottom) / 2 - wrapRect.top;
+      const bx = (b.left + b.right) / 2 - wrapRect.left;
+      const by = (b.top + b.bottom) / 2 - wrapRect.top;
+      const dx = bx - ax;
+      const dy = by - ay;
+      let x1, y1, x2, y2;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) { x1 = a.right - wrapRect.left;  y1 = ay; x2 = b.left - wrapRect.left;   y2 = by; }
+        else        { x1 = a.left  - wrapRect.left;  y1 = ay; x2 = b.right - wrapRect.left;  y2 = by; }
+      } else {
+        if (dy > 0) { x1 = ax; y1 = a.bottom - wrapRect.top; x2 = bx; y2 = b.top    - wrapRect.top; }
+        else        { x1 = ax; y1 = a.top    - wrapRect.top; x2 = bx; y2 = b.bottom - wrapRect.top; }
+      }
+      const midX = (x1 + x2) / 2;
+      const midY = (y1 + y2) / 2;
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('class', 'canvas-line');
+      path.setAttribute('d', `M ${x1} ${y1} Q ${midX} ${midY} ${x2} ${y2}`);
+      path.setAttribute('marker-end', 'url(#canvas-arrow)');
+      group.appendChild(path);
+
+      const num = document.createElementNS(SVG_NS, 'text');
+      num.setAttribute('class', 'canvas-line-num');
+      num.setAttribute('x', x1 + (dx > 0 ? 6 : -6));
+      num.setAttribute('y', y1 - 6);
+      num.setAttribute('text-anchor', dx > 0 ? 'start' : 'end');
+      num.textContent = String(i + 1);
+      group.appendChild(num);
+    }
+  }
+
+  function setOrderVisible(visible) {
+    wrap.classList.toggle('show-order', !!visible);
+    if (readBtn) readBtn.setAttribute('aria-pressed', visible ? 'true' : 'false');
+    if (visible) drawLines();
+  }
+
   if (readBtn) {
     readBtn.addEventListener('click', () => {
-      if (reading) return;
-      reading = true;
-      readBtn.disabled = true;
-      const orig = readBtn.querySelector('span').textContent;
-      readBtn.querySelector('span').textContent = 'Aan het lezen…';
-      let i = 0;
-      function step() {
-        cards.forEach(c => c.classList.remove('cv-reading'));
-        if (i >= order.length) {
-          reading = false;
-          readBtn.disabled = false;
-          readBtn.querySelector('span').textContent = orig;
-          clearActive();
-          return;
-        }
-        const cn = order[i];
-        const card = document.querySelector(`.canvas-real .cv[data-cn="${cn}"]`);
-        if (card) {
-          card.classList.add('cv-reading');
-          // scroll into view smoothly if needed
-          const r = card.getBoundingClientRect();
-          if (r.top < 80 || r.bottom > window.innerHeight - 80) {
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          clearActive();
-          activate(cn);
-        }
-        i++;
-        setTimeout(step, 1600);
-      }
-      step();
+      const isOn = wrap.classList.contains('show-order');
+      setOrderVisible(!isOn);
+      const labelSpan = readBtn.querySelector('span');
+      if (labelSpan) labelSpan.textContent = !isOn ? 'Verberg volgorde' : 'Lees in volgorde';
     });
   }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    if (!wrap.classList.contains('show-order')) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawLines, 80);
+  });
+
+  // Pre-compute once layout is settled so the first toggle is instant
+  requestAnimationFrame(() => requestAnimationFrame(drawLines));
 })();
 
 /* ============================================================

@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Deliverables van de PowNed Redactie Agent: doelgroepanalyse, best practice tools en workflow-mapping.">
+<title>Deliverables — Doelgroep, Tools & Workflow · Redactie Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #f2f0eb;
+  --canvas-warm: #ece9e2;
+  --bone: #ffffff;
+  --fog: #e3e3e2;
+  --driftwood: #dcd7d3;
+  --ink: #1a1a1a;
+  --graphite: #5a5a5a;
+  --graphite-soft: #8a8a8a;
+  --magenta: #e2148b;
+  --purple: #9c2d8f;
+  --magenta-soft: rgba(226, 20, 139, .08);
+  --grad-pow: linear-gradient(135deg, #9c2d8f, #e2148b);
+  --frame: #0a0a0a;
+  --ff: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --max: 1200px;
+  --r-card: 16px;
+  --r-card-lg: 24px;
+  --r-pill: 999px;
+  --lego-red: #d62b2b;
+  --lego-yellow: #f5b800;
+  --lego-blue: #1e6dc7;
+  --lego-green: #2e8540;
+  --easing: cubic-bezier(.2,.7,.2,1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+*::selection { background: var(--magenta); color: #fff; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--ff);
+  font-feature-settings: "ss01", "cv11";
+  font-size: 16px; font-weight: 500; line-height: 1.5;
+  color: var(--ink); background: var(--canvas);
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+.t-h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 700; line-height: 1.02; letter-spacing: -0.027em; }
+.t-h2 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 700; line-height: 1.04; letter-spacing: -0.024em; }
+.t-display { font-size: clamp(40px, 7vw, 72px); font-weight: 700; line-height: 0.98; letter-spacing: -0.028em; }
+
+#progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  background: var(--magenta); z-index: 200; transition: width .1s;
+}
+
+/* === NAV === */
+nav.topnav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100; padding: 14px 32px;
+  background: rgba(242, 240, 235, .85);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid var(--driftwood);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 16px; letter-spacing: -0.02em;
+  text-decoration: none; color: var(--ink);
+}
+.nav-brand-mark {
+  width: 22px; height: 22px;
+  background: var(--grad-pow); border-radius: 5px;
+}
+.nav-cluster { display: flex; align-items: center; gap: 6px; }
+.nav-link {
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  color: var(--graphite); text-decoration: none;
+  padding: 8px 14px; border-radius: var(--r-pill);
+  transition: background .15s var(--easing), color .15s var(--easing);
+}
+.nav-link:hover { color: var(--ink); background: rgba(0,0,0,.04); }
+.nav-link.active { background: var(--ink); color: #fff; }
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--ink); color: #fff;
+  padding: 9px 14px; border-radius: var(--r-pill);
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  transition: background .15s var(--easing), transform .15s var(--easing);
+}
+.nav-cta:hover { background: var(--magenta); transform: translateX(-2px); }
+.nav-cta svg { width: 12px; height: 12px; }
+
+/* === HERO === */
+.hero { padding: 140px 32px 80px; position: relative; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(226,20,139,.06), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(156,45,143,.05), transparent 40%);
+  pointer-events: none;
+}
+.hero-inner { max-width: var(--max); margin: 0 auto; position: relative; }
+.hero-eyebrow {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 16px;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.hero-eyebrow::before {
+  content: ""; width: 24px; height: 1px; background: var(--magenta);
+}
+.hero h1 { margin-bottom: 20px; max-width: 920px; }
+.hero h1 .accent {
+  background: var(--grad-pow);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero p.lede {
+  font-size: 18px; font-weight: 500; line-height: 1.5;
+  color: var(--graphite); max-width: 720px; letter-spacing: -0.008em;
+}
+.hero-meta {
+  margin-top: 40px; display: flex; gap: 28px; flex-wrap: wrap;
+}
+.hero-meta a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--graphite); text-decoration: none;
+  border-bottom: 1px dashed var(--driftwood); padding-bottom: 4px;
+  transition: color .15s var(--easing), border-color .15s var(--easing);
+}
+.hero-meta a:hover { color: var(--magenta); border-color: var(--magenta); }
+
+/* === SECTION === */
+.section { padding: 96px 32px; position: relative; }
+.section-warm { background: var(--canvas-warm); }
+.section-inner { max-width: var(--max); margin: 0 auto; }
+.section-head {
+  margin-bottom: 56px;
+  display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: end;
+}
+.section-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--ff-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 16px;
+}
+.section-eyebrow::before {
+  content: ""; width: 24px; height: 1px; background: var(--magenta);
+}
+.section-head h2 { color: var(--ink); }
+.section-lede {
+  font-size: 18px; line-height: 1.5; color: var(--graphite);
+  letter-spacing: -0.008em; font-weight: 500;
+}
+
+/* === DELIVERABLE BLOCK INDEX === */
+.dlist {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-top: 24px;
+}
+.dlist-card {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); padding: 24px;
+  display: flex; flex-direction: column; gap: 8px;
+  text-decoration: none; color: var(--ink);
+  border-top: 3px solid var(--magenta);
+  transition: transform .2s var(--easing), border-color .2s var(--easing);
+}
+.dlist-card:hover { transform: translateY(-3px); }
+.dlist-num {
+  font-family: var(--ff-mono); font-size: 11px;
+  color: var(--magenta); letter-spacing: 0.08em;
+}
+.dlist-title {
+  font-size: 18px; font-weight: 600; letter-spacing: -0.014em;
+}
+.dlist-sub { font-size: 13px; color: var(--graphite); }
+
+/* === DOELGROEP === */
+.dg-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 40px;
+}
+.dg-card {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); padding: 28px 24px;
+  border-top: 3px solid var(--magenta);
+}
+.dg-num {
+  font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+  letter-spacing: -0.024em; color: var(--ink); line-height: 1;
+  margin-bottom: 8px; font-feature-settings: "tnum";
+}
+.dg-label {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 8px;
+}
+.dg-sub { font-size: 13px; color: var(--graphite); line-height: 1.4; }
+
+/* Demographics table */
+.demo-table {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); overflow: hidden;
+  margin-bottom: 40px;
+}
+.demo-row {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 0; border-top: 1px solid var(--fog);
+}
+.demo-row:first-child { border-top: none; }
+.demo-cell {
+  padding: 14px 18px; font-size: 13px;
+  display: flex; align-items: center;
+}
+.demo-cell.head {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--graphite-soft); font-weight: 500;
+  background: var(--canvas);
+}
+.demo-cell.row-label {
+  font-weight: 600; color: var(--ink);
+}
+.demo-cell.gen-z { background: rgba(226,20,139,.04); color: var(--ink); font-weight: 600; }
+
+/* Persona cards (richer) */
+.dg-personas {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.dg-persona {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); padding: 28px;
+  transition: border-color .2s var(--easing), transform .2s var(--easing);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.dg-persona:hover { border-color: var(--magenta); transform: translateY(-2px); }
+.dg-persona-head {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 4px;
+}
+.dg-persona-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--grad-pow); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 17px;
+  font-family: var(--ff); letter-spacing: -0.02em;
+}
+.dg-persona-meta {
+  flex: 1;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.dg-persona-name {
+  font-size: 17px; font-weight: 700; letter-spacing: -0.014em;
+  color: var(--ink); line-height: 1.1;
+}
+.dg-persona-role {
+  font-family: var(--ff-mono); font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--magenta);
+}
+.dg-persona h3 {
+  font-size: 18px; font-weight: 600; letter-spacing: -0.014em;
+  color: var(--ink); margin: 0;
+}
+.dg-persona-sum {
+  font-size: 13px; color: var(--graphite); line-height: 1.55;
+}
+.dg-persona ul {
+  list-style: none; display: flex; flex-direction: column; gap: 8px;
+}
+.dg-persona li {
+  font-size: 13px; color: var(--graphite); line-height: 1.5;
+  padding-left: 18px; position: relative;
+}
+.dg-persona li::before {
+  content: ""; position: absolute; left: 0; top: 8px;
+  width: 8px; height: 1px; background: var(--magenta);
+}
+.dg-persona li strong { color: var(--ink); font-weight: 600; }
+.dg-persona-tag {
+  font-family: var(--ff-mono); font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--graphite-soft);
+  padding: 4px 10px; background: var(--canvas);
+  border-radius: var(--r-pill); align-self: flex-start;
+}
+
+/* === BEST-PRACTICE TOOLS === */
+.tools-conclusion {
+  background: var(--ink); color: #fff;
+  border-radius: var(--r-card-lg); padding: 40px;
+  margin-bottom: 32px; position: relative; overflow: hidden;
+}
+.tools-conclusion::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 70% at 80% 0%, rgba(226,20,139,.18), transparent 60%);
+  pointer-events: none;
+}
+.tools-conclusion .label {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 14px; position: relative;
+}
+.tools-conclusion h3 {
+  font-size: clamp(22px, 2.6vw, 30px); font-weight: 700;
+  letter-spacing: -0.018em; line-height: 1.2;
+  margin-bottom: 20px; position: relative;
+}
+.tools-conclusion h3 .em {
+  background: var(--grad-pow);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.tools-conclusion p {
+  color: rgba(255,255,255,.75); max-width: 720px;
+  font-size: 15px; line-height: 1.55; position: relative;
+}
+
+/* Compare table */
+.compare {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); overflow: hidden;
+  margin-bottom: 32px; overflow-x: auto;
+}
+.compare table { width: 100%; border-collapse: collapse; min-width: 700px; }
+.compare th, .compare td {
+  padding: 12px 16px; text-align: left;
+  font-size: 13px; vertical-align: top;
+  border-top: 1px solid var(--fog);
+}
+.compare thead th {
+  background: var(--canvas);
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--graphite-soft); font-weight: 500;
+  border-top: none;
+}
+.compare th.row-label, .compare td.row-label {
+  font-weight: 600; color: var(--ink); width: 28%;
+}
+.compare td.choice {
+  background: rgba(226,20,139,.04);
+}
+.compare th.choice {
+  background: var(--magenta); color: #fff;
+}
+.compare td .check {
+  color: var(--lego-green); font-weight: 600;
+}
+.compare td .cross {
+  color: var(--graphite-soft);
+}
+
+/* Cost cards */
+.cost-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 24px;
+}
+.cost-card {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); padding: 22px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cost-card.choice { border-color: var(--magenta); border-width: 2px; }
+.cost-card .tool {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--graphite-soft);
+}
+.cost-card.choice .tool { color: var(--magenta); }
+.cost-card .price {
+  font-size: 32px; font-weight: 700; letter-spacing: -0.022em;
+  color: var(--ink); font-feature-settings: "tnum";
+}
+.cost-card .note {
+  font-size: 12px; color: var(--graphite); line-height: 1.4;
+}
+.cost-source {
+  font-size: 12px; color: var(--graphite-soft); font-style: italic;
+  max-width: 720px;
+}
+
+/* === WORKFLOW === */
+.wf-tabs { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
+.wf-tab {
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  padding: 10px 16px; border-radius: var(--r-pill);
+  background: var(--bone); border: 1px solid var(--fog);
+  color: var(--graphite); cursor: pointer; transition: all .15s var(--easing);
+}
+.wf-tab:hover { border-color: var(--magenta); color: var(--ink); }
+.wf-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.wf-jtbd {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-left: 3px solid var(--magenta);
+  border-radius: var(--r-card); padding: 22px 26px; margin-bottom: 24px;
+  font-size: 15px; line-height: 1.55; color: var(--graphite);
+}
+.wf-jtbd .label {
+  display: block; font-family: var(--ff-mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--magenta); font-weight: 600; margin-bottom: 8px;
+}
+.wf-jtbd em { font-style: normal; color: var(--ink); font-weight: 600; }
+
+.wf-flow {
+  display: flex; align-items: stretch; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 28px;
+}
+.wf-step {
+  flex: 1; min-width: 160px; background: var(--bone);
+  border-radius: var(--r-card); padding: 20px;
+  border-top: 4px solid var(--graphite-soft);
+  border-left: 1px solid var(--fog);
+  border-right: 1px solid var(--fog);
+  border-bottom: 1px solid var(--fog);
+  display: flex; flex-direction: column; gap: 6px;
+  opacity: 0; transform: translateY(10px);
+  animation: stepIn .4s var(--easing) forwards;
+}
+@keyframes stepIn { to { opacity: 1; transform: translateY(0); } }
+.wf-trigger { border-top-color: var(--lego-red); }
+.wf-filter { border-top-color: var(--lego-yellow); }
+.wf-action { border-top-color: var(--lego-blue); }
+.wf-output { border-top-color: var(--lego-green); }
+.wf-step-head { display: flex; justify-content: space-between; align-items: baseline; }
+.wf-step-num { font-family: var(--ff-mono); font-size: 11px; color: var(--graphite-soft); letter-spacing: 0.06em; }
+.wf-step-type { font-family: var(--ff-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--ink); font-weight: 600; }
+.wf-trigger .wf-step-type { color: var(--lego-red); }
+.wf-filter .wf-step-type { color: var(--lego-yellow); }
+.wf-action .wf-step-type { color: var(--lego-blue); }
+.wf-output .wf-step-type { color: var(--lego-green); }
+.wf-step-label { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.wf-step-detail { font-size: 12px; color: var(--graphite); line-height: 1.4; margin-top: auto; }
+.wf-arrow { display: flex; align-items: center; justify-content: center; width: 24px; flex-shrink: 0; }
+.wf-arrow svg { width: 24px; height: 12px; }
+
+.wf-detail {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+}
+.wf-detail-block {
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: var(--r-card); padding: 22px;
+}
+.wf-detail-block h4 {
+  font-family: var(--ff-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 14px; font-weight: 600;
+}
+.wf-detail-block ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.wf-detail-block li {
+  font-size: 13px; color: var(--graphite); line-height: 1.5;
+  padding-left: 14px; position: relative;
+}
+.wf-detail-block li::before {
+  content: ""; position: absolute; left: 0; top: 8px;
+  width: 6px; height: 1px; background: var(--magenta);
+}
+.wf-detail-block li strong { color: var(--ink); font-weight: 600; }
+
+.wf-legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 11px; color: var(--graphite);
+  font-family: var(--ff-mono); letter-spacing: 0.04em;
+  padding-top: 24px; border-top: 1px solid var(--fog);
+}
+.wf-leg-item { display: inline-flex; align-items: center; gap: 6px; }
+.wf-leg-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+/* === ENDBAR === */
+.endbar {
+  padding: 64px 32px;
+  background: var(--frame); color: #fff; text-align: center;
+}
+.endbar-inner { max-width: var(--max); margin: 0 auto; }
+.endbar h3 {
+  font-size: clamp(22px, 3vw, 32px); font-weight: 600;
+  letter-spacing: -0.018em; margin-bottom: 24px;
+}
+.endbar-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 14px 22px; background: #fff; color: var(--ink);
+  border-radius: var(--r-pill); font-weight: 500; font-size: 14px;
+  text-decoration: none; transition: background .15s var(--easing), color .15s var(--easing);
+}
+.endbar-cta:hover { background: var(--magenta); color: #fff; }
+.endbar-cta svg { width: 14px; height: 14px; }
+.endbar-secondary {
+  display: inline-flex; align-items: center; gap: 8px; margin-left: 12px;
+  padding: 14px 22px; border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.85); border-radius: var(--r-pill);
+  font-weight: 500; font-size: 14px; text-decoration: none;
+  transition: border-color .15s var(--easing), color .15s var(--easing);
+}
+.endbar-secondary:hover { border-color: #fff; color: #fff; }
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .section-head { grid-template-columns: 1fr; gap: 24px; }
+  .dg-grid { grid-template-columns: repeat(2, 1fr); }
+  .dg-personas { grid-template-columns: 1fr; }
+  .dlist { grid-template-columns: 1fr; }
+  .cost-grid { grid-template-columns: repeat(2, 1fr); }
+  .demo-row { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+  .wf-detail { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  nav.topnav { padding: 12px 20px; }
+  .hero { padding: 90px 20px 60px; }
+  .section { padding: 56px 20px; }
+  .endbar { padding: 48px 20px; }
+  .dg-grid { grid-template-columns: 1fr; }
+  .cost-grid { grid-template-columns: 1fr; }
+  .wf-flow { flex-direction: column; }
+  .wf-arrow { width: 100%; height: 24px; transform: rotate(90deg); }
+  .wf-step { min-width: auto; }
+  .nav-link { display: none; }
+  .endbar-secondary { margin-left: 0; margin-top: 12px; }
+  .demo-cell { padding: 10px 12px; font-size: 12px; }
+  .demo-row { grid-template-columns: 1fr 1fr; }
+  .demo-cell.head:nth-child(n+3), .demo-cell:nth-child(n+3) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-brand">
+    <span class="nav-brand-mark"></span>
+    <span>Redactie Agent</span>
+  </a>
+  <div class="nav-cluster">
+    <a href="#doelgroep" class="nav-link">Doelgroep</a>
+    <a href="#tools" class="nav-link">Tools</a>
+    <a href="#workflow" class="nav-link">Workflow</a>
+    <a href="brand-guide.html" class="nav-link">Brand Guide</a>
+    <a href="index.html" class="nav-cta">
+      <svg viewBox="0 0 12 12" fill="none">
+        <path d="M7 2L3 6L7 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Naar de demo</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Deliverables · Blok 4 · 2026</div>
+    <h1 class="t-display">
+      Drie deliverables, één <span class="accent">Redactie Agent</span>.
+    </h1>
+    <p class="lede">
+      De inhoudelijke onderbouwing van het concept. Doelgroepanalyse om te bepalen voor wie we bouwen, best practice toolkeuze om te bepalen waarmee, en workflow-mapping om te bepalen hoe — vier automatiseringen in vaktermen.
+    </p>
+    <div class="dlist">
+      <a href="#doelgroep" class="dlist-card">
+        <span class="dlist-num">01 · Deliverable</span>
+        <span class="dlist-title">Doelgroepanalyse</span>
+        <span class="dlist-sub">Wie kijkt PowNed? Twee doelgroepen: kijkers + redactie.</span>
+      </a>
+      <a href="#tools" class="dlist-card">
+        <span class="dlist-num">02 · Deliverable</span>
+        <span class="dlist-title">Best Practice Tools</span>
+        <span class="dlist-sub">n8n vs Make vs Zapier — onderbouwde toolkeuze.</span>
+      </a>
+      <a href="#workflow" class="dlist-card">
+        <span class="dlist-num">03 · Deliverable</span>
+        <span class="dlist-title">Workflow-mapping</span>
+        <span class="dlist-sub">Vier automatiseringen, LEGO-kleuren, JTBD per flow.</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DOELGROEP -->
+<section class="section section-warm" id="doelgroep">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Deliverable 01 · Doelgroepanalyse</div>
+        <h2 class="t-h1">Wie kijkt PowNed?</h2>
+      </div>
+      <p class="section-lede">
+        De netwerkgeneratie: 2,7 miljoen Gen Z en 3,4 miljoen millennials die continu online zijn, hun nieuws via socials halen en allergisch zijn voor betutteling. De Redactie Agent bedient twee doelgroepen — het kijkerspubliek en de redactie zelf.
+      </p>
+    </div>
+
+    <div class="dg-grid">
+      <div class="dg-card">
+        <div class="dg-num">2,7M</div>
+        <div class="dg-label">Gen Z in Nederland</div>
+        <div class="dg-sub">16% van de bevolking, geboren 1996-2010 (CBS 2025)</div>
+      </div>
+      <div class="dg-card">
+        <div class="dg-num">71%</div>
+        <div class="dg-label">Social als nieuwsbron</div>
+        <div class="dg-sub">Bij Gen Z, vooral Instagram + TikTok</div>
+      </div>
+      <div class="dg-card">
+        <div class="dg-num">910K</div>
+        <div class="dg-label">PowNed YouTube</div>
+        <div class="dg-sub">Plus 124K TikTok en 910K Facebook</div>
+      </div>
+      <div class="dg-card">
+        <div class="dg-num">115M</div>
+        <div class="dg-label">Facebook-views in 2020</div>
+        <div class="dg-sub">Plus 110M YouTube-views (NPO Maatschappelijke Waarde)</div>
+      </div>
+    </div>
+
+    <div class="demo-table">
+      <div class="demo-row">
+        <div class="demo-cell head">Demografie</div>
+        <div class="demo-cell head">Gen Z (16-29)</div>
+        <div class="demo-cell head">Millennials (30-44)</div>
+        <div class="demo-cell head">Gen X+ (45+)</div>
+      </div>
+      <div class="demo-row">
+        <div class="demo-cell row-label">Aantal in NL</div>
+        <div class="demo-cell gen-z">≈ 2,7 mln</div>
+        <div class="demo-cell">≈ 3,4 mln</div>
+        <div class="demo-cell">≈ 11,9 mln</div>
+      </div>
+      <div class="demo-row">
+        <div class="demo-cell row-label">Aandeel bevolking</div>
+        <div class="demo-cell gen-z">16%</div>
+        <div class="demo-cell">19%</div>
+        <div class="demo-cell">66%</div>
+      </div>
+      <div class="demo-row">
+        <div class="demo-cell row-label">Social als primaire nieuwsbron</div>
+        <div class="demo-cell gen-z">71%</div>
+        <div class="demo-cell">30%</div>
+        <div class="demo-cell">12%</div>
+      </div>
+      <div class="demo-row">
+        <div class="demo-cell row-label">Belangrijkste platform</div>
+        <div class="demo-cell gen-z">Instagram + TikTok</div>
+        <div class="demo-cell">Instagram + Facebook</div>
+        <div class="demo-cell">Facebook + LinkedIn</div>
+      </div>
+      <div class="demo-row">
+        <div class="demo-cell row-label">Vertrouwen in mainstream media</div>
+        <div class="demo-cell gen-z">Laag</div>
+        <div class="demo-cell">Gemiddeld</div>
+        <div class="demo-cell">Hoog</div>
+      </div>
+    </div>
+
+    <div class="dg-personas">
+      <div class="dg-persona">
+        <div class="dg-persona-head">
+          <div class="dg-persona-avatar">L</div>
+          <div class="dg-persona-meta">
+            <div class="dg-persona-name">Lars, 22</div>
+            <div class="dg-persona-role">Persona 01 · Netwerkjongere</div>
+          </div>
+        </div>
+        <div class="dg-persona-tag">Kijker</div>
+        <p class="dg-persona-sum">Student bedrijfskunde HvA, woont op kamer in Amsterdam-Oost. Werkt als bezorger bij Picnic. Scrollt 's ochtends TikTok terwijl hij zijn tanden poetst, deelt PowNed-clips in zijn vriendengroep met "hahaha".</p>
+        <ul>
+          <li><strong>Wat hij zoekt:</strong> rauw, eerlijk, herkenbaar — geen jargon</li>
+          <li><strong>Wat hij vermijdt:</strong> NOS Journaal, NRC-opinies, talkshows</li>
+          <li><strong>Triggert delen:</strong> "dit moeten mijn vrienden zien"</li>
+          <li><strong>Voor de Agent:</strong> indirect — hij ziet alleen de output</li>
+        </ul>
+      </div>
+      <div class="dg-persona">
+        <div class="dg-persona-head">
+          <div class="dg-persona-avatar">A</div>
+          <div class="dg-persona-meta">
+            <div class="dg-persona-name">Anouk, 32</div>
+            <div class="dg-persona-role">Persona 02 · Kritische millennial</div>
+          </div>
+        </div>
+        <div class="dg-persona-tag">Kijker</div>
+        <p class="dg-persona-sum">Communicatie­adviseur bij een gemeente in de Randstad, moeder van een peuter. Volkskrant-abonnee, volgt PowNed op Instagram omdat ze de straat­interviews verfrissend vindt — ook als ze het soms vulgair vindt.</p>
+        <ul>
+          <li><strong>Wat zij zoekt:</strong> confrontatie van macht, ongemakkelijke vragen</li>
+          <li><strong>Waar zij afhaakt:</strong> pesten, racisme of seksisme onder "satire"</li>
+          <li><strong>Triggert delen:</strong> politicus die een vraag niet kan beantwoorden</li>
+          <li><strong>Voor de Agent:</strong> indirect — Agent vindt stof, redactie maakt verhaal</li>
+        </ul>
+      </div>
+      <div class="dg-persona">
+        <div class="dg-persona-head">
+          <div class="dg-persona-avatar">M</div>
+          <div class="dg-persona-meta">
+            <div class="dg-persona-name">Maartje, 38</div>
+            <div class="dg-persona-role">Persona 03 · Eindredacteur</div>
+          </div>
+        </div>
+        <div class="dg-persona-tag">B2B · Eindgebruiker</div>
+        <p class="dg-persona-sum">Eindredacteur online bij PowNed. Staat 06:30 op, neemt de bus, opent achter elkaar WhatsApp, Telegraaf-app, NOS, NU.nl, X, Slack, en 20 regionale nieuws­websites. Om 08:30 redactie­vergadering — pitcht 5 verhalen.</p>
+        <ul>
+          <li><strong>Wat zij wil:</strong> voor 08:30 een ranglijst van 20 kansrijke verhalen</li>
+          <li><strong>Wat haar irriteert:</strong> ruis, traagheid, ongeduide filters</li>
+          <li><strong>Wat haar overtuigt:</strong> snel, begrijpelijk zonder handleiding</li>
+          <li><strong>Voor de Agent:</strong> direct — alle keuzes worden hierop getoetst</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEST PRACTICE TOOLS -->
+<section class="section" id="tools">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Deliverable 02 · Best Practice Tools</div>
+        <h2 class="t-h1">n8n, Make of Zapier?</h2>
+      </div>
+      <p class="section-lede">
+        Drie marktleiders vergeleken op pricing, AI-mogelijkheden, data-soevereiniteit en complexiteits­plafond. Onze keuze, met argumentatie.
+      </p>
+    </div>
+
+    <div class="tools-conclusion">
+      <div class="label">Conclusie vooraf</div>
+      <h3>Voor de PowNed Redactie Agent kiezen we <span class="em">n8n self-hosted</span>.</h3>
+      <p>
+        Drie redenen, op volgorde van belang: <strong>(1)</strong> pricing-model schaalt niet met complexiteit — één execution, ongeacht of die uit drie of dertig stappen bestaat. <strong>(2)</strong> Data-soevereiniteit — de PowNed YouTube-corpus blijft op onze eigen infrastructuur. <strong>(3)</strong> AI-native architectuur met 70+ LangChain-nodes en native vector-store ondersteuning.
+      </p>
+    </div>
+
+    <div class="compare">
+      <table>
+        <thead>
+          <tr>
+            <th class="row-label">Criterium</th>
+            <th class="choice">n8n</th>
+            <th>Make</th>
+            <th>Zapier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Pricing-model</td>
+            <td class="choice">Per execution (1 run = 1 unit). Self-hosted: gratis</td>
+            <td>Per operation (elke node = 1 unit)</td>
+            <td>Per task (elke actie = 1 unit)</td>
+          </tr>
+          <tr>
+            <td class="row-label">Self-hosting</td>
+            <td class="choice"><span class="check">✓</span> Ja, gratis, onbeperkt</td>
+            <td><span class="cross">✗</span> Cloud-only</td>
+            <td><span class="cross">✗</span> Cloud-only (US-servers)</td>
+          </tr>
+          <tr>
+            <td class="row-label">AI-nodes</td>
+            <td class="choice">70+ met LangChain, vector store, agent memory</td>
+            <td>AI Agents (sinds okt 2025)</td>
+            <td>Zapier Copilot + AI Agents</td>
+          </tr>
+          <tr>
+            <td class="row-label">GDPR / data-residency</td>
+            <td class="choice">Volledig — data blijft op eigen infra</td>
+            <td>EU-servers, sterke compliance</td>
+            <td>US-servers, vereist DPA</td>
+          </tr>
+          <tr>
+            <td class="row-label">Custom code</td>
+            <td class="choice">Volledige Node.js / Python</td>
+            <td>Beperkt (functies, regex, JSON)</td>
+            <td>Code-step in Python/JS</td>
+          </tr>
+          <tr>
+            <td class="row-label">Integraties</td>
+            <td class="choice">≈ 400 native + universele HTTP</td>
+            <td>≈ 2.000 apps</td>
+            <td>8.000+ apps</td>
+          </tr>
+          <tr>
+            <td class="row-label">Leercurve</td>
+            <td class="choice">Steil — JS/Python kennis nuttig</td>
+            <td>Gemiddeld — visueel canvas</td>
+            <td>Laag — lineaire wizard</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; letter-spacing: -0.014em; margin-bottom: 16px; color: var(--ink);">Kostenmodel — concreet voor de Redactie Agent</h3>
+    <div class="cost-grid">
+      <div class="cost-card">
+        <div class="tool">Zapier (Team)</div>
+        <div class="price">€300<span style="font-size: 14px; color: var(--graphite-soft); font-weight: 500;">/m</span></div>
+        <div class="note">37.500 tasks × €0,008</div>
+      </div>
+      <div class="cost-card">
+        <div class="tool">Make (Pro)</div>
+        <div class="price">€75<span style="font-size: 14px; color: var(--graphite-soft); font-weight: 500;">/m</span></div>
+        <div class="note">37.500 operations × €0,002</div>
+      </div>
+      <div class="cost-card">
+        <div class="tool">n8n Cloud (Pro)</div>
+        <div class="price">€50<span style="font-size: 14px; color: var(--graphite-soft); font-weight: 500;">/m</span></div>
+        <div class="note">7.500 executions / 10k limiet</div>
+      </div>
+      <div class="cost-card choice">
+        <div class="tool">n8n self-hosted</div>
+        <div class="price">€0<span style="font-size: 14px; color: var(--graphite-soft); font-weight: 500;">/m</span></div>
+        <div class="note">Op bestaande Pi 5 — onze keuze</div>
+      </div>
+    </div>
+    <p class="cost-source">Indicatieve prijzen op basis van publieke prijslijsten december 2025. Verschil tussen Zapier en n8n self-hosted is bijna €3.600 per jaar — voor een student-team zonder budget en voor PowNed met beperkt innovatie­budget doorslaggevend.</p>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="section section-warm" id="workflow">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow">Deliverable 03 · Workflow-mapping</div>
+        <h2 class="t-h1">Vier automatiseringen, in vaktermen.</h2>
+      </div>
+      <p class="section-lede">
+        Elke automatisering volgt dezelfde opbouw: een trigger start het proces, een filter beslist of het door mag, een actie voert het uit, een output levert het resultaat. LEGO-kleuren laten je per blok zien wat het doet.
+      </p>
+    </div>
+
+    <div class="wf-tabs">
+      <button class="wf-tab active" data-wf="1">01 Dataverzameling</button>
+      <button class="wf-tab" data-wf="2">02 AI-filtering</button>
+      <button class="wf-tab" data-wf="3">03 Redactiefeed</button>
+      <button class="wf-tab" data-wf="4">04 Verhaalinsteek</button>
+    </div>
+
+    <div class="wf-jtbd" id="wfJtbd"></div>
+    <div class="wf-flow" id="wfFlow"></div>
+    <div class="wf-detail" id="wfDetail"></div>
+
+    <div class="wf-legend">
+      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-red)"></span>Trigger</span>
+      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-yellow)"></span>Filter / IF</span>
+      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-blue)"></span>Actie (LLM/Tool/API)</span>
+      <span class="wf-leg-item"><span class="wf-leg-dot" style="background: var(--lego-green)"></span>Output</span>
+    </div>
+  </div>
+</section>
+
+<!-- ENDBAR -->
+<section class="endbar">
+  <div class="endbar-inner">
+    <h3>Klaar om de demo te zien?</h3>
+    <a href="index.html" class="endbar-cta">
+      Naar de Redactie Agent
+      <svg viewBox="0 0 14 14" fill="none">
+        <path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <a href="brand-guide.html" class="endbar-secondary">Brand Guide</a>
+  </div>
+</section>
+
+<script>
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = (window.scrollY / max * 100) + '%';
+}, { passive: true });
+
+const WORKFLOWS = {
+  1: {
+    jtbd: "Wanneer de redactie 's ochtends arriveert, wil ik dat alle relevante nieuwsbronnen al gescand zijn, zodat ik niet handmatig 30 websites hoef door te bladeren. Maar ik kan dat nu niet omdat ik geen tool heb die alle bronnen tegelijk uitleest en deduplicated.",
+    nodes: [
+      { type: 'trigger', label: 'Cron 06:00', detail: 'Schedule trigger, dagelijks vóór 08:30' },
+      { type: 'action', label: 'Fetch RSS/sitemap', detail: 'HTTP requests, 31 bronnen parallel' },
+      { type: 'filter', label: 'Hash-deduplicatie', detail: 'IF: SHA-256 hash niet eerder gezien' },
+      { type: 'action', label: 'Trafilatura extract', detail: 'Body text + metadata uit raw HTML' },
+      { type: 'output', label: 'PostgreSQL insert', detail: '≈ 247 items per ochtend opgeslagen' }
+    ],
+    tools: ['n8n Schedule trigger', 'HTTP Request node (parallel)', 'Trafilatura (Python custom code)', 'PostgreSQL'],
+    choices: [
+      '<strong>31 bronnen</strong> gekozen op basis van de PowNed YouTube-corpus, plus regionale dekking (NH, Brabant, Zuid-Holland).',
+      '<strong>Hash-deduplicatie</strong> op SHA-256 van titel+URL voorkomt dubbele opslag van ANP-doorgiftes.',
+      '<strong>Trafilatura</strong> gekozen boven readability/newspaper3k — 96% F1 op DAnIEL benchmark, beter in Nederlands.',
+      '<strong>Parallelle uitvoering</strong>: serieel = 62 sec, parallel = 4 sec.'
+    ]
+  },
+  2: {
+    jtbd: 'Wanneer ik 247 nieuwe items heb verzameld, wil ik dat een AI-systeem de top 50 selecteert die het meest "PowNed-stof" zijn, zodat de redactie niet alle 247 hoeft te beoordelen. Maar ik kan dat nu niet omdat ik geen objectieve maatstaf heb voor wat "PowNed-stof" is.',
+    nodes: [
+      { type: 'trigger', label: 'Nieuw item in DB', detail: 'Database trigger op INSERT in articles' },
+      { type: 'action', label: 'Embedding e5-large-v2', detail: 'Item titel+body → 1024-dim vector' },
+      { type: 'action', label: 'Cosine + BM25', detail: 'Score tegen PowNed-corpus, 0.7 / 0.3' },
+      { type: 'filter', label: 'Score ≥ 0.6?', detail: 'IF: anders skip naar low-rel bucket' },
+      { type: 'output', label: 'Update item.score', detail: 'Top 50 verschijnen in feed, sort DESC' }
+    ],
+    tools: ['PostgreSQL trigger', 'n8n LangChain node', 'e5-large-v2 (zelf gehost)', 'pgvector + BM25', 'Custom JS scorer'],
+    choices: [
+      '<strong>e5-large-v2</strong> is multilingual (NL+EN in één ruimte) en draait open-source op een Pi 5 met 16GB.',
+      '<strong>Cosine</strong> vangt semantiek ("asielbus blokkade" matcht migratie-content). <strong>BM25</strong> vangt jargon ("asielzoekers­centrum" weegt zwaar).',
+      '<strong>Gewichten 0.7/0.3</strong> empirisch bepaald — gelijk gewogen daalde precision in tests.',
+      '<strong>Drempel 0.6</strong> bewust laag: liever te veel in de feed (redactie filtert) dan stories missen.'
+    ]
+  },
+  3: {
+    jtbd: 'Wanneer ik om 07:30 in de bus zit, wil ik op mijn telefoon de top 50 items van vandaag doorscrollen, gefilterd per regio waar ik die ochtend over moet pitchen. Maar ik kan dat nu niet omdat onze bestaande tools allemaal desktop-only zijn.',
+    nodes: [
+      { type: 'trigger', label: 'Redacteur opent feed', detail: 'HTTP GET /feed met JWT-token' },
+      { type: 'action', label: 'Query DB', detail: 'SELECT top 50 vandaag, ORDER BY score DESC' },
+      { type: 'filter', label: 'Filters toepassen', detail: 'Regio / categorie / favoriet (URL params)' },
+      { type: 'action', label: 'Render UI', detail: 'Server-rendered cards, hydrate voor interactie' },
+      { type: 'output', label: 'Live feed in browser', detail: 'Klik op kaart = artikel + insteek-knop' }
+    ],
+    tools: ['n8n HTTP webhook', 'PostgreSQL query', 'FastAPI (Python)', 'Vanilla HTML/CSS/JS', 'Service worker (offline cache)'],
+    choices: [
+      '<strong>Server-rendered eerste paint</strong>: SSR <500ms vs SPA 2-3 sec op mobiel.',
+      '<strong>Filters in URL params</strong> zodat redactieleden bookmarks kunnen maken voor hun beat.',
+      '<strong>Service worker</strong> cachet de laatste run — feed werkt offline in de bus.',
+      '<strong>JWT in plaats van cookies</strong>: geen cross-site state nodig, makkelijker debuggen.'
+    ]
+  },
+  4: {
+    jtbd: 'Wanneer ik een interessant item zie, wil ik in 5 seconden een eerste schets van hoe ik het zou aanpakken — inclusief vragen om te stellen en sprekers — zodat ik in de redactievergadering een concreet voorstel kan doen. Maar ik kan dat nu niet omdat dit eerst een uur eigen denkwerk vraagt.',
+    nodes: [
+      { type: 'trigger', label: 'Klik "Genereer"', detail: 'POST /insteek/{itemId} vanuit feed-detail' },
+      { type: 'action', label: 'RAG: vergelijkbare cases', detail: 'pgvector top 3 PowNed-precedenten als few-shot' },
+      { type: 'action', label: 'Claude API call', detail: 'System + few-shot + item, JSON-mode' },
+      { type: 'filter', label: 'JSON valid?', detail: 'IF: parse succeed; anders fallback plain text' },
+      { type: 'output', label: 'Insteek in UI', detail: 'Locatie / invalshoek / vragen / sprekers' }
+    ],
+    tools: ['HTTP webhook in n8n', 'pgvector RAG over PowNed-precedenten', 'Claude API (claude-haiku-4-5)', 'JSON schema validator', 'Markdown renderer'],
+    choices: [
+      '<strong>RAG met pgvector</strong> geeft Claude PowNed-precedenten als context — zonder RAG generieke insteken, met RAG herkenbaar PowNed.',
+      '<strong>Claude Haiku 4.5</strong> boven Sonnet/Opus: latency >diep redeneren. Haiku <2 sec, Sonnet 5+.',
+      '<strong>JSON-mode</strong> voor consistente UI-rendering. Parse-fail → graceful degradation naar plain text.',
+      '<strong>Insteek = suggestie, geen voorschrift</strong>. Bewust Human-in-the-Loop: AI schetst, redacteur bouwt af.'
+    ]
+  }
+};
+const TYPE_LABEL = { trigger: 'TRIGGER', filter: 'FILTER / IF', action: 'ACTIE', output: 'OUTPUT' };
+const wfFlow = document.getElementById('wfFlow');
+const wfJtbd = document.getElementById('wfJtbd');
+const wfDetail = document.getElementById('wfDetail');
+
+function renderWorkflow(id) {
+  const w = WORKFLOWS[id];
+  if (!w) return;
+  wfJtbd.innerHTML = `<span class="label">Jobs-to-be-Done</span><em>${w.jtbd}</em>`;
+  wfFlow.innerHTML = w.nodes.map((n, i) => `
+    <div class="wf-step wf-${n.type}" style="animation-delay: ${i * 0.06}s">
+      <div class="wf-step-head">
+        <span class="wf-step-num">0${i + 1}</span>
+        <span class="wf-step-type">${TYPE_LABEL[n.type]}</span>
+      </div>
+      <div class="wf-step-label">${n.label}</div>
+      <div class="wf-step-detail">${n.detail}</div>
+    </div>
+    ${i < w.nodes.length - 1 ? '<div class="wf-arrow"><svg viewBox="0 0 24 12"><path d="M0 6h22M18 1l5 5-5 5" stroke="#8a8a8a" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>' : ''}
+  `).join('');
+  wfDetail.innerHTML = `
+    <div class="wf-detail-block">
+      <h4>Tools per stap</h4>
+      <ul>${w.tools.map(t => `<li>${t}</li>`).join('')}</ul>
+    </div>
+    <div class="wf-detail-block">
+      <h4>Ontwerpkeuzes</h4>
+      <ul>${w.choices.map(c => `<li>${c}</li>`).join('')}</ul>
+    </div>
+  `;
+}
+
+document.querySelectorAll('.wf-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.wf-tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    renderWorkflow(t.dataset.wf);
+  });
+});
+renderWorkflow(1);
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 60, behavior: 'smooth' });
+    }
+  });
+});
+</script>
+</body>
+</html>

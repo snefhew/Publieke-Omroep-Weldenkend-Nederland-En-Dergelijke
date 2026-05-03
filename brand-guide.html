@@ -1,0 +1,1623 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lede. — Brand Guide</title>
+<meta name="description" content="De huisstijl van Lede., een growth hacking agency die AI-systemen bouwt voor mediaorganisaties." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --paper: #FAF7F0;
+  --bone: #FDFBF5;
+  --ink: #0E0E10;
+  --carbon: #1A1A1C;
+  --mist: #E8E4D8;
+  --mist-soft: #F0EDE2;
+  --slate: #6B6B6F;
+  --slate-soft: #989598;
+  --signal: #DCFF00;
+  --signal-deep: #B8D900;
+  --signal-soft: rgba(220, 255, 0, 0.14);
+  --signal-line: rgba(220, 255, 0, 0.45);
+  --ff: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --gap-section: 120px;
+  --easing: cubic-bezier(.2,.7,.2,1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--ff);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+  font-feature-settings: "ss01", "ss02";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ====================== NAV ====================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 14px 32px;
+  background: rgba(250, 247, 240, 0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--mist);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform .3s var(--easing);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.025em;
+  text-decoration: none;
+  color: var(--ink);
+}
+.nav-brand .dot { color: var(--signal-deep); }
+.nav-mark {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform .15s var(--easing), background .15s var(--easing), color .15s var(--easing);
+}
+.nav-back:hover { transform: translateX(-2px); background: var(--signal); color: var(--ink); }
+.nav-back svg { width: 12px; height: 12px; }
+.nav-cluster { display: flex; align-items: center; gap: 8px; }
+.nav-link {
+  font-family: var(--ff);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--mist);
+  transition: background .15s var(--easing), border-color .15s var(--easing);
+}
+.nav-link:hover { background: var(--signal); border-color: var(--signal-deep); }
+@media (max-width: 640px) {
+  .nav-link { display: none; }
+}
+
+/* ====================== SCROLL PROGRESS ====================== */
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--signal);
+  z-index: 101;
+  transition: width 0.05s linear;
+}
+
+/* ====================== HERO ====================== */
+.hero {
+  min-height: 100vh;
+  padding: 120px 32px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(circle at 15% 20%, var(--signal-soft) 0%, transparent 35%),
+    radial-gradient(circle at 85% 75%, rgba(220,255,0,0.08) 0%, transparent 40%);
+}
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--mist) 1px, transparent 1px),
+    linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 80px 80px;
+  background-position: -1px -1px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+.hero-inner {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+.hero-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 8px;
+  background: var(--signal);
+}
+.hero-title {
+  font-size: clamp(56px, 11vw, 168px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  color: var(--ink);
+  margin-bottom: 32px;
+  position: relative;
+}
+.hero-title .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+}
+.hero-title .word > span {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: wordIn 1s var(--easing) forwards;
+}
+.hero-title .word:nth-child(1) > span { animation-delay: 0.1s; }
+.hero-title .word:nth-child(2) > span { animation-delay: 0.25s; }
+.hero-title .word:nth-child(3) > span { animation-delay: 0.4s; }
+.hero-title .accent {
+  position: relative;
+  display: inline-block;
+}
+.hero-title .accent::after {
+  content: '';
+  position: absolute;
+  bottom: 0.06em;
+  left: -0.04em;
+  right: -0.04em;
+  height: 0.28em;
+  background: var(--signal);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: highlightIn 0.9s var(--easing) 1.1s forwards;
+}
+.hero-title .dot {
+  color: var(--signal-deep);
+}
+@keyframes wordIn {
+  to { transform: translateY(0); }
+}
+@keyframes highlightIn {
+  to { transform: scaleX(1); }
+}
+.hero-sub {
+  font-size: clamp(18px, 2.4vw, 28px);
+  color: var(--slate);
+  max-width: 760px;
+  letter-spacing: -0.015em;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--easing) 1.4s forwards;
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-meta {
+  margin-top: 56px;
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--easing) 1.7s forwards;
+}
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hero-meta-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate-soft);
+  font-weight: 500;
+}
+.hero-meta-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--slate-soft);
+  opacity: 0;
+  animation: fadeIn 0.8s var(--easing) 2.2s forwards;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--slate-soft), transparent);
+  position: relative;
+  overflow: hidden;
+}
+.hero-scroll-line::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: var(--signal-deep);
+  animation: scrollLine 2s var(--easing) infinite;
+}
+@keyframes scrollLine {
+  0% { top: -100%; }
+  100% { top: 100%; }
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* ====================== SECTION ====================== */
+.section {
+  padding: var(--gap-section) 32px;
+  position: relative;
+}
+.section-bone { background: var(--bone); }
+.section-dark { background: var(--ink); color: var(--paper); }
+.section-dark .section-title { color: var(--paper); }
+.section-dark .section-lede { color: rgba(250,247,240,0.65); }
+.section-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.section-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+.section-eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 6px;
+  background: var(--signal);
+}
+.section-dark .section-eyebrow { color: var(--paper); }
+.section-title {
+  font-size: clamp(40px, 5.5vw, 72px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+.section-lede {
+  font-size: clamp(18px, 1.6vw, 22px);
+  color: var(--slate);
+  max-width: 720px;
+  line-height: 1.5;
+  margin-bottom: 64px;
+}
+
+/* Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--easing), transform 0.8s var(--easing);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* ====================== MANIFESTO ====================== */
+.manifesto {
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  color: var(--ink);
+  max-width: 1100px;
+}
+.manifesto .em {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+}
+.manifesto .em::before {
+  content: '';
+  position: absolute;
+  bottom: 0.08em;
+  left: -0.06em;
+  right: -0.06em;
+  height: 0.32em;
+  background: var(--signal);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--easing);
+}
+.manifesto.in .em:nth-of-type(1)::before { transform: scaleX(1); transition-delay: 0.4s; }
+.manifesto.in .em:nth-of-type(2)::before { transform: scaleX(1); transition-delay: 0.9s; }
+.manifesto .strike {
+  position: relative;
+  color: var(--slate-soft);
+}
+.manifesto .strike::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--easing);
+}
+.manifesto.in .strike::after {
+  transform: scaleX(1);
+  transition-delay: 0.65s;
+}
+.manifesto-author {
+  margin-top: 64px;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+  font-weight: 500;
+}
+
+/* ====================== LOGO ====================== */
+.logo-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.logo-display {
+  background: var(--paper);
+  border: 1px solid var(--mist);
+  border-radius: 24px;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.logo-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--mist) 1px, transparent 1px),
+    linear-gradient(90deg, var(--mist) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.logo-mark-large {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  cursor: pointer;
+  transition: transform 0.3s var(--easing);
+}
+.logo-mark-large:hover { transform: scale(1.04); }
+.logo-mark-large .mark-svg {
+  width: 88px;
+  height: 88px;
+  color: var(--ink);
+}
+.logo-mark-large .word {
+  font-size: 84px;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  color: var(--ink);
+}
+.logo-mark-large .word .dot { color: var(--signal-deep); }
+
+.logo-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.logo-variant {
+  background: var(--bone);
+  border: 1px solid var(--mist);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.2s var(--easing), transform 0.2s var(--easing);
+  cursor: pointer;
+}
+.logo-variant:hover { border-color: var(--ink); transform: translateY(-2px); }
+.logo-variant.dark { background: var(--ink); border-color: var(--carbon); }
+.logo-variant.signal { background: var(--signal); border-color: var(--signal-deep); }
+.logo-variant-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate-soft);
+  font-weight: 500;
+}
+.logo-variant.dark .logo-variant-label { color: rgba(250,247,240,0.5); }
+.logo-variant.signal .logo-variant-label { color: var(--ink); }
+.logo-variant-vis {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-variant-vis .mark-svg {
+  width: 32px;
+  height: 32px;
+  color: var(--ink);
+}
+.logo-variant.dark .mark-svg { color: var(--paper); }
+.logo-variant-vis .word-mini {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+.logo-variant-vis .word-mini .dot { color: var(--signal-deep); }
+.logo-variant.dark .word-mini { color: var(--paper); }
+.logo-variant.dark .word-mini .dot { color: var(--signal); }
+.logo-variant.signal .word-mini .dot { color: var(--ink); }
+
+.logo-rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 32px;
+}
+.logo-rule {
+  background: var(--bone);
+  border: 1px solid var(--mist);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+}
+.logo-rule.do { border-left: 3px solid var(--signal-deep); }
+.logo-rule.dont { border-left: 3px solid #d4a017; }
+.logo-rule-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.logo-rule.do .logo-rule-label::before {
+  content: '✓ ';
+  color: var(--signal-deep);
+}
+.logo-rule.dont .logo-rule-label::before {
+  content: '✗ ';
+  color: #d4a017;
+}
+.logo-rule-text {
+  font-size: 14px;
+  color: var(--slate);
+  line-height: 1.5;
+}
+
+/* ====================== COLORS ====================== */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.color-card {
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s var(--easing), box-shadow 0.25s var(--easing);
+  position: relative;
+  border: 1px solid transparent;
+}
+.color-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+}
+.color-card.light { border-color: var(--mist); }
+.color-card-vis {
+  height: 200px;
+  position: relative;
+}
+.color-card-info {
+  padding: 22px 24px;
+  background: var(--bone);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.color-card.light .color-card-info { background: var(--paper); }
+.color-name {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.color-hex {
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--slate);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: color 0.15s var(--easing);
+}
+.color-hex:hover { color: var(--ink); }
+.color-hex svg { width: 12px; height: 12px; opacity: 0.5; }
+.color-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  z-index: 200;
+  opacity: 0;
+  transition: transform 0.3s var(--easing), opacity 0.3s var(--easing);
+  letter-spacing: 0.04em;
+}
+.color-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.color-usage {
+  background: var(--bone);
+  border: 1px solid var(--mist);
+  border-radius: 24px;
+  padding: 40px;
+  margin-top: 32px;
+}
+.color-usage-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--slate-soft);
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+.color-bar {
+  display: flex;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.color-bar-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  transition: flex 0.6s var(--easing);
+  text-transform: uppercase;
+}
+.color-ratio-explainer {
+  font-size: 14px;
+  color: var(--slate);
+  line-height: 1.6;
+  max-width: 620px;
+}
+
+/* ====================== TYPOGRAPHY ====================== */
+.type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.type-card {
+  background: var(--bone);
+  border: 1px solid var(--mist);
+  border-radius: 24px;
+  padding: 40px;
+}
+.type-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 20px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.type-label::before {
+  content: '';
+  width: 16px;
+  height: 5px;
+  background: var(--signal);
+}
+.type-name {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.type-meta {
+  font-size: 12px;
+  color: var(--slate);
+  margin-bottom: 32px;
+  font-family: var(--ff-mono);
+  letter-spacing: 0.02em;
+}
+.type-preview {
+  font-size: clamp(40px, 5vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  margin-bottom: 24px;
+  color: var(--ink);
+  transition: font-weight 0.15s var(--easing);
+  min-height: 80px;
+  word-break: break-word;
+}
+.type-preview.mono {
+  font-family: var(--ff-mono);
+  font-size: clamp(20px, 2.4vw, 32px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.type-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.type-input {
+  width: 100%;
+  border: 1px solid var(--mist);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-family: var(--ff);
+  font-size: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  transition: border-color 0.15s var(--easing);
+}
+.type-input:focus { outline: none; border-color: var(--ink); }
+.type-slider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.type-slider-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--slate);
+  letter-spacing: 0.06em;
+  min-width: 80px;
+  font-weight: 500;
+}
+.type-slider input {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 2px;
+  background: var(--mist);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.type-slider input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--signal);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s var(--easing);
+}
+.type-slider input::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.type-slider-value {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  color: var(--ink);
+  min-width: 40px;
+  text-align: right;
+  font-feature-settings: "tnum";
+  font-weight: 500;
+}
+
+.type-scale {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.type-scale-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--mist);
+}
+.type-scale-row:last-child { border-bottom: none; }
+.type-scale-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate-soft);
+  min-width: 80px;
+  font-weight: 500;
+}
+.type-scale-text {
+  flex: 1;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  line-height: 1;
+}
+.type-scale-spec {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--slate-soft);
+}
+
+/* ====================== TONE ====================== */
+.tone-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.tone-pair {
+  background: var(--bone);
+  border: 1px solid var(--mist);
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s var(--easing);
+}
+.tone-pair:hover { border-color: var(--ink); }
+.tone-pair-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.tone-pair.do .tone-pair-label { color: var(--ink); }
+.tone-pair.dont .tone-pair-label { color: var(--slate); }
+.tone-pair-icon {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.tone-pair.do .tone-pair-icon { background: var(--signal); color: var(--ink); }
+.tone-pair.dont .tone-pair-icon { background: rgba(0,0,0,0.06); color: var(--slate); }
+.tone-pair-icon svg { width: 11px; height: 11px; }
+.tone-pair-quote {
+  font-size: clamp(18px, 1.8vw, 22px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.tone-pair.dont .tone-pair-quote { color: var(--slate); }
+
+/* ====================== PRINCIPLES ====================== */
+.principles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--mist);
+}
+.principle {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 32px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--mist);
+  align-items: start;
+  cursor: pointer;
+  transition: padding-left 0.3s var(--easing);
+  position: relative;
+}
+.principle::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 4px;
+  height: 60%;
+  background: var(--signal);
+  transition: transform 0.3s var(--easing);
+}
+.principle:hover { padding-left: 16px; }
+.principle:hover::before { transform: translateY(-50%) scaleY(1); }
+.principle-num {
+  font-family: var(--ff-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  padding-top: 6px;
+}
+.principle-content { padding-right: 80px; }
+.principle-title {
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+.principle-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--slate);
+  max-width: 720px;
+}
+.principle-example {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: var(--signal-soft);
+  border-left: 2px solid var(--signal);
+  border-radius: 4px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+/* ====================== TOOLS ====================== */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.tool-card {
+  background: var(--paper);
+  border: 1px solid var(--mist);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.2s var(--easing);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--easing);
+}
+.tool-card:hover {
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+.tool-card:hover::before { transform: scaleX(1); }
+.tool-name {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.tool-role {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--slate-soft);
+  font-weight: 500;
+}
+
+/* ====================== FOOTER ====================== */
+.footer {
+  padding: 80px 32px 48px;
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.footer-mark {
+  font-size: clamp(72px, 16vw, 240px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  color: var(--paper);
+  margin-bottom: 48px;
+}
+.footer-mark .dot { color: var(--signal); }
+.footer-meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(250,247,240,0.1);
+}
+.footer-meta-item {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(250,247,240,0.5);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--signal);
+  color: var(--ink);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  margin-top: 24px;
+  letter-spacing: -0.015em;
+  transition: transform 0.2s var(--easing), background 0.2s var(--easing);
+}
+.footer-cta:hover {
+  transform: translateX(4px);
+}
+
+/* ====================== RESPONSIVE ====================== */
+@media (max-width: 1024px) {
+  .logo-grid { grid-template-columns: 1fr; }
+  .color-grid { grid-template-columns: repeat(2, 1fr); }
+  .type-grid { grid-template-columns: 1fr; }
+  .tone-grid { grid-template-columns: 1fr; }
+  .principle-content { padding-right: 0; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 12px 20px; }
+  .hero { padding: 100px 20px 60px; }
+  .section { padding: 80px 20px; }
+  .footer { padding: 60px 20px 32px; }
+  .color-grid { grid-template-columns: 1fr; }
+  .logo-rules { grid-template-columns: 1fr; }
+  .principle { grid-template-columns: 1fr; gap: 12px; padding: 28px 0; }
+  .principle-num { padding-top: 0; }
+  .hero-meta { gap: 24px; }
+  .footer-mark { font-size: 96px; }
+  .color-card-vis { height: 140px; }
+  .type-card { padding: 24px; }
+  .color-usage { padding: 24px; }
+  .color-bar { height: 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Reusable SVG mark, defined once for reuse via <use> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="lede-mark" viewBox="0 0 32 32">
+      <rect x="4" y="3" width="24" height="26" rx="2.5" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="8" y="7.5" width="14" height="3" rx="1.5" fill="#DCFF00"/>
+      <line x1="8" y1="14.5" x2="22" y2="14.5" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.4" stroke-linecap="round"/>
+      <line x1="8" y1="18.5" x2="19" y2="18.5" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.4" stroke-linecap="round"/>
+      <line x1="8" y1="22.5" x2="21" y2="22.5" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.4" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- Scroll progress bar -->
+<div class="progress" id="progress"></div>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="index.html" class="nav-brand">
+    <span class="nav-mark">
+      <svg width="22" height="22"><use href="#lede-mark"/></svg>
+    </span>
+    <span>Lede<span class="dot">.</span></span>
+  </a>
+  <div class="nav-cluster">
+    <a href="deliverables.html" class="nav-link">Deliverables</a>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 12 12" fill="none">
+        <path d="M7 2L3 6L7 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Redactie Agent
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Brand Guide  ·  v1.0  ·  2026</div>
+    <h1 class="hero-title">
+      <span class="word"><span>We zijn</span></span>
+      <span class="word"><span class="accent">Lede</span></span><span class="word"><span class="dot">.</span></span>
+    </h1>
+    <p class="hero-sub">Een growth hacking agency die AI-systemen bouwt voor mediaorganisaties. We schrijven de lede van groei: de eerste regel die mensen vasthoudt en de redactie aan het werk zet.</p>
+
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Discipline</span>
+        <span class="hero-meta-value">AI-automatisering voor media</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Stack</span>
+        <span class="hero-meta-value">n8n  ·  Claude  ·  pgvector</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Status</span>
+        <span class="hero-meta-value">Levend document</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    Scroll
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="section section-bone">
+  <div class="section-inner">
+    <div class="section-eyebrow">Manifesto</div>
+    <h2 class="section-title reveal">Waar we voor staan.</h2>
+  </div>
+  <div class="section-inner">
+    <p class="manifesto reveal">
+      We bouwen AI-systemen die <span class="em">redacties versterken</span>, niet vervangen.<br>
+      We zijn niet bang voor automatisering, maar wel voor <span class="strike">automatisering zonder mens</span>.<br>
+      De AI suggereert. <span class="em">De mens beslist.</span>
+    </p>
+    <p class="manifesto-author reveal">— Lede., growth hacking agency</p>
+  </div>
+</section>
+
+<!-- LOGO -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">Logo</div>
+    <h2 class="section-title reveal">Eén mark, drie varianten.</h2>
+    <p class="section-lede reveal">Het logo bestaat uit een grafisch teken — een pagina met de lede gehighlight in signaal-geel — en de wordmark "Lede." in Space Grotesk Bold. De mark werkt zelfstandig op favicons en mobiele schermen; de wordmark werkt zelfstandig in plain-text contexten.</p>
+
+    <div class="logo-grid reveal">
+      <div class="logo-display">
+        <div class="logo-mark-large" id="logoMain">
+          <svg class="mark-svg"><use href="#lede-mark"/></svg>
+          <span class="word">Lede<span class="dot">.</span></span>
+        </div>
+      </div>
+
+      <div class="logo-side">
+        <div class="logo-variant">
+          <span class="logo-variant-label">Primair  ·  Licht oppervlak</span>
+          <div class="logo-variant-vis">
+            <svg class="mark-svg"><use href="#lede-mark"/></svg>
+            <span class="word-mini">Lede<span class="dot">.</span></span>
+          </div>
+        </div>
+
+        <div class="logo-variant dark">
+          <span class="logo-variant-label">Mono  ·  Donker oppervlak</span>
+          <div class="logo-variant-vis">
+            <svg class="mark-svg"><use href="#lede-mark"/></svg>
+            <span class="word-mini">Lede<span class="dot">.</span></span>
+          </div>
+        </div>
+
+        <div class="logo-variant signal">
+          <span class="logo-variant-label">Signal  ·  Op accentkleur</span>
+          <div class="logo-variant-vis">
+            <svg class="mark-svg"><use href="#lede-mark"/></svg>
+            <span class="word-mini">Lede<span class="dot">.</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="logo-rules reveal">
+      <div class="logo-rule do">
+        <div class="logo-rule-label">Wel</div>
+        <p class="logo-rule-text">Minimaal 24px hoogte op digitaal. Mark en wordmark optisch uitgelijnd op de baseline. Witruimte gelijk aan de hoogte van de mark rondom het hele logo. De punt achter "Lede" is altijd in signaalgeel of inkt — nooit weggelaten.</p>
+      </div>
+      <div class="logo-rule dont">
+        <div class="logo-rule-label">Niet</div>
+        <p class="logo-rule-text">Geen alternatieve kleuren in de hoogtelijn van de mark. Geen schaduwen, gloed, of 3D-effecten. Geen scheef geplaatste of geroteerde varianten. Geen punt na de wordmark weglaten — die hoort erbij.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLORS -->
+<section class="section section-bone">
+  <div class="section-inner">
+    <div class="section-eyebrow">Kleurpalet</div>
+    <h2 class="section-title reveal">Eén accentkleur, vijf ondersteuners.</h2>
+    <p class="section-lede reveal">Klik op een hex-code om te kopiëren. Signaalgeel is de actieve kleur — het maakt iets de "lede" van het scherm. De andere vijf zijn de stille meerderheid: zij dragen de pagina.</p>
+
+    <div class="color-grid reveal">
+      <div class="color-card" data-hex="#DCFF00" data-name="Signal">
+        <div class="color-card-vis" style="background: #DCFF00;"></div>
+        <div class="color-card-info">
+          <span class="color-name">Signal</span>
+          <span class="color-hex">
+            #DCFF00
+            <svg viewBox="0 0 12 12" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1"/><rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1" fill="var(--bone)"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="color-card" data-hex="#0E0E10" data-name="Ink">
+        <div class="color-card-vis" style="background: #0E0E10;"></div>
+        <div class="color-card-info">
+          <span class="color-name">Ink</span>
+          <span class="color-hex">
+            #0E0E10
+            <svg viewBox="0 0 12 12" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1"/><rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1" fill="var(--bone)"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="color-card" data-hex="#1A1A1C" data-name="Carbon">
+        <div class="color-card-vis" style="background: #1A1A1C;"></div>
+        <div class="color-card-info">
+          <span class="color-name">Carbon</span>
+          <span class="color-hex">
+            #1A1A1C
+            <svg viewBox="0 0 12 12" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1"/><rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1" fill="var(--bone)"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="color-card light" data-hex="#FAF7F0" data-name="Paper">
+        <div class="color-card-vis" style="background: #FAF7F0; border-bottom: 1px solid var(--mist);"></div>
+        <div class="color-card-info">
+          <span class="color-name">Paper</span>
+          <span class="color-hex">
+            #FAF7F0
+            <svg viewBox="0 0 12 12" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1"/><rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1" fill="var(--bone)"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="color-card light" data-hex="#E8E4D8" data-name="Mist">
+        <div class="color-card-vis" style="background: #E8E4D8;"></div>
+        <div class="color-card-info">
+          <span class="color-name">Mist</span>
+          <span class="color-hex">
+            #E8E4D8
+            <svg viewBox="0 0 12 12" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1"/><rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1" fill="var(--bone)"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="color-card" data-hex="#6B6B6F" data-name="Slate">
+        <div class="color-card-vis" style="background: #6B6B6F;"></div>
+        <div class="color-card-info">
+          <span class="color-name">Slate</span>
+          <span class="color-hex">
+            #6B6B6F
+            <svg viewBox="0 0 12 12" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1"/><rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="1.2" rx="1" fill="var(--bone)"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="color-usage reveal">
+      <div class="color-usage-label">Verhoudingen op een typische pagina</div>
+      <div class="color-bar" id="colorBar">
+        <div class="color-bar-segment" style="background: var(--paper); color: var(--ink); border: 1px solid var(--mist); flex: 60;">60% Paper</div>
+        <div class="color-bar-segment" style="background: var(--ink); color: var(--paper); flex: 28;">28% Ink + Slate</div>
+        <div class="color-bar-segment" style="background: var(--signal); color: var(--ink); flex: 12;">12% Signal</div>
+      </div>
+      <p class="color-ratio-explainer">De achtergrond is bijna altijd Paper. Tekst is Ink of Slate. Signal gebruiken we sparsaam: voor één duidelijke actie per scherm, of om een waarde uit te lichten. Twee accenten = nul accenten. De punt in "Lede." en de scroll-progress bar zijn de enige plekken waar Signal automatisch verschijnt.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TYPOGRAPHY -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">Typografie</div>
+    <h2 class="section-title reveal">Twee fonts. Allebei variabel.</h2>
+    <p class="section-lede reveal">Space Grotesk voor display en body — geometrisch, scherp, met karakter waar Inter veilig is. JetBrains Mono voor labels, code en metadata. Gebruik de schuiver om gewichten te proeven.</p>
+
+    <div class="type-grid reveal">
+      <div class="type-card">
+        <div class="type-label">Display + Body</div>
+        <h3 class="type-name">Space Grotesk Variable</h3>
+        <p class="type-meta">Sans-serif  ·  300-700  ·  Open-source  ·  fonts.google.com</p>
+        <div class="type-preview" id="typePreview" style="font-weight: 700;">Lede.</div>
+        <div class="type-controls">
+          <input type="text" class="type-input" id="typeInput" placeholder="Typ je eigen tekst" value="Lede." />
+          <div class="type-slider">
+            <span class="type-slider-label">Gewicht</span>
+            <input type="range" min="300" max="700" step="100" value="700" id="typeWeight" />
+            <span class="type-slider-value" id="typeWeightVal">700</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="type-card">
+        <div class="type-label">Labels + Mono</div>
+        <h3 class="type-name">JetBrains Mono</h3>
+        <p class="type-meta">Monospace  ·  400-700  ·  Open-source  ·  jetbrains.com/lp/mono</p>
+        <div class="type-preview mono" id="typePreviewMono" style="font-weight: 500;">SCORE 94 · LEDE</div>
+        <div class="type-controls">
+          <input type="text" class="type-input" id="typeInputMono" placeholder="Typ je eigen tekst" value="SCORE 94 · LEDE" />
+          <div class="type-slider">
+            <span class="type-slider-label">Gewicht</span>
+            <input type="range" min="400" max="700" step="100" value="500" id="typeWeightMono" />
+            <span class="type-slider-value" id="typeWeightMonoVal">500</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="type-scale reveal" style="margin-top: 32px;">
+      <div class="type-scale-row">
+        <span class="type-scale-label">H1</span>
+        <span class="type-scale-text" style="font-size: 56px;">De grote koppen</span>
+        <span class="type-scale-spec">56-72  ·  weight 600-700  ·  -3.5% letter-spacing</span>
+      </div>
+      <div class="type-scale-row">
+        <span class="type-scale-label">H2</span>
+        <span class="type-scale-text" style="font-size: 36px;">Sectiekoppen</span>
+        <span class="type-scale-spec">36-48  ·  weight 600</span>
+      </div>
+      <div class="type-scale-row">
+        <span class="type-scale-label">H3</span>
+        <span class="type-scale-text" style="font-size: 22px;">Subkoppen</span>
+        <span class="type-scale-spec">22-28  ·  weight 600</span>
+      </div>
+      <div class="type-scale-row">
+        <span class="type-scale-label">Body</span>
+        <span class="type-scale-text" style="font-size: 16px; font-weight: 400;">Reguliere lopende tekst voor de meeste paragrafen.</span>
+        <span class="type-scale-spec">15-17  ·  weight 400  ·  line-height 1.5</span>
+      </div>
+      <div class="type-scale-row">
+        <span class="type-scale-label">Mono</span>
+        <span class="type-scale-text" style="font-family: var(--ff-mono); font-size: 12px; letter-spacing: 0.10em; text-transform: uppercase; font-weight: 500;">EYEBROW LABEL</span>
+        <span class="type-scale-spec">11-13  ·  weight 500  ·  uppercase  ·  +10% spacing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TONE OF VOICE -->
+<section class="section section-bone">
+  <div class="section-inner">
+    <div class="section-eyebrow">Tone of voice</div>
+    <h2 class="section-title reveal">Direct, praktisch, mensgericht.</h2>
+    <p class="section-lede reveal">We zeggen wat we bedoelen. We beloven niets dat we niet kunnen waarmaken. We schrijven voor mensen, niet voor zoekmachines.</p>
+
+    <div class="tone-grid reveal">
+      <div class="tone-pair do">
+        <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Wel</span>
+        <p class="tone-pair-quote">"De Agent vindt 247 items. Daarvan zijn er 50 relevant. De redactie kiest welke vijf vandaag worden gemaakt."</p>
+      </div>
+      <div class="tone-pair dont">
+        <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M3 3L8 8M8 3L3 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>Niet</span>
+        <p class="tone-pair-quote">"Ons revolutionaire AI-platform unlockt synergieën in de moderne newsroom workflow."</p>
+      </div>
+
+      <div class="tone-pair do">
+        <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Wel</span>
+        <p class="tone-pair-quote">"Score 94 omdat: lokaal, conflict, visueel sterk."</p>
+      </div>
+      <div class="tone-pair dont">
+        <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M3 3L8 8M8 3L3 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>Niet</span>
+        <p class="tone-pair-quote">"De AI heeft op basis van geavanceerde algoritmes een hoge relevantie-correlatie vastgesteld."</p>
+      </div>
+
+      <div class="tone-pair do">
+        <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Wel</span>
+        <p class="tone-pair-quote">"Dit is een prototype. Het werkt, maar nog niet volledig. Hier is wat we wel hebben."</p>
+      </div>
+      <div class="tone-pair dont">
+        <span class="tone-pair-label"><span class="tone-pair-icon"><svg viewBox="0 0 11 11" fill="none"><path d="M3 3L8 8M8 3L3 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>Niet</span>
+        <p class="tone-pair-quote">"We zijn enthousiast om je vandaag onze visie op de toekomst van journalistiek te presenteren."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN PRINCIPLES -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">Design principes</div>
+    <h2 class="section-title reveal">Vier regels die alles bepalen.</h2>
+    <p class="section-lede reveal">Bij elke beslissing — een knop, een tekstlijn, een hele pagina — vragen we deze vier dingen.</p>
+
+    <div class="principles-list reveal">
+      <div class="principle">
+        <div class="principle-num">01</div>
+        <div class="principle-content">
+          <h3 class="principle-title">Inhoud boven decoratie.</h3>
+          <p class="principle-desc">Een visualisatie moet iets toevoegen aan het begrip, anders is het een afleiding. Bij twijfel: weghalen. Witruimte is een keuze, geen leegte.</p>
+          <div class="principle-example">→ Niet drie iconen rond elke tekst, wel duidelijke typografische hiërarchie.</div>
+        </div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">02</div>
+        <div class="principle-content">
+          <h3 class="principle-title">Eén accentkleur per scherm.</h3>
+          <p class="principle-desc">Signal is een instrument. Op één scherm vraag je het publiek aandacht ergens te vestigen — niet op vijf plekken tegelijk. Twee accenten = nul accenten.</p>
+          <div class="principle-example">→ Eén CTA-knop, één highlighted score, één belangrijke quote.</div>
+        </div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">03</div>
+        <div class="principle-content">
+          <h3 class="principle-title">Witruimte als ademruimte.</h3>
+          <p class="principle-desc">Generous padding en line-height zijn geen luxe. Ze geven het oog rust en het brein de gelegenheid om te begrijpen. Krap is niet efficiënt, krap is moeilijk te lezen.</p>
+          <div class="principle-example">→ 120px sectie-padding op desktop. Body line-height 1.5. Margins ≥ 32px.</div>
+        </div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">04</div>
+        <div class="principle-content">
+          <h3 class="principle-title">Mono voor metadata, sans voor inhoud.</h3>
+          <p class="principle-desc">Space Grotesk voor wat je leest. JetBrains Mono voor wat het is: labels, scores, tijdstempels, type-aanduidingen. Het verschil maakt scanbaar wat anders ruis is.</p>
+          <div class="principle-example">→ "Redactie Agent" is body. "SCORE 94 · 06:32" is mono.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="section section-bone">
+  <div class="section-inner">
+    <div class="section-eyebrow">Tools en stack</div>
+    <h2 class="section-title reveal">Waar we mee werken.</h2>
+    <p class="section-lede reveal">Open-source waar het kan, gevestigde tools waar het moet. We bouwen geen platform — we bouwen op platforms.</p>
+
+    <div class="tools-grid reveal">
+      <div class="tool-card"><span class="tool-name">n8n</span><span class="tool-role">Workflow-orchestratie</span></div>
+      <div class="tool-card"><span class="tool-name">Claude API</span><span class="tool-role">LLM-calls</span></div>
+      <div class="tool-card"><span class="tool-name">PostgreSQL</span><span class="tool-role">Database</span></div>
+      <div class="tool-card"><span class="tool-name">pgvector</span><span class="tool-role">Vector store</span></div>
+      <div class="tool-card"><span class="tool-name">e5-large-v2</span><span class="tool-role">Embeddings</span></div>
+      <div class="tool-card"><span class="tool-name">Trafilatura</span><span class="tool-role">Web extraction</span></div>
+      <div class="tool-card"><span class="tool-name">FastAPI</span><span class="tool-role">Python backend</span></div>
+      <div class="tool-card"><span class="tool-name">Docker</span><span class="tool-role">Deployment</span></div>
+      <div class="tool-card"><span class="tool-name">GSAP</span><span class="tool-role">Frontend animatie</span></div>
+      <div class="tool-card"><span class="tool-name">Space Grotesk</span><span class="tool-role">Display + body</span></div>
+      <div class="tool-card"><span class="tool-name">JetBrains Mono</span><span class="tool-role">Labels + code</span></div>
+      <div class="tool-card"><span class="tool-name">Figma</span><span class="tool-role">Design + prototyping</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <h2 class="footer-mark">Lede<span class="dot">.</span></h2>
+    <a href="index.html" class="footer-cta">
+      Bekijk de Redactie Agent
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <div class="footer-meta">
+      <span class="footer-meta-item">Brand Guide v1.0  ·  2026</span>
+      <span class="footer-meta-item">Levend document  ·  laatst bijgewerkt mei 2026</span>
+      <span class="footer-meta-item">Lede.  ·  Growth Hacking Agency</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="color-toast" id="colorToast">Hex gekopieerd</div>
+
+<script>
+// ====== Scroll progress ======
+const progress = document.getElementById('progress');
+const updateProgress = () => {
+  const scrolled = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = (scrolled / max * 100) + '%';
+};
+window.addEventListener('scroll', updateProgress, { passive: true });
+
+// ====== Reveal on scroll ======
+const reveals = document.querySelectorAll('.reveal, .manifesto');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => io.observe(r));
+
+// ====== Color cards: click to copy ======
+const toast = document.getElementById('colorToast');
+let toastTimer;
+const showToast = (msg) => {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+};
+
+document.querySelectorAll('.color-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const hex = card.dataset.hex;
+    const name = card.dataset.name;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast(name + '  ·  ' + hex + ' gekopieerd');
+      }).catch(() => {
+        showToast('Kopiëren mislukt');
+      });
+    } else {
+      showToast('Clipboard niet ondersteund');
+    }
+  });
+});
+
+// ====== Typography sandbox ======
+const typePreview = document.getElementById('typePreview');
+const typeInput = document.getElementById('typeInput');
+const typeWeight = document.getElementById('typeWeight');
+const typeWeightVal = document.getElementById('typeWeightVal');
+
+typeInput.addEventListener('input', e => {
+  typePreview.textContent = e.target.value || 'Lede.';
+});
+typeWeight.addEventListener('input', e => {
+  typePreview.style.fontWeight = e.target.value;
+  typeWeightVal.textContent = e.target.value;
+});
+
+const typePreviewMono = document.getElementById('typePreviewMono');
+const typeInputMono = document.getElementById('typeInputMono');
+const typeWeightMono = document.getElementById('typeWeightMono');
+const typeWeightMonoVal = document.getElementById('typeWeightMonoVal');
+
+typeInputMono.addEventListener('input', e => {
+  typePreviewMono.textContent = e.target.value || 'SCORE 94';
+});
+typeWeightMono.addEventListener('input', e => {
+  typePreviewMono.style.fontWeight = e.target.value;
+  typeWeightMonoVal.textContent = e.target.value;
+});
+
+// ====== Logo cursor follow ======
+const logoMain = document.getElementById('logoMain');
+const logoDisplay = logoMain.parentElement;
+logoDisplay.addEventListener('mousemove', e => {
+  const rect = logoDisplay.getBoundingClientRect();
+  const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+  const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+  logoMain.style.transform = `translate(${x * 14}px, ${y * 14}px) scale(1.02)`;
+});
+logoDisplay.addEventListener('mouseleave', () => {
+  logoMain.style.transform = '';
+});
+
+// ====== Color bar grow animation on view ======
+const colorBar = document.getElementById('colorBar');
+const segments = colorBar.querySelectorAll('.color-bar-segment');
+const initialFlex = ['60', '28', '12'];
+segments.forEach(s => s.style.flex = '1');
+
+const colorBarIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      segments.forEach((s, i) => s.style.flex = initialFlex[i]);
+      colorBarIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.4 });
+colorBarIO.observe(colorBar);
+
+// ====== Smooth scroll for anchor nav ======
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
