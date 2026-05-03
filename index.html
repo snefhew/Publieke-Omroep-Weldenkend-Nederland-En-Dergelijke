@@ -118,6 +118,63 @@ nav {
   transition: background .15s ease;
 }
 .nav-cta:hover { background: var(--magenta); }
+
+/* Mobile hamburger + drawer */
+.nav-burger {
+  display: none;
+  width: 40px; height: 40px;
+  background: none; border: none; cursor: pointer;
+  padding: 10px; border-radius: 8px;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 4px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  margin-left: auto;
+}
+.nav-burger:active { background: rgba(0,0,0,.05); }
+.nav-burger-bar {
+  display: block; width: 20px; height: 2px;
+  background: var(--ink); border-radius: 2px;
+  transition: transform .25s ease, opacity .2s ease;
+}
+.nav-burger.open .nav-burger-bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-burger.open .nav-burger-bar:nth-child(2) { opacity: 0; }
+.nav-burger.open .nav-burger-bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.nav-drawer {
+  display: none;
+  position: absolute;
+  left: 12px; right: 12px; top: calc(100% + 6px);
+  background: rgba(242, 240, 235, .98);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid var(--driftwood);
+  border-radius: 16px;
+  padding: 8px;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 16px 40px -12px rgba(0,0,0,.18);
+  max-height: calc(100svh - 80px);
+  max-height: calc(100dvh - 80px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-drawer.open { display: flex; }
+.nav-drawer .nav-link,
+.nav-drawer .nav-cta {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 14px 16px;
+  font-size: 15px;
+  border-radius: 10px;
+  touch-action: manipulation;
+}
+.nav-drawer .nav-cta {
+  justify-content: space-between;
+  margin-top: 4px;
+}
+nav.nav-hidden { transform: translateY(-100%); }
+nav { transition: transform .3s ease; }
+
 @media (max-width: 1280px) { .nav-side { display: none; } }
 
 /* === PROGRESS === */
@@ -2153,7 +2210,7 @@ nav {
   .insteek-grid { grid-template-columns: 1fr; }
   .insteek-source { position: relative; top: auto; }
   .insteek-output { max-height: none; overflow: visible; }
-  .macos-body { grid-template-columns: 1fr; height: auto; }
+  .macos-body { grid-template-columns: 1fr; height: auto; min-height: 0; }
   .feed-side {
     border-right: none;
     border-bottom: 1px solid var(--fog);
@@ -2183,7 +2240,7 @@ nav {
   .wf-arrow { width: 100%; height: 24px; transform: rotate(90deg); }
   .wf-step { min-width: auto; }
   .section { padding: 48px 20px; }
-  .hero { padding: 90px 20px 60px; }
+  .hero { padding: 90px 20px 60px; min-height: 100svh; min-height: 100dvh; }
   .auto { padding: 48px 20px; }
   .auto-intro { padding: 64px 20px; }
   .macos-wrap { padding: 24px 12px; }
@@ -2191,24 +2248,114 @@ nav {
   .canvas-grid { grid-template-columns: 1fr; }
   .cv-collab { grid-column: span 1; }
   .brief-grid { grid-template-columns: 1fr; }
-  nav { padding: 12px 16px; }
+  nav { padding: 10px 12px; }
   .nav-side { display: none; }
   .nav-right { display: none; }
+  .nav-burger { display: inline-flex; }
   .nav-brand { font-size: 16px; }
   .jtbd-block { padding: 32px 24px; }
   .jtbd-block .quote { font-size: 22px; }
-  .insteek-output { padding: 24px; max-height: none; overflow: visible; }
+  .insteek-output { padding: 22px 18px; max-height: none; overflow: visible; }
   .macos-actions { display: none; }
-  .macos-title { font-size: 12px; }
+  .macos-title { display: none; }
+  .macos-toolbar { padding: 10px 12px; gap: 8px; }
+  .feed-segment { flex-shrink: 0; }
+  .feed-region-select { font-size: 12px; max-width: 110px; }
+  .feed-search { margin-left: 0; flex: 1 1 100%; min-width: 0; }
+  .feed-search input { width: 100%; max-width: 100%; }
   .viz-04-grid { grid-template-columns: 1fr 1fr; }
-  .feed-search input { width: 120px; }
-  .sheet-body { padding: 24px 24px 80px; }
+  .sheet-body { padding: 24px 20px 80px; -webkit-overflow-scrolling: touch; }
   .sheet h2.sheet-title { font-size: 24px; }
   .sheet-lead { font-size: 16px; }
-  .viz-01 { height: 460px; }
-  .viz-01-stats { grid-template-columns: repeat(2, 1fr); }
+  .sheet { position: fixed; left: 0; right: 0; top: auto; bottom: 0; height: 92svh; height: 92dvh; max-height: 92dvh; border-radius: 16px 16px 0 0; z-index: 998; }
+  .sheet-bg { position: fixed; inset: 0; z-index: 997; }
+  .viz { padding: 18px; border-radius: 14px; }
+  .viz-01 { height: 420px; }
+  .viz-01-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; padding-top: 14px; margin-top: 12px; }
+  .viz-01-stat-num { font-size: 18px; }
+  .viz-01-stat-label { font-size: 9px; }
+  .viz-01 .src-text { font-size: 11px; }
   .viz-02 { height: 320px; }
-  .viz-02-info { grid-template-columns: 1fr; }
+  .viz-02-info { grid-template-columns: 1fr; gap: 10px; }
+  .cosine-vec svg { height: 200px; }
+  .cosine-opt { padding: 12px 14px; min-height: 44px; touch-action: manipulation; font-size: 13px; }
+  .feed-side { padding: 10px 8px; gap: 4px; }
+  .feed-side-item { padding: 8px 10px; font-size: 13px; min-height: 38px; }
+  .feed-side-stats { padding: 12px 8px 4px; }
+  .feed-list { padding: 10px 12px 16px; max-height: none; }
+  .fc { padding: 14px 14px; }
+  .fc-title { font-size: 14.5px; }
+  .fc-meta { font-size: 11px; }
+  .fc-why { font-size: 13px; line-height: 1.5; }
+  .fc-tag { font-size: 10.5px; }
+  .fc-action { font-size: 12px; padding: 6px 11px; min-height: 32px; }
+  .feed-bar { padding: 12px 14px; }
+  .feed-bar h3 { font-size: 15px; }
+  .insteek-source { padding: 22px 18px; position: relative; top: auto; }
+  .in-source-title { font-size: 19px; }
+  .in-source-sum { font-size: 14px; }
+  .in-source-why { font-size: 13px; }
+  .in-jumper-row { gap: 8px; }
+  .in-jumper-btn { width: 40px; height: 40px; font-size: 12px; touch-action: manipulation; }
+  .in-output-text { font-size: 13px; line-height: 1.7; }
+  .in-out-title { font-size: 10px; }
+  .in-out-status { font-size: 9px; }
+  .auto-side h2 { font-size: 30px; }
+  .auto-side p { font-size: 15px; }
+  .auto-content { gap: 14px; }
+  .viz-04 { padding: 22px 18px; }
+  .viz-04-stage { padding: 14px 12px; }
+  .viz-04-label { font-size: 12.5px; }
+  .viz-04-sub { font-size: 11px; }
+  .tech-strip { padding: 12px 14px; gap: 6px; }
+  .tech-pill { font-size: 10.5px; padding: 5px 10px; }
+  .hero-visual { height: auto; }
+  .hero-panel { width: 100% !important; max-width: 100%; padding: 18px; }
+  .hero h1 { font-size: clamp(34px, 9vw, 48px); }
+  .hero p.lede { font-size: 16px; margin-bottom: 28px; }
+  .hp-row .hp-text { white-space: normal; line-height: 1.35; }
+  .hp-stat { font-size: 28px; }
+  .modal { padding: 32px 24px; max-height: calc(100svh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .modal h3 { font-size: 22px; }
+  .modal-body { font-size: 14px; }
+  .auto-counter-label { font-size: 16px; }
+  .gha-quote { font-size: 22px; }
+  .dg-persona { padding: 22px 18px; }
+  .dg-persona h3 { font-size: 19px; }
+  .brief-card { padding: 22px 18px; }
+  .brief-card h3 { font-size: 19px; }
+  .brief-card p { font-size: 14px; }
+  .cv h4 { font-size: 16px; }
+  .cv p { font-size: 13px; }
+  .modal-bg { padding: 16px; }
+  .wf-tabs { gap: 6px; }
+  .wf-tab { font-size: 12.5px; padding: 9px 14px; touch-action: manipulation; }
+  .btn { padding: 13px 20px; font-size: 14px; min-height: 44px; touch-action: manipulation; }
+  .canvas-read-btn { font-size: 13px; padding: 10px 16px; min-height: 40px; }
+  .feed-seg-btn { padding: 7px 12px; min-height: 32px; touch-action: manipulation; }
+  body { font-size: 15px; }
+}
+@media (max-width: 480px) {
+  nav { padding: 8px 10px; }
+  .nav-brand { font-size: 15px; }
+  .hero { padding: 80px 16px 48px; }
+  .section { padding: 40px 16px; }
+  .auto { padding: 40px 16px; }
+  .auto-intro { padding: 48px 16px; }
+  .macos-wrap { padding: 16px 8px; }
+  .feed-region-select { display: none; }
+  .feed-segment { font-size: 11px; }
+  .viz-01 { height: 380px; }
+  .viz-02 { height: 300px; }
+  .cosine-demo { padding: 18px; }
+  .cosine-vec svg { height: 170px; }
+  .in-jumper-btn { width: 38px; height: 38px; }
+  .hero h1 { font-size: clamp(30px, 8.5vw, 42px); }
+  .hero-trust { font-size: 10px; gap: 12px; }
+  .jtbd-block { padding: 26px 18px; }
+  .jtbd-block .quote { font-size: 19px; }
+  .gha-block { padding: 22px 18px; }
+  .modal { padding: 26px 18px; }
 }
 </style>
 </head>
@@ -2271,6 +2418,23 @@ nav {
         <svg class="icon-sm"><use href="#i-arrow-right"/></svg>
       </button>
     </div>
+    <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navDrawer">
+      <span class="nav-burger-bar"></span>
+      <span class="nav-burger-bar"></span>
+      <span class="nav-burger-bar"></span>
+    </button>
+  </div>
+  <div class="nav-drawer" id="navDrawer" aria-hidden="true">
+    <a class="nav-link" href="deliverables.html">Deliverables</a>
+    <a class="nav-link" href="brand-guide.html">Brand Guide</a>
+    <button class="nav-link" data-to="brief">Brief</button>
+    <button class="nav-link" data-to="canvas">Canvas</button>
+    <button class="nav-link" data-to="auto-3">Feed</button>
+    <button class="nav-link" data-to="auto-4">Insteek</button>
+    <button class="nav-cta" data-to="auto-3">
+      <span>Bekijk de feed</span>
+      <svg class="icon-sm"><use href="#i-arrow-right"/></svg>
+    </button>
   </div>
 </nav>
 
@@ -3311,18 +3475,73 @@ const navMap = {
   'auto-intro':'auto-3', 'auto-1':'auto-3', 'auto-2':'auto-3',
   'auto-3':'auto-3', 'auto-4':'auto-4'
 };
+let lastScrollY = window.scrollY;
+let scrollAccumDown = 0;
 window.addEventListener('scroll', () => {
-  navEl.classList.toggle('scrolled', window.scrollY > 80);
+  const sy = window.scrollY;
+  navEl.classList.toggle('scrolled', sy > 80);
   const h = document.documentElement.scrollHeight - window.innerHeight;
-  document.getElementById('progress').style.width = (window.scrollY / h * 100) + '%';
-  const sy = window.scrollY + window.innerHeight * 0.4;
+  document.getElementById('progress').style.width = (sy / h * 100) + '%';
+  const focusY = sy + window.innerHeight * 0.4;
   let active = 'brief';
   sections.forEach(id => {
     const el = document.getElementById(id);
-    if (el && el.offsetTop <= sy) active = navMap[id] || id;
+    if (el && el.offsetTop <= focusY) active = navMap[id] || id;
   });
   document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.to === active));
+
+  // Hide-on-scroll-down behavior (mobile only) — requires drawer closed
+  if (window.innerWidth <= 768 && !navEl.classList.contains('drawer-open')) {
+    const delta = sy - lastScrollY;
+    if (sy < 80) {
+      navEl.classList.remove('nav-hidden');
+      scrollAccumDown = 0;
+    } else if (delta > 0) {
+      scrollAccumDown += delta;
+      if (scrollAccumDown > 60) navEl.classList.add('nav-hidden');
+    } else if (delta < -4) {
+      navEl.classList.remove('nav-hidden');
+      scrollAccumDown = 0;
+    }
+  } else {
+    navEl.classList.remove('nav-hidden');
+  }
+  lastScrollY = sy;
 }, { passive: true });
+
+/* ---- Mobile burger toggle + drawer ---- */
+const navBurger = document.getElementById('navBurger');
+const navDrawer = document.getElementById('navDrawer');
+function closeDrawer() {
+  navDrawer.classList.remove('open');
+  navBurger.classList.remove('open');
+  navEl.classList.remove('drawer-open');
+  navBurger.setAttribute('aria-expanded', 'false');
+  navDrawer.setAttribute('aria-hidden', 'true');
+}
+function openDrawer() {
+  navDrawer.classList.add('open');
+  navBurger.classList.add('open');
+  navEl.classList.add('drawer-open');
+  navEl.classList.remove('nav-hidden');
+  navBurger.setAttribute('aria-expanded', 'true');
+  navDrawer.setAttribute('aria-hidden', 'false');
+}
+if (navBurger) {
+  navBurger.addEventListener('click', () => {
+    if (navDrawer.classList.contains('open')) closeDrawer(); else openDrawer();
+  });
+}
+// Close drawer when any link inside it is tapped
+if (navDrawer) {
+  navDrawer.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('click', () => { closeDrawer(); });
+  });
+}
+// Resize: close drawer above breakpoint
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) closeDrawer();
+});
 
 /* ============================================================
    REVEAL + HERO PANELS
