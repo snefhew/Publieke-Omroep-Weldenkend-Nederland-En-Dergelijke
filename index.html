@@ -1633,6 +1633,168 @@ nav.scrolled .nav-brand { color: var(--ink); }
   letter-spacing: 0.04em;
 }
 
+/* === HC AI CANVAS — orbital constellation === */
+.hcc-wrap { position: relative; }
+.hcc-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
+}
+.hcc-badge {
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--graphite);
+  padding: 6px 12px; background: var(--bone);
+  border: 1px solid var(--fog); border-radius: var(--r-pill);
+}
+.hcc-badge strong { color: var(--magenta); font-weight: 600; }
+.hcc-legend {
+  display: flex; gap: 18px; font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--graphite);
+}
+.hcc-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.hcc-legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.lg-found { background: var(--purple); }
+.lg-bridge { background: var(--magenta); }
+.lg-frame { background: var(--frame); }
+.hcc-readbtn {
+  font-family: var(--ff); font-size: 13px; font-weight: 500;
+  padding: 8px 16px; border-radius: var(--r-pill);
+  background: var(--ink); color: #fff; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px; transition: background .2s;
+}
+.hcc-readbtn:hover { background: var(--magenta); }
+.hcc-readbtn .arrow { transition: transform .2s; }
+.hcc-readbtn:hover .arrow { transform: translateX(3px); }
+
+.hcc-stage {
+  position: relative;
+  background: linear-gradient(180deg, var(--bone) 0%, var(--canvas) 100%);
+  border: 1px solid var(--driftwood);
+  border-radius: 24px; overflow: hidden;
+  height: 760px; padding: 24px;
+}
+.hcc-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hcc-orbits { opacity: .55; }
+.hcc-edges path {
+  fill: none; stroke: rgba(226,20,139,.25); stroke-width: 1.25;
+  transition: opacity .35s, stroke .35s, stroke-width .35s;
+}
+.hcc-edges path.is-hot {
+  stroke: url(#hccFlow); stroke-width: 2; opacity: 1;
+  stroke-dasharray: 8 8; animation: hccFlow 1.2s linear infinite;
+}
+.hcc-stage.is-dim .hcc-edges path:not(.is-hot) { opacity: .08; }
+@keyframes hccFlow { to { stroke-dashoffset: -32; } }
+.hcc-readline path {
+  fill: none; stroke: var(--magenta); stroke-width: 2.25;
+  stroke-linecap: round; stroke-dasharray: 6 6; opacity: 0;
+}
+.hcc-readline.on path { opacity: .95; }
+
+.hcc-nodes { position: absolute; inset: 0; }
+.hcc-node {
+  position: absolute;
+  width: calc(var(--r) * 2); height: calc(var(--r) * 2);
+  border-radius: 50%;
+  background: var(--bone); border: 1px solid var(--fog);
+  padding: 14px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+  cursor: pointer;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .25s, opacity .35s, filter .35s;
+  will-change: transform;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.12);
+  left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%) translate(calc(cos(var(--ang, 0) * 1deg) * var(--rad, 0) * 1px), calc(sin(var(--ang, 0) * 1deg) * var(--rad, 0) * 1px));
+}
+.hcc-node .label {
+  font-family: var(--ff-mono); font-size: 9px; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 6px;
+}
+.hcc-node h4 {
+  font-size: 13px; font-weight: 600; letter-spacing: -.01em;
+  line-height: 1.18; color: var(--ink); margin-bottom: 6px;
+}
+.hcc-node p {
+  font-size: 11px; line-height: 1.4; color: var(--graphite);
+  display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.hcc-node:hover {
+  border-color: var(--magenta);
+  transform: translate(-50%, -50%) translate(calc(cos(var(--ang, 0) * 1deg) * var(--rad, 0) * 1px), calc(sin(var(--ang, 0) * 1deg) * var(--rad, 0) * 1px)) scale(1.06);
+  box-shadow: 0 4px 12px rgba(226,20,139,.25), 0 18px 42px -16px rgba(226,20,139,.35);
+  z-index: 6;
+}
+.hcc-stage.is-dim .hcc-node:not(.is-hot):not(:hover) { opacity: .28; filter: saturate(.4); }
+.hcc-node.is-hot { border-color: var(--magenta); }
+.hcc-node.is-reading {
+  background: var(--magenta); border-color: var(--magenta);
+  box-shadow: 0 0 0 6px rgba(226,20,139,.18), 0 18px 42px -10px rgba(226,20,139,.5);
+  z-index: 7;
+}
+.hcc-node.is-reading .label,
+.hcc-node.is-reading h4,
+.hcc-node.is-reading p { color: #fff; }
+.hcc-found { border-color: var(--purple); }
+.hcc-found .label { color: var(--purple); }
+.hcc-bridge { border-color: rgba(226,20,139,.35); }
+.hcc-frame { background: var(--frame); border-color: var(--frame); }
+.hcc-frame .label { color: var(--magenta); }
+.hcc-frame h4 { color: #fff; }
+.hcc-frame p { color: rgba(255,255,255,.7); }
+.hcc-core {
+  background: var(--ink); border-color: var(--ink);
+  box-shadow: 0 0 0 8px rgba(226,20,139,.12), 0 24px 48px -12px rgba(0,0,0,.4);
+}
+.hcc-core .label { color: var(--magenta); }
+.hcc-core h4 { color: #fff; font-size: 15px; }
+.hcc-core p { color: rgba(255,255,255,.78); font-size: 12px; -webkit-line-clamp: 4; line-clamp: 4; }
+
+.hcc-detail {
+  position: absolute; right: 24px; bottom: 24px; width: 280px;
+  background: var(--bone); border: 1px solid var(--fog);
+  border-radius: 16px; padding: 18px;
+  box-shadow: 0 12px 32px -16px rgba(0,0,0,.18);
+  transition: opacity .25s, transform .25s;
+}
+.hcc-detail-eyebrow {
+  font-family: var(--ff-mono); font-size: 10px;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 8px;
+}
+.hcc-detail-title {
+  font-size: 15px; font-weight: 600; letter-spacing: -.01em;
+  color: var(--ink); margin-bottom: 6px;
+}
+.hcc-detail-body { font-size: 12px; line-height: 1.5; color: var(--graphite); }
+
+@media (max-width: 880px) {
+  .hcc-stage { height: auto; padding: 16px; background: transparent; border: none; }
+  .hcc-svg, .hcc-detail { display: none; }
+  .hcc-nodes {
+    position: static; display: flex; flex-direction: column; gap: 10px;
+    counter-reset: hccstep;
+  }
+  .hcc-node {
+    position: relative; left: auto; top: auto;
+    width: 100%; height: auto; border-radius: 14px;
+    transform: none !important;
+    text-align: left; padding: 18px; align-items: flex-start;
+  }
+  .hcc-node:hover { transform: none !important; }
+  .hcc-node p { -webkit-line-clamp: unset; line-clamp: unset; }
+  .hcc-node::before {
+    content: counter(hccstep, decimal-leading-zero);
+    counter-increment: hccstep;
+    position: absolute; top: 14px; right: 16px;
+    font-family: var(--ff-mono); font-size: 10px; color: var(--graphite);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hcc-edges path.is-hot { animation: none; }
+}
+
 /* === DOELGROEP === */
 .dg-grid {
   display: grid; grid-template-columns: repeat(4, 1fr);
@@ -2138,44 +2300,67 @@ nav.scrolled .nav-brand { color: var(--ink); }
       </p>
     </div>
 
-    <div class="canvas-real-wrap">
-      <div class="canvas-toolbar">
-        <span class="canvas-progress-badge"><strong>10 / 10</strong> blokken ingevuld</span>
-        <button class="canvas-read-btn" id="canvasReadBtn">
-          <span>Lees in volgorde</span>
-          <span class="arrow">→</span>
+    <div class="hcc-wrap">
+      <div class="hcc-toolbar">
+        <span class="hcc-badge"><strong>10 / 10</strong> blokken &middot; klik een knoop</span>
+        <div class="hcc-legend">
+          <span><i class="lg lg-found"></i>Fundament</span>
+          <span><i class="lg lg-bridge"></i>Brug</span>
+          <span><i class="lg lg-frame"></i>Kader</span>
+        </div>
+        <button class="hcc-readbtn" id="canvasReadBtn">
+          <span>Lees in volgorde</span><span class="arrow">→</span>
         </button>
       </div>
 
-      <div class="canvas-real" id="canvasReal">
-        <div class="cv cv-jtbd reveal" data-m="jtbd" data-cn="jtbd" data-step="1"><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil bereiken</h4><p>Lokale verhalen met landelijk potentieel snel signaleren, voor 08:30 op het ochtendoverleg.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-promise reveal" data-m="promise" data-cn="promise" data-step="2"><div class="label">AI Promise</div><h4>Wat de technologie kan</h4><p>Continu 30+ bronnen monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-hact reveal" data-m="hact" data-cn="hact" data-step="3"><div class="label">Human Activities</div><h4>Wat de mens blijft doen</h4><p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-reinf reveal" data-m="hreinf" data-cn="reinf" data-step="4"><div class="label">Human Reinforcement</div><h4>Hoe de AI de mens versterkt</h4><p>Insteek-suggesties, sprekers aanbevelen, historische context bij items.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-benefits reveal" data-m="benefits" data-cn="benefits" data-step="5"><div class="label">Benefits for Humans</div><h4>Wat het de redactie oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-mact reveal" data-m="mact" data-cn="mact" data-step="6"><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-collab2 reveal" data-m="collab" data-cn="collab" data-step="7"><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik. Filtering wordt steeds preciezer, in jullie eigen redactiestijl.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-bias reveal" data-m="bias" data-cn="bias" data-step="8"><div class="label">Critical Thinking & Biases</div><h4>Risico's en blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-impl reveal" data-m="impl" data-cn="impl" data-step="9"><div class="label">Considerations & Implications</div><h4>Juridisch, ethisch, praktisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
-        <div class="cv cv-change reveal" data-m="change" data-cn="change" data-step="10"><div class="label">Change Management</div><h4>Hoe we het invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="hcc-stage" id="hccStage">
+        <svg class="hcc-svg" id="hccSvg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <radialGradient id="hccCoreGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"  stop-color="#e2148b" stop-opacity=".55"/>
+              <stop offset="60%" stop-color="#9c2d8f" stop-opacity=".10"/>
+              <stop offset="100%" stop-color="#9c2d8f" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="hccFlow" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%"  stop-color="#e2148b" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#e2148b" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#e2148b" stop-opacity="0"/>
+            </linearGradient>
+            <marker id="hccArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10" fill="#e2148b"/>
+            </marker>
+          </defs>
+          <circle cx="500" cy="350" r="240" fill="url(#hccCoreGlow)"/>
+          <g class="hcc-orbits" stroke="var(--driftwood)" stroke-dasharray="2 5" fill="none">
+            <circle cx="500" cy="350" r="135"/>
+            <circle cx="500" cy="350" r="225"/>
+            <circle cx="500" cy="350" r="305"/>
+          </g>
+          <g class="hcc-edges" id="hccEdges"></g>
+          <g class="hcc-readline" id="hccReadLine"></g>
+        </svg>
 
-        <div class="canvas-real-overlay" id="canvasOverlay">
-          <svg aria-hidden="true">
-            <defs>
-              <marker id="canvas-arrow"
-                      viewBox="0 0 10 10"
-                      refX="9" refY="5"
-                      markerWidth="6" markerHeight="6"
-                      markerUnits="strokeWidth"
-                      orient="auto">
-                <path d="M0,0 L10,5 L0,10" fill="none"
-                      stroke="#e2148b" stroke-width="1.5"
-                      stroke-linecap="round" stroke-linejoin="round"/>
-              </marker>
-            </defs>
-            <g class="canvas-lines-group"></g>
-          </svg>
+        <div class="hcc-nodes" id="hccNodes">
+          <div class="cv hcc-node hcc-core reveal" data-m="collab" data-cn="collab" data-step="7" style="--x:50%;--y:50%;--r:108px"><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik.</p></div>
+
+          <div class="cv hcc-node hcc-found reveal" data-m="jtbd"     data-cn="jtbd"     data-step="1"  style="--x:50%;--y:50%;--r:78px;--ang:-90;--rad:135"><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil</h4><p>Lokale verhalen met landelijk potentieel snel signaleren, voor 08:30.</p></div>
+          <div class="cv hcc-node hcc-found reveal" data-m="promise"  data-cn="promise"  data-step="2"  style="--x:50%;--y:50%;--r:78px;--ang:30;--rad:135"><div class="label">AI Promise</div><h4>Wat de tech kan</h4><p>Continu 30+ bronnen monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p></div>
+          <div class="cv hcc-node hcc-found reveal" data-m="hact"     data-cn="hact"     data-step="3"  style="--x:50%;--y:50%;--r:78px;--ang:150;--rad:135"><div class="label">Human Activities</div><h4>Wat de mens doet</h4><p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p></div>
+
+          <div class="cv hcc-node hcc-bridge reveal" data-m="hreinf"   data-cn="reinf"    data-step="4"  style="--x:50%;--y:50%;--r:74px;--ang:-40;--rad:225"><div class="label">Human Reinforcement</div><h4>Hoe AI versterkt</h4><p>Insteek-suggesties, sprekers, historische context bij items.</p></div>
+          <div class="cv hcc-node hcc-bridge reveal" data-m="benefits" data-cn="benefits" data-step="5"  style="--x:50%;--y:50%;--r:74px;--ang:80;--rad:225"><div class="label">Benefits</div><h4>Wat het oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p></div>
+          <div class="cv hcc-node hcc-bridge reveal" data-m="mact"     data-cn="mact"     data-step="6"  style="--x:50%;--y:50%;--r:74px;--ang:200;--rad:225"><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p></div>
+
+          <div class="cv hcc-node hcc-frame reveal" data-m="bias"   data-cn="bias"   data-step="8"  style="--x:50%;--y:50%;--r:70px;--ang:-130;--rad:305"><div class="label">Bias & risico</div><h4>Blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p></div>
+          <div class="cv hcc-node hcc-frame reveal" data-m="impl"   data-cn="impl"   data-step="9"  style="--x:50%;--y:50%;--r:70px;--ang:0;--rad:305"><div class="label">Implications</div><h4>Juridisch &amp; ethisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p></div>
+          <div class="cv hcc-node hcc-frame reveal" data-m="change" data-cn="change" data-step="10" style="--x:50%;--y:50%;--r:70px;--ang:130;--rad:305"><div class="label">Change Mgmt</div><h4>Hoe we invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p></div>
         </div>
+
+        <aside class="hcc-detail" id="hccDetail" aria-live="polite">
+          <div class="hcc-detail-eyebrow">Hover een knoop</div>
+          <h4 class="hcc-detail-title">Het systeem in één oogopslag</h4>
+          <p class="hcc-detail-body">10 concepten, één centraal collaboratie-pact. Drie ringen: fundament, brug, kader. Klik voor de volledige toelichting.</p>
+        </aside>
       </div>
     </div>
   </div>
@@ -3599,11 +3784,172 @@ ScrollTrigger.create({
 });
 
 /* ============================================================
-   CANVAS REAL — clean line system + reading walkthrough
+   HC AI CANVAS — orbital constellation
    ============================================================ */
 (function () {
-  const wrap = document.getElementById('canvasReal');
-  if (!wrap) return;
+  const stage   = document.getElementById('hccStage');
+  if (!stage) return;
+  const svg     = document.getElementById('hccSvg');
+  const edgesG  = document.getElementById('hccEdges');
+  const readG   = document.getElementById('hccReadLine');
+  const nodes   = [...stage.querySelectorAll('.hcc-node')];
+  const detail  = document.getElementById('hccDetail');
+  const dEye    = detail.querySelector('.hcc-detail-eyebrow');
+  const dTit    = detail.querySelector('.hcc-detail-title');
+  const dBod    = detail.querySelector('.hcc-detail-body');
+  const readBtn = document.getElementById('canvasReadBtn');
+  const SVG_NS  = 'http://www.w3.org/2000/svg';
+
+  const adj = {
+    jtbd:    ['promise','benefits','collab'],
+    promise: ['jtbd','mact','bias'],
+    hact:    ['reinf','mact','collab'],
+    reinf:   ['hact','collab','change'],
+    benefits:['jtbd','collab'],
+    mact:    ['promise','hact','collab','impl'],
+    collab:  ['mact','hact','reinf','benefits','jtbd'],
+    bias:    ['promise','mact'],
+    impl:    ['mact','change'],
+    change:  ['impl','reinf']
+  };
+
+  function nodeCenter(n) {
+    const sR = stage.getBoundingClientRect();
+    const r  = n.getBoundingClientRect();
+    const sx = svg.viewBox.baseVal.width  / sR.width;
+    const sy = svg.viewBox.baseVal.height / sR.height;
+    return { x:(r.left + r.width/2 - sR.left) * sx, y:(r.top + r.height/2 - sR.top) * sy };
+  }
+
+  function buildEdges() {
+    edgesG.innerHTML = '';
+    const seen = new Set();
+    Object.keys(adj).forEach(a => {
+      adj[a].forEach(b => {
+        const key = [a,b].sort().join('-');
+        if (seen.has(key)) return;
+        seen.add(key);
+        const na = stage.querySelector(`.hcc-node[data-cn="${a}"]`);
+        const nb = stage.querySelector(`.hcc-node[data-cn="${b}"]`);
+        if (!na || !nb) return;
+        const A = nodeCenter(na), B = nodeCenter(nb);
+        const mx = (A.x+B.x)/2, my = (A.y+B.y)/2;
+        const dx = B.x-A.x, dy = B.y-A.y;
+        const nx = -dy, ny = dx;
+        const len = Math.hypot(nx,ny) || 1;
+        const cx = mx + (nx/len)*40, cy = my + (ny/len)*40;
+        const p = document.createElementNS(SVG_NS,'path');
+        p.setAttribute('d', `M ${A.x} ${A.y} Q ${cx} ${cy} ${B.x} ${B.y}`);
+        p.dataset.a = a; p.dataset.b = b;
+        edgesG.appendChild(p);
+      });
+    });
+  }
+
+  function highlight(cn) {
+    stage.classList.add('is-dim');
+    nodes.forEach(n => {
+      const m = n.dataset.cn;
+      if (m === cn || (adj[cn] && adj[cn].includes(m))) n.classList.add('is-hot');
+    });
+    edgesG.querySelectorAll('path').forEach(p => {
+      if (p.dataset.a === cn || p.dataset.b === cn) p.classList.add('is-hot');
+    });
+    const card = stage.querySelector(`.hcc-node[data-cn="${cn}"]`);
+    if (card) {
+      dEye.textContent = card.querySelector('.label').textContent;
+      dTit.textContent = card.querySelector('h4').textContent;
+      dBod.textContent = card.querySelector('p').textContent;
+    }
+  }
+  function clearH() {
+    stage.classList.remove('is-dim');
+    nodes.forEach(n => n.classList.remove('is-hot'));
+    edgesG.querySelectorAll('path').forEach(p => p.classList.remove('is-hot'));
+  }
+  nodes.forEach(n => {
+    n.addEventListener('mouseenter', () => highlight(n.dataset.cn));
+    n.addEventListener('mouseleave', clearH);
+    n.addEventListener('focus', () => highlight(n.dataset.cn));
+    n.addEventListener('blur', clearH);
+  });
+
+  // Reading walkthrough
+  let reading = false, readTl = null;
+  function buildReadPath() {
+    readG.innerHTML = '';
+    const ord = nodes.slice().sort((a,b) => +a.dataset.step - +b.dataset.step);
+    let d = '';
+    ord.forEach((n,i) => { const c = nodeCenter(n); d += (i ? ' L ' : 'M ') + c.x + ' ' + c.y; });
+    const p = document.createElementNS(SVG_NS,'path');
+    p.setAttribute('d', d);
+    p.setAttribute('marker-end', 'url(#hccArrow)');
+    readG.appendChild(p);
+    return { path:p, ord };
+  }
+  function playRead() {
+    const { path, ord } = buildReadPath();
+    readG.classList.add('on');
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    if (readTl) readTl.kill();
+    readTl = gsap.timeline();
+    readTl.to(path, { strokeDashoffset:0, duration:4, ease:'power2.inOut' });
+    ord.forEach((n,i) => {
+      readTl.call(() => {
+        ord.forEach(o => o.classList.remove('is-reading'));
+        n.classList.add('is-reading');
+      }, null, i * 0.4);
+    });
+  }
+  function stopRead() {
+    if (readTl) readTl.kill();
+    readG.classList.remove('on');
+    readG.innerHTML = '';
+    nodes.forEach(n => n.classList.remove('is-reading'));
+  }
+  if (readBtn) {
+    readBtn.addEventListener('click', () => {
+      reading = !reading;
+      readBtn.querySelector('span').textContent = reading ? 'Verberg volgorde' : 'Lees in volgorde';
+      reading ? playRead() : stopRead();
+    });
+  }
+
+  function rebuild() {
+    buildEdges();
+    if (reading) {
+      stopRead();
+      reading = false;
+      if (readBtn) readBtn.querySelector('span').textContent = 'Lees in volgorde';
+    }
+  }
+  let rzTimer;
+  window.addEventListener('resize', () => { clearTimeout(rzTimer); rzTimer = setTimeout(rebuild, 120); });
+  requestAnimationFrame(() => requestAnimationFrame(rebuild));
+
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.set(nodes, { opacity:0, scale:0.6 });
+    ScrollTrigger.create({
+      trigger: stage, start: 'top 75%', once: true,
+      onEnter: () => {
+        gsap.to(nodes, {
+          opacity:1, scale:1, duration:0.7, ease:'back.out(1.4)',
+          stagger: { each:0.06, from:'center' },
+          onComplete: rebuild
+        });
+      }
+    });
+  } else {
+    nodes.forEach(n => { n.style.opacity = 1; });
+  }
+  return; /* end new canvas IIFE — old code below is dead; cut by closing paren */
+})();
+/* ===== old canvas-real IIFE removed ===== */
+(function () {
+  const _legacy = document.getElementById('canvasReal');
+  if (!_legacy) return;
   const overlay = document.getElementById('canvasOverlay');
   const svg = overlay && overlay.querySelector('svg');
   const group = svg && svg.querySelector('.canvas-lines-group');

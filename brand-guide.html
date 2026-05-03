@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lede. — Brand Guide</title>
+<title>Lede. · Brand Guide</title>
 <meta name="description" content="De huisstijl van Lede., een growth hacking agency die AI-systemen bouwt voor mediaorganisaties." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -208,7 +208,12 @@ body {
   z-index: -1;
   transform: scaleX(0);
   transform-origin: left;
-  animation: highlightIn 0.9s var(--easing) 1.1s forwards;
+  animation: highlightIn 0.7s var(--easing) 0.85s forwards, highlightSettle 0.6s var(--easing) 1.55s forwards;
+}
+@keyframes highlightSettle {
+  0%   { transform: scaleX(1) scaleY(1); }
+  50%  { transform: scaleX(1) scaleY(1.05) translateY(1px); }
+  100% { transform: scaleX(1) scaleY(1); }
 }
 .hero-title .dot {
   color: var(--signal-deep);
@@ -383,8 +388,8 @@ body {
   transform-origin: left;
   transition: transform 0.7s var(--easing);
 }
-.manifesto.in .em:nth-of-type(1)::before { transform: scaleX(1); transition-delay: 0.4s; }
-.manifesto.in .em:nth-of-type(2)::before { transform: scaleX(1); transition-delay: 0.9s; }
+.manifesto.in .em:nth-of-type(1)::before { transform: scaleX(1); transition-delay: 0.3s; }
+.manifesto.in .em:nth-of-type(2)::before { transform: scaleX(1); transition-delay: 1.5s; }
 .manifesto .strike {
   position: relative;
   color: var(--slate-soft);
@@ -403,7 +408,7 @@ body {
 }
 .manifesto.in .strike::after {
   transform: scaleX(1);
-  transition-delay: 0.65s;
+  transition-delay: 0.9s;
 }
 .manifesto-author {
   margin-top: 64px;
@@ -481,12 +486,33 @@ body {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  transition: border-color 0.2s var(--easing), transform 0.2s var(--easing);
+  transition: border-color 0.2s var(--easing), transform 0.2s var(--easing), box-shadow 0.2s var(--easing);
   cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
 }
 .logo-variant:hover { border-color: var(--ink); transform: translateY(-2px); }
+.logo-variant.active {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px var(--signal);
+}
 .logo-variant.dark { background: var(--ink); border-color: var(--carbon); }
+.logo-variant.dark .mark-svg { color: var(--paper); --mark-accent: var(--signal); }
 .logo-variant.signal { background: var(--signal); border-color: var(--signal-deep); }
+.logo-variant.signal .mark-svg { color: var(--ink); --mark-accent: var(--ink); }
+.logo-variant.signal .word-mini .dot { color: var(--ink); }
+
+/* Big display variants, sync to active variant card */
+.logo-display { transition: background 0.3s var(--easing); }
+.logo-display.display-dark { background: var(--ink); }
+.logo-display.display-dark .logo-mark-large .mark-svg { color: var(--paper); --mark-accent: var(--signal); }
+.logo-display.display-dark .logo-mark-large .word { color: var(--paper); }
+.logo-display.display-dark .logo-mark-large .word .dot { color: var(--signal); }
+.logo-display.display-signal { background: var(--signal); }
+.logo-display.display-signal .logo-mark-large .mark-svg { color: var(--ink); --mark-accent: var(--ink); }
+.logo-display.display-signal .logo-mark-large .word { color: var(--ink); }
+.logo-display.display-signal .logo-mark-large .word .dot { color: var(--ink); }
 .logo-variant-label {
   font-family: var(--ff-mono);
   font-size: 10px;
@@ -578,6 +604,13 @@ body {
   box-shadow: 0 20px 40px rgba(0,0,0,0.06);
 }
 .color-card.light { border-color: var(--mist); }
+.color-card[data-hex="#DCFF00"] {
+  box-shadow: 0 24px 60px -20px rgba(220, 255, 0, 0.55), 0 8px 24px -12px rgba(220, 255, 0, 0.35);
+}
+.color-card[data-hex="#DCFF00"]:hover {
+  box-shadow: 0 32px 72px -18px rgba(220, 255, 0, 0.7), 0 10px 30px -10px rgba(220, 255, 0, 0.45);
+}
+.color-card[data-hex="#DCFF00"] .color-card-vis { height: 240px; }
 .color-card-vis {
   height: 200px;
   position: relative;
@@ -1083,7 +1116,7 @@ body {
   <defs>
     <symbol id="lede-mark" viewBox="0 0 32 32">
       <rect x="4" y="3" width="24" height="26" rx="2.5" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-width="1.5"/>
-      <rect x="8" y="7.5" width="14" height="3" rx="1.5" fill="#DCFF00"/>
+      <rect x="8" y="7.5" width="14" height="3" rx="1.5" fill="var(--mark-accent, #DCFF00)"/>
       <line x1="8" y1="14.5" x2="22" y2="14.5" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.4" stroke-linecap="round"/>
       <line x1="8" y1="18.5" x2="19" y2="18.5" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.4" stroke-linecap="round"/>
       <line x1="8" y1="22.5" x2="21" y2="22.5" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.4" stroke-linecap="round"/>
@@ -1119,7 +1152,7 @@ body {
   <div class="hero-inner">
     <div class="hero-eyebrow">Brand Guide  ·  v1.0  ·  2026</div>
     <h1 class="hero-title">
-      <span class="word"><span>We zijn</span></span>
+      <span class="word"><span>Wij zijn</span></span>
       <span class="word"><span class="accent">Lede</span></span><span class="word"><span class="dot">.</span></span>
     </h1>
     <p class="hero-sub">Een growth hacking agency die AI-systemen bouwt voor mediaorganisaties. We schrijven de lede van groei: de eerste regel die mensen vasthoudt en de redactie aan het werk zet.</p>
@@ -1167,10 +1200,10 @@ body {
   <div class="section-inner">
     <div class="section-eyebrow">Logo</div>
     <h2 class="section-title reveal">Eén mark, drie varianten.</h2>
-    <p class="section-lede reveal">Het logo bestaat uit een grafisch teken — een pagina met de lede gehighlight in signaal-geel — en de wordmark "Lede." in Space Grotesk Bold. De mark werkt zelfstandig op favicons en mobiele schermen; de wordmark werkt zelfstandig in plain-text contexten.</p>
+    <p class="section-lede reveal">Het logo bestaat uit een grafisch teken (een pagina met de lede gehighlight in signaal-geel) en de wordmark "Lede." in Space Grotesk Bold. De mark werkt zelfstandig op favicons en mobiele schermen; de wordmark werkt zelfstandig in plain-text contexten.</p>
 
     <div class="logo-grid reveal">
-      <div class="logo-display">
+      <div class="logo-display display-primary" id="logoDisplay">
         <div class="logo-mark-large" id="logoMain">
           <svg class="mark-svg"><use href="#lede-mark"/></svg>
           <span class="word">Lede<span class="dot">.</span></span>
@@ -1178,40 +1211,40 @@ body {
       </div>
 
       <div class="logo-side">
-        <div class="logo-variant">
+        <button type="button" class="logo-variant active" data-variant="primary">
           <span class="logo-variant-label">Primair  ·  Licht oppervlak</span>
           <div class="logo-variant-vis">
             <svg class="mark-svg"><use href="#lede-mark"/></svg>
             <span class="word-mini">Lede<span class="dot">.</span></span>
           </div>
-        </div>
+        </button>
 
-        <div class="logo-variant dark">
+        <button type="button" class="logo-variant dark" data-variant="dark">
           <span class="logo-variant-label">Mono  ·  Donker oppervlak</span>
           <div class="logo-variant-vis">
             <svg class="mark-svg"><use href="#lede-mark"/></svg>
             <span class="word-mini">Lede<span class="dot">.</span></span>
           </div>
-        </div>
+        </button>
 
-        <div class="logo-variant signal">
+        <button type="button" class="logo-variant signal" data-variant="signal">
           <span class="logo-variant-label">Signal  ·  Op accentkleur</span>
           <div class="logo-variant-vis">
             <svg class="mark-svg"><use href="#lede-mark"/></svg>
             <span class="word-mini">Lede<span class="dot">.</span></span>
           </div>
-        </div>
+        </button>
       </div>
     </div>
 
     <div class="logo-rules reveal">
       <div class="logo-rule do">
         <div class="logo-rule-label">Wel</div>
-        <p class="logo-rule-text">Minimaal 24px hoogte op digitaal. Mark en wordmark optisch uitgelijnd op de baseline. Witruimte gelijk aan de hoogte van de mark rondom het hele logo. De punt achter "Lede" is altijd in signaalgeel of inkt — nooit weggelaten.</p>
+        <p class="logo-rule-text">Minimaal 24px hoogte op digitaal. Mark en wordmark optisch uitgelijnd op de baseline. Witruimte gelijk aan de hoogte van de mark rondom het hele logo. De punt achter "Lede" is altijd in signaalgeel of inkt, nooit weggelaten.</p>
       </div>
       <div class="logo-rule dont">
         <div class="logo-rule-label">Niet</div>
-        <p class="logo-rule-text">Geen alternatieve kleuren in de hoogtelijn van de mark. Geen schaduwen, gloed, of 3D-effecten. Geen scheef geplaatste of geroteerde varianten. Geen punt na de wordmark weglaten — die hoort erbij.</p>
+        <p class="logo-rule-text">Geen alternatieve kleuren in de hoogtelijn van de mark. Geen schaduwen, gloed, of 3D-effecten. Geen scheef geplaatste of geroteerde varianten. Geen punt na de wordmark weglaten, die hoort erbij.</p>
       </div>
     </div>
   </div>
@@ -1222,7 +1255,7 @@ body {
   <div class="section-inner">
     <div class="section-eyebrow">Kleurpalet</div>
     <h2 class="section-title reveal">Eén accentkleur, vijf ondersteuners.</h2>
-    <p class="section-lede reveal">Klik op een hex-code om te kopiëren. Signaalgeel is de actieve kleur — het maakt iets de "lede" van het scherm. De andere vijf zijn de stille meerderheid: zij dragen de pagina.</p>
+    <p class="section-lede reveal">Klik op een hex-code om te kopiëren. Signaalgeel is de actieve kleur, het maakt iets de "lede" van het scherm. De andere vijf zijn de stille meerderheid: zij dragen de pagina.</p>
 
     <div class="color-grid reveal">
       <div class="color-card" data-hex="#DCFF00" data-name="Signal">
@@ -1309,7 +1342,7 @@ body {
   <div class="section-inner">
     <div class="section-eyebrow">Typografie</div>
     <h2 class="section-title reveal">Twee fonts. Allebei variabel.</h2>
-    <p class="section-lede reveal">Space Grotesk voor display en body — geometrisch, scherp, met karakter waar Inter veilig is. JetBrains Mono voor labels, code en metadata. Gebruik de schuiver om gewichten te proeven.</p>
+    <p class="section-lede reveal">Space Grotesk voor display en body, geometrisch, scherp, met karakter waar Inter veilig is. JetBrains Mono voor labels, code en metadata. Gebruik de schuiver om gewichten te proeven.</p>
 
     <div class="type-grid reveal">
       <div class="type-card">
@@ -1416,7 +1449,7 @@ body {
   <div class="section-inner">
     <div class="section-eyebrow">Design principes</div>
     <h2 class="section-title reveal">Vier regels die alles bepalen.</h2>
-    <p class="section-lede reveal">Bij elke beslissing — een knop, een tekstlijn, een hele pagina — vragen we deze vier dingen.</p>
+    <p class="section-lede reveal">Bij elke beslissing (een knop, een tekstlijn, een hele pagina) vragen we deze vier dingen.</p>
 
     <div class="principles-list reveal">
       <div class="principle">
@@ -1432,7 +1465,7 @@ body {
         <div class="principle-num">02</div>
         <div class="principle-content">
           <h3 class="principle-title">Eén accentkleur per scherm.</h3>
-          <p class="principle-desc">Signal is een instrument. Op één scherm vraag je het publiek aandacht ergens te vestigen — niet op vijf plekken tegelijk. Twee accenten = nul accenten.</p>
+          <p class="principle-desc">Signal is een instrument. Op één scherm vraag je het publiek aandacht ergens te vestigen, niet op vijf plekken tegelijk. Twee accenten = nul accenten.</p>
           <div class="principle-example">→ Eén CTA-knop, één highlighted score, één belangrijke quote.</div>
         </div>
       </div>
@@ -1463,7 +1496,7 @@ body {
   <div class="section-inner">
     <div class="section-eyebrow">Tools en stack</div>
     <h2 class="section-title reveal">Waar we mee werken.</h2>
-    <p class="section-lede reveal">Open-source waar het kan, gevestigde tools waar het moet. We bouwen geen platform — we bouwen op platforms.</p>
+    <p class="section-lede reveal">Open-source waar het kan, gevestigde tools waar het moet. We bouwen geen platform, we bouwen op platforms.</p>
 
     <div class="tools-grid reveal">
       <div class="tool-card"><span class="tool-name">n8n</span><span class="tool-role">Workflow-orchestratie</span></div>
@@ -1576,6 +1609,17 @@ typeInputMono.addEventListener('input', e => {
 typeWeightMono.addEventListener('input', e => {
   typePreviewMono.style.fontWeight = e.target.value;
   typeWeightMonoVal.textContent = e.target.value;
+});
+
+// ====== Logo variant switcher ======
+const logoDisplayEl = document.getElementById('logoDisplay');
+document.querySelectorAll('.logo-variant').forEach(v => {
+  v.addEventListener('click', () => {
+    document.querySelectorAll('.logo-variant').forEach(x => x.classList.remove('active'));
+    v.classList.add('active');
+    logoDisplayEl.classList.remove('display-primary', 'display-dark', 'display-signal');
+    logoDisplayEl.classList.add('display-' + v.dataset.variant);
+  });
 });
 
 // ====== Logo cursor follow ======
