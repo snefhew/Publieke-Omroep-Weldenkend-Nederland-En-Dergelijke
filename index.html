@@ -293,6 +293,12 @@ nav { transition: transform .3s ease; }
 .auto-meta-key { font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--graphite-soft); }
 .auto-meta-val { font-weight: 500; color: var(--ink); }
 .auto-content { display: flex; flex-direction: column; gap: 16px; }
+.auto-head-grid { display: grid; grid-template-columns: 380px 1fr; gap: 64px; align-items: end; }
+.auto-head-grid > p { font-size: 17px; line-height: 1.55; color: var(--graphite); max-width: 600px; }
+@media (max-width: 1024px) {
+  .auto-head-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .auto-head-grid > p { max-width: 100% !important; font-size: 16px !important; }
+}
 
 /* === BACKEND VIZ COMMON === */
 .viz {
@@ -2896,7 +2902,7 @@ nav { transition: transform .3s ease; }
 <!-- AUTO 03: FEED in macOS WINDOW -->
 <section class="auto" id="auto-3" style="background: var(--canvas)">
   <div class="auto-inner" style="display:block; padding-bottom: 40px;">
-    <div style="display:grid;grid-template-columns:380px 1fr;gap:64px;margin-bottom:40px;align-items:end">
+    <div class="auto-head-grid" style="margin-bottom:40px">
       <div>
         <div class="auto-num"><span class="auto-num-pill">03</span><span>Automatisering</span></div>
         <h2 class="t-h2">Klaar voor het ochtendoverleg.</h2>
@@ -3032,7 +3038,7 @@ nav { transition: transform .3s ease; }
 <!-- AUTO 04: INSTEEK -->
 <section class="auto auto-alt" id="auto-4">
   <div class="auto-inner" style="display:block">
-    <div style="display:grid;grid-template-columns:380px 1fr;gap:64px;margin-bottom:24px;align-items:end">
+    <div class="auto-head-grid" style="margin-bottom:24px">
       <div>
         <div class="auto-num"><span class="auto-num-pill">04</span><span>Vierde automatisering</span></div>
         <h2 class="t-h2">Het verhaal achter de kop.</h2>
