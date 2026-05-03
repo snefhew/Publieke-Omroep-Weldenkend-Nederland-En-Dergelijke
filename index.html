@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="PowNed Redactie Agent — concept-demo. HvA Smart Media Production, Blok 4 Growth Hacking.">
+<meta name="description" content="PowNed Redactie Agent. Een AI-agent die elke ochtend lokaal nieuws met landelijke potentie naar de redactie brengt.">
 <title>PowNed Redactie Agent</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,58 +11,42 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
 <style>
 :root {
-  /* Surfaces, adapted from Superhuman */
   --canvas: #f2f0eb;
   --canvas-warm: #ece9e2;
   --bone: #ffffff;
   --fog: #e3e3e2;
   --driftwood: #dcd7d3;
-
-  /* Type colors */
   --ink: #1a1a1a;
   --ink-soft: #2a2a2a;
   --graphite: #5a5a5a;
   --graphite-soft: #8a8a8a;
-
-  /* PowNed brand */
   --magenta: #e2148b;
   --magenta-deep: #c11077;
   --purple: #9c2d8f;
   --magenta-soft: rgba(226, 20, 139, .08);
-  --magenta-line: rgba(226, 20, 139, .18);
-
-  /* Dark frame */
+  --magenta-line: rgba(226, 20, 139, .2);
   --frame: #0a0a0a;
   --frame-soft: #161616;
   --frame-line: rgba(255,255,255,.08);
-
-  /* Gradients */
   --grad-pow: linear-gradient(135deg, #9c2d8f, #e2148b);
   --grad-hero: radial-gradient(ellipse 60% 80% at 30% 20%, rgba(156,45,143,.45), transparent 60%),
                radial-gradient(ellipse 50% 60% at 80% 70%, rgba(226,20,139,.4), transparent 60%),
                radial-gradient(ellipse 40% 50% at 60% 40%, rgba(124,30,120,.3), transparent 60%);
-
-  /* Type */
   --ff: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
-
-  /* Layout */
   --max: 1200px;
   --gap-section: 96px;
-
-  /* Radii */
   --r-btn: 8px;
   --r-link: 12px;
   --r-card: 16px;
   --r-card-lg: 24px;
   --r-pill: 999px;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 *::selection { background: var(--magenta); color: #fff; }
-
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--ff);
@@ -76,881 +60,310 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
+.t-display { font-size: clamp(40px, 7.5vw, 80px); font-weight: 700; line-height: 0.96; letter-spacing: -0.028em; }
+.t-h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 700; line-height: 0.98; letter-spacing: -0.027em; }
+.t-h2 { font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; line-height: 1.04; letter-spacing: -0.024em; }
+.t-h3 { font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; line-height: 1.2; letter-spacing: -0.022em; }
+.t-mono { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
 
-/* ========== TYPE SCALE (Superhuman-derived) ========== */
-.t-display {
-  font-size: clamp(40px, 7.5vw, 80px);
-  font-weight: 700;
-  line-height: 0.96;
-  letter-spacing: -0.028em;
-}
-.t-h1 {
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 700;
-  line-height: 0.98;
-  letter-spacing: -0.027em;
-}
-.t-h2 {
-  font-size: clamp(28px, 3.5vw, 44px);
-  font-weight: 700;
-  line-height: 1.04;
-  letter-spacing: -0.024em;
-}
-.t-h3 {
-  font-size: clamp(22px, 2.4vw, 28px);
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.022em;
-}
-.t-h4 {
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.014em;
-}
-.t-sub {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: -0.008em;
-}
-.t-body { font-size: 16px; line-height: 1.6; }
-.t-sm { font-size: 14px; line-height: 1.5; }
-.t-cap { font-size: 12px; line-height: 1.5; }
-.t-mono {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-.t-graphite { color: var(--graphite); }
-
-/* ========== ANNOUNCEMENT BANNER ========== */
-.banner {
-  background: var(--frame);
-  color: #fff;
-  padding: 12px 32px;
-  text-align: center;
-  position: relative;
-  z-index: 100;
-}
-.banner-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  font-size: 13px;
-  font-weight: 500;
-}
-.banner-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--magenta);
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: .5; transform: scale(.8); }
-}
-.banner-link {
-  color: rgba(255,255,255,.7);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color .2s;
-}
+/* === BANNER === */
+.banner { background: var(--frame); color: #fff; padding: 12px 32px; text-align: center; position: relative; z-index: 100; }
+.banner-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 13px; font-weight: 500; }
+.banner-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--magenta); animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(.8); } }
+.banner-link { color: rgba(255,255,255,.7); text-decoration: none; font-weight: 500; transition: color .2s; cursor: pointer; }
 .banner-link:hover { color: #fff; }
 
-/* ========== NAVIGATION ========== */
-nav {
-  position: fixed;
-  top: 36px;
-  left: 0; right: 0;
-  z-index: 90;
-  padding: 16px 32px;
-  transition: all .3s ease;
-}
-nav.scrolled {
-  background: rgba(242, 240, 235, .85);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  border-bottom: 1px solid var(--driftwood);
-  top: 0;
-}
-nav.scrolled .nav-link { color: var(--ink); }
-nav.scrolled .nav-brand { color: var(--ink); }
-.nav-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-.nav-brand {
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: -0.02em;
-  color: #fff;
-  cursor: pointer;
-  transition: color .3s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.nav-brand-mark {
-  display: inline-block;
-  width: 22px; height: 22px;
-  background: var(--grad-pow);
-  border-radius: 5px;
-}
-.nav-links {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-.nav-link {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--ff);
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255,255,255,.7);
-  padding: 8px 14px;
-  border-radius: var(--r-pill);
-  transition: all .2s;
-  letter-spacing: -0.005em;
-}
-.nav-link:hover { color: #fff; }
-.nav-link.active {
-  background: rgba(255,255,255,.1);
-  color: #fff;
-}
+/* === NAV === */
+nav { position: fixed; top: 36px; left: 0; right: 0; z-index: 90; padding: 16px 32px; transition: all .3s ease; }
+nav.scrolled { background: rgba(242, 240, 235, .85); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--driftwood); top: 0; }
 nav.scrolled .nav-link { color: var(--graphite); }
 nav.scrolled .nav-link:hover { color: var(--ink); }
-nav.scrolled .nav-link.active {
-  background: var(--ink);
-  color: #fff;
-}
-.nav-cta {
-  background: var(--ink);
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: var(--r-btn);
-  font-size: 13px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: all .2s;
-}
-nav.scrolled .nav-cta {
-  background: var(--ink);
-}
+nav.scrolled .nav-link.active { background: var(--ink); color: #fff; }
+nav.scrolled .nav-brand { color: var(--ink); }
+.nav-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.nav-brand { font-weight: 700; font-size: 18px; letter-spacing: -0.02em; color: #fff; cursor: pointer; transition: color .3s; display: flex; align-items: center; gap: 8px; }
+.nav-brand-mark { display: inline-block; width: 22px; height: 22px; background: var(--grad-pow); border-radius: 5px; }
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-link { background: none; border: none; cursor: pointer; font-family: var(--ff); font-size: 13px; font-weight: 500; color: rgba(255,255,255,.7); padding: 8px 14px; border-radius: var(--r-pill); transition: all .2s; letter-spacing: -0.005em; }
+.nav-link:hover { color: #fff; }
+.nav-link.active { background: rgba(255,255,255,.1); color: #fff; }
+.nav-cta { background: var(--ink); color: #fff; padding: 8px 14px; border-radius: var(--r-btn); font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
 .nav-cta:hover { background: var(--magenta); }
 
-/* ========== PROGRESS BAR ========== */
-#progress {
-  position: fixed;
-  top: 0; left: 0;
-  height: 2px;
-  width: 0%;
-  background: var(--magenta);
-  z-index: 200;
-  transition: width .1s;
-}
+/* === PROGRESS === */
+#progress { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--magenta); z-index: 200; transition: width .1s; }
 
-/* ========== HERO ========== */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  background: var(--frame);
-  color: #fff;
-  overflow: hidden;
-  padding: 140px 32px 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--grad-hero);
-  opacity: .9;
-  pointer-events: none;
-}
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%);
-  pointer-events: none;
-}
-.hero-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
-}
+/* === HERO === */
+.hero { position: relative; min-height: 100vh; background: var(--frame); color: #fff; overflow: hidden; padding: 140px 32px 80px; display: flex; flex-direction: column; justify-content: center; }
+.hero::before { content: ""; position: absolute; inset: 0; background: var(--grad-hero); opacity: .9; pointer-events: none; }
+.hero::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%); pointer-events: none; }
+.hero-inner { max-width: var(--max); margin: 0 auto; width: 100%; position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 .hero-content { max-width: 560px; }
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background: rgba(255,255,255,.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,.15);
-  border-radius: var(--r-pill);
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255,255,255,.85);
-  margin-bottom: 24px;
-  letter-spacing: -0.005em;
-}
-.hero-eyebrow-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--magenta);
-}
-.hero h1 {
-  margin-bottom: 20px;
-  color: #fff;
-}
-.hero h1 .accent {
-  background: var(--grad-pow);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.hero p.lede {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.5;
-  color: rgba(255,255,255,.7);
-  margin-bottom: 36px;
-  letter-spacing: -0.008em;
-  max-width: 520px;
-}
-.hero-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  border-radius: var(--r-btn);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.005em;
-  cursor: pointer;
-  transition: all .2s;
-  border: 1px solid transparent;
-  text-decoration: none;
-}
-.btn-primary {
-  background: #fff;
-  color: var(--ink);
-}
-.btn-primary:hover {
-  background: var(--canvas);
-  transform: translateY(-1px);
-}
-.btn-ghost {
-  background: transparent;
-  color: #fff;
-  border-color: rgba(255,255,255,.25);
-}
-.btn-ghost:hover {
-  border-color: #fff;
-}
-.btn-iris {
-  background: transparent;
-  color: var(--magenta);
-  border-color: var(--magenta);
-}
-.btn-iris:hover {
-  background: var(--magenta);
-  color: #fff;
-}
-.btn-dark {
-  background: var(--ink);
-  color: #fff;
-}
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(255,255,255,.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-pill); font-size: 12px; font-weight: 500; color: rgba(255,255,255,.85); margin-bottom: 24px; letter-spacing: -0.005em; }
+.hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--magenta); }
+.hero h1 { margin-bottom: 20px; color: #fff; }
+.hero h1 .accent { background: var(--grad-pow); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p.lede { font-size: 18px; font-weight: 500; line-height: 1.5; color: rgba(255,255,255,.7); margin-bottom: 36px; letter-spacing: -0.008em; max-width: 520px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: var(--r-btn); font-size: 14px; font-weight: 500; letter-spacing: -0.005em; cursor: pointer; transition: all .2s; border: 1px solid transparent; text-decoration: none; font-family: var(--ff); }
+.btn-primary { background: #fff; color: var(--ink); }
+.btn-primary:hover { background: var(--canvas); transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.25); }
+.btn-ghost:hover { border-color: #fff; }
+.btn-iris { background: transparent; color: var(--magenta); border-color: var(--magenta); }
+.btn-iris:hover { background: var(--magenta); color: #fff; }
+.btn-dark { background: var(--ink); color: #fff; }
 .btn-dark:hover { background: var(--magenta); }
 
-.hero-visual {
-  position: relative;
-  height: 520px;
-}
-.hero-panel {
-  position: absolute;
-  background: rgba(255,255,255,.04);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: var(--r-card-lg);
-  padding: 20px;
-  color: #fff;
-}
-.hero-panel-1 {
-  top: 10%; left: 0;
-  width: 320px;
-}
-.hero-panel-2 {
-  top: 38%; right: 0;
-  width: 280px;
-}
-.hero-panel-3 {
-  bottom: 5%; left: 18%;
-  width: 300px;
-}
-.hp-head {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(255,255,255,.6);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.hp-head .sig {
-  width: 6px; height: 6px;
-  background: var(--magenta);
-  border-radius: 50%;
-  box-shadow: 0 0 8px var(--magenta);
-}
-.hp-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 0;
-  border-top: 1px solid rgba(255,255,255,.06);
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255,255,255,.85);
-}
+.hero-visual { position: relative; height: 520px; }
+.hero-panel { position: absolute; background: rgba(255,255,255,.04); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); border: 1px solid rgba(255,255,255,.12); border-radius: var(--r-card-lg); padding: 20px; color: #fff; }
+.hero-panel-1 { top: 10%; left: 0; width: 320px; }
+.hero-panel-2 { top: 38%; right: 0; width: 280px; }
+.hero-panel-3 { bottom: 5%; left: 18%; width: 300px; }
+.hp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 11px; font-weight: 500; color: rgba(255,255,255,.6); letter-spacing: 0.04em; text-transform: uppercase; }
+.hp-head .sig { width: 6px; height: 6px; background: var(--magenta); border-radius: 50%; box-shadow: 0 0 8px var(--magenta); animation: pulse-dot 2s ease-in-out infinite; }
+.hp-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,.06); font-size: 12px; font-weight: 500; color: rgba(255,255,255,.85); }
 .hp-row:first-of-type { border-top: none; padding-top: 0; }
-.hp-score {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: rgba(226,20,139,.15);
-  color: var(--magenta);
-  flex-shrink: 0;
-}
-.hp-row .hp-text {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.hp-stat {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.022em;
-  color: #fff;
-  line-height: 1;
-  margin: 4px 0 6px;
-}
-.hp-stat-sub {
-  font-size: 12px;
-  color: rgba(255,255,255,.5);
-}
-.hp-bar {
-  height: 4px;
-  background: rgba(255,255,255,.08);
-  border-radius: var(--r-pill);
-  overflow: hidden;
-  margin-top: 14px;
-}
-.hp-bar-fill {
-  height: 100%;
-  background: var(--grad-pow);
-  border-radius: var(--r-pill);
-}
-
-.hero-trust {
-  position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  font-size: 11px;
-  color: rgba(255,255,255,.4);
-  font-family: var(--ff-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  z-index: 3;
-}
+.hp-score { font-family: var(--ff-mono); font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; background: rgba(226,20,139,.15); color: var(--magenta); flex-shrink: 0; }
+.hp-row .hp-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hp-stat { font-size: 32px; font-weight: 700; letter-spacing: -0.022em; color: #fff; line-height: 1; margin: 4px 0 6px; }
+.hp-stat-sub { font-size: 12px; color: rgba(255,255,255,.5); }
+.hp-bar { height: 4px; background: rgba(255,255,255,.08); border-radius: var(--r-pill); overflow: hidden; margin-top: 14px; }
+.hp-bar-fill { height: 100%; background: var(--grad-pow); border-radius: var(--r-pill); }
+.hero-trust { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 24px; font-size: 11px; color: rgba(255,255,255,.4); font-family: var(--ff-mono); letter-spacing: 0.08em; text-transform: uppercase; z-index: 3; }
 .hero-trust span { display: inline-flex; align-items: center; gap: 8px; }
-.hero-trust .sep {
-  width: 1px; height: 12px;
-  background: rgba(255,255,255,.2);
-}
+.hero-trust .sep { width: 1px; height: 12px; background: rgba(255,255,255,.2); }
 
-/* ========== SECTION ========== */
-.section {
-  padding: var(--gap-section) 32px;
-  position: relative;
-}
+/* === SECTION === */
+.section { padding: var(--gap-section) 32px; position: relative; }
 .section-warm { background: var(--canvas-warm); }
-.section-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-}
-.section-head {
-  margin-bottom: 56px;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 64px;
-  align-items: end;
-}
-.section-head-narrow { grid-template-columns: 1fr; }
-.section-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--magenta);
-  margin-bottom: 16px;
-}
-.section-eyebrow::before {
-  content: "";
-  width: 24px; height: 1px;
-  background: var(--magenta);
-}
+.section-inner { max-width: var(--max); margin: 0 auto; }
+.section-head { margin-bottom: 56px; display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: end; }
+.section-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--magenta); margin-bottom: 16px; }
+.section-eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--magenta); }
 .section-head h2 { color: var(--ink); }
-.section-lede {
-  font-size: 18px;
-  line-height: 1.5;
-  color: var(--graphite);
-  letter-spacing: -0.008em;
-  font-weight: 500;
-}
+.section-lede { font-size: 18px; line-height: 1.5; color: var(--graphite); letter-spacing: -0.008em; font-weight: 500; }
 
-/* ========== JTBD / BRIEF ========== */
-.jtbd-block {
-  background: var(--bone);
-  border-radius: var(--r-card-lg);
-  padding: 56px;
-  margin-bottom: 40px;
-  position: relative;
-  border: 1px solid var(--fog);
-}
-.jtbd-block .label {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--magenta);
-  margin-bottom: 20px;
-}
-.jtbd-block .quote {
-  font-size: clamp(24px, 3vw, 36px);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.024em;
-  color: var(--ink);
-}
-.jtbd-block .quote .em {
-  background: var(--grad-pow);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.brief-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-.brief-card {
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  border-radius: var(--r-card);
-  padding: 28px;
-  position: relative;
-}
-.brief-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 28px;
-  width: 28px;
-  height: 3px;
-  background: var(--magenta);
-}
-.brief-card .label {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--magenta);
-  margin-bottom: 12px;
-  margin-top: 4px;
-}
-.brief-card h3 {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.014em;
-  color: var(--ink);
-  margin-bottom: 10px;
-  line-height: 1.2;
-}
-.brief-card p {
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--graphite);
-}
+/* === BRIEF / JTBD === */
+.jtbd-block { background: var(--bone); border-radius: var(--r-card-lg); padding: 56px; margin-bottom: 40px; position: relative; border: 1px solid var(--fog); }
+.jtbd-block .label { font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--magenta); margin-bottom: 20px; }
+.jtbd-block .quote { font-size: clamp(24px, 3vw, 36px); font-weight: 600; line-height: 1.15; letter-spacing: -0.024em; color: var(--ink); }
+.jtbd-block .quote .em { background: var(--grad-pow); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.brief-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.brief-card { background: var(--bone); border: 1px solid var(--fog); border-radius: var(--r-card); padding: 28px; position: relative; }
+.brief-card::before { content: ""; position: absolute; top: 0; left: 28px; width: 28px; height: 3px; background: var(--magenta); }
+.brief-card .label { font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--magenta); margin-bottom: 12px; margin-top: 4px; }
+.brief-card h3 { font-size: 22px; font-weight: 600; letter-spacing: -0.014em; color: var(--ink); margin-bottom: 10px; line-height: 1.2; }
+.brief-card p { font-size: 15px; line-height: 1.55; color: var(--graphite); }
 
-/* ========== CANVAS ========== */
-.canvas-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-.cv {
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  border-radius: var(--r-card);
-  padding: 24px;
-  cursor: pointer;
-  transition: all .25s ease;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 150px;
-}
-.cv:hover {
-  border-color: var(--magenta);
-  transform: translateY(-2px);
-}
-.cv .label {
-  font-family: var(--ff-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--magenta);
-}
-.cv h4 {
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.014em;
-  line-height: 1.2;
-  color: var(--ink);
-}
-.cv p {
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--graphite);
-}
-.cv .more {
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--magenta);
-}
-.cv-collab {
-  grid-column: span 2;
-  background: var(--frame);
-  color: #fff;
-  border-color: var(--frame);
-}
+/* === CANVAS === */
+.canvas-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.cv { background: var(--bone); border: 1px solid var(--fog); border-radius: var(--r-card); padding: 24px; cursor: pointer; transition: all .25s ease; position: relative; display: flex; flex-direction: column; gap: 10px; min-height: 150px; }
+.cv:hover { border-color: var(--magenta); transform: translateY(-2px); }
+.cv .label { font-family: var(--ff-mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--magenta); }
+.cv h4 { font-size: 17px; font-weight: 600; letter-spacing: -0.014em; line-height: 1.2; color: var(--ink); }
+.cv p { font-size: 13px; line-height: 1.5; color: var(--graphite); }
+.cv .more { margin-top: auto; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; color: var(--magenta); }
+.cv-collab { grid-column: span 2; background: var(--frame); color: #fff; border-color: var(--frame); }
 .cv-collab:hover { border-color: var(--magenta); }
 .cv-collab h4 { color: #fff; }
 .cv-collab p { color: rgba(255,255,255,.7); }
 .cv-collab .label { color: var(--magenta); }
 
-/* Modal */
-.modal-bg {
-  position: fixed;
-  inset: 0;
-  background: rgba(10,10,10,.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 950;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-  opacity: 0;
-}
+/* === MODAL === */
+.modal-bg { position: fixed; inset: 0; background: rgba(10,10,10,.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 950; display: none; align-items: center; justify-content: center; padding: 32px; opacity: 0; }
 .modal-bg.open { display: flex; }
-.modal {
-  background: var(--bone);
-  border-radius: var(--r-card-lg);
-  max-width: 640px;
-  width: 100%;
-  padding: 48px;
-  position: relative;
-  transform: translateY(20px);
-  opacity: 0;
-}
-.modal-close {
-  position: absolute;
-  top: 20px; right: 20px;
-  background: var(--canvas);
-  border: 1px solid var(--fog);
-  border-radius: 50%;
-  width: 32px; height: 32px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--graphite);
-  transition: all .2s;
-}
+.modal { background: var(--bone); border-radius: var(--r-card-lg); max-width: 640px; width: 100%; padding: 48px; position: relative; transform: translateY(20px); opacity: 0; }
+.modal-close { position: absolute; top: 20px; right: 20px; background: var(--canvas); border: 1px solid var(--fog); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--graphite); transition: all .2s; }
 .modal-close:hover { background: var(--magenta); color: #fff; border-color: var(--magenta); }
-.modal .label {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--magenta);
-  margin-bottom: 12px;
-}
-.modal h3 {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.022em;
-  line-height: 1.1;
-  color: var(--ink);
-  margin-bottom: 20px;
-}
-.modal-body {
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--graphite);
-  white-space: pre-line;
-}
+.modal .label { font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--magenta); margin-bottom: 12px; }
+.modal h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.022em; line-height: 1.1; color: var(--ink); margin-bottom: 20px; }
+.modal-body { font-size: 15px; line-height: 1.65; color: var(--graphite); white-space: pre-line; }
 
-/* ========== AUTOMATIONS DIVIDER ========== */
-.auto-intro {
-  background: var(--frame);
-  color: #fff;
-  padding: 88px 32px;
+/* === AUTO INTRO === */
+.auto-intro { background: var(--frame); color: #fff; padding: 88px 32px; position: relative; overflow: hidden; }
+.auto-intro::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 70% at 70% 50%, rgba(226,20,139,.25), transparent 60%); }
+.auto-intro-inner { max-width: var(--max); margin: 0 auto; position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.auto-intro h2 { color: #fff; }
+.auto-intro p { font-size: 17px; line-height: 1.5; color: rgba(255,255,255,.65); letter-spacing: -0.005em; max-width: 480px; }
+.auto-counter { display: flex; flex-direction: column; gap: 12px; }
+.auto-counter-row { display: flex; align-items: baseline; gap: 20px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,.1); }
+.auto-counter-row:first-child { border-top: none; }
+.auto-counter-num { font-family: var(--ff-mono); font-size: 12px; font-weight: 500; color: var(--magenta); letter-spacing: 0.04em; width: 36px; flex-shrink: 0; }
+.auto-counter-label { font-size: 18px; font-weight: 600; color: #fff; letter-spacing: -0.014em; flex: 1; }
+.auto-counter-tag { font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+
+/* === AUTO SECTION === */
+.auto { padding: var(--gap-section) 32px; }
+.auto-alt { background: var(--canvas-warm); }
+.auto-inner { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 380px 1fr; gap: 64px; align-items: start; }
+.auto-side { position: sticky; top: 100px; }
+.auto-num { display: inline-flex; align-items: center; gap: 8px; font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--magenta); margin-bottom: 20px; }
+.auto-num-pill { background: var(--magenta); color: #fff; padding: 4px 10px; border-radius: var(--r-btn); font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; }
+.auto-side h2 { font-size: clamp(32px, 3.5vw, 44px); font-weight: 700; line-height: 1; letter-spacing: -0.024em; color: var(--ink); margin-bottom: 20px; }
+.auto-side p { font-size: 16px; line-height: 1.6; color: var(--graphite); margin-bottom: 24px; }
+.auto-meta { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--driftwood); padding-top: 24px; }
+.auto-meta-row { display: flex; justify-content: space-between; font-size: 13px; }
+.auto-meta-key { font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--graphite-soft); }
+.auto-meta-val { font-weight: 500; color: var(--ink); }
+.auto-content { display: flex; flex-direction: column; gap: 16px; }
+
+/* === BACKEND VIZ COMMON === */
+.viz {
+  background: var(--bone);
+  border: 1px solid var(--fog);
+  border-radius: var(--r-card-lg);
+  padding: 28px;
   position: relative;
   overflow: hidden;
 }
-.auto-intro::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 50% 70% at 70% 50%, rgba(226,20,139,.25), transparent 60%);
-}
-.auto-intro-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
-}
-.auto-intro h2 { color: #fff; }
-.auto-intro p {
-  font-size: 17px;
-  line-height: 1.5;
-  color: rgba(255,255,255,.65);
-  letter-spacing: -0.005em;
-  max-width: 480px;
-}
-.auto-counter {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.auto-counter-row {
-  display: flex;
-  align-items: baseline;
-  gap: 20px;
-  padding: 16px 0;
-  border-top: 1px solid rgba(255,255,255,.1);
-}
-.auto-counter-row:first-child { border-top: none; }
-.auto-counter-num {
-  font-family: var(--ff-mono);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--magenta);
-  letter-spacing: 0.04em;
-  width: 36px;
-  flex-shrink: 0;
-}
-.auto-counter-label {
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: -0.014em;
-  flex: 1;
-}
-.auto-counter-tag {
-  font-family: var(--ff-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.4);
-}
-
-/* ========== AUTOMATION SECTION ========== */
-.auto {
-  padding: var(--gap-section) 32px;
-}
-.auto-alt { background: var(--canvas-warm); }
-.auto-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 380px 1fr;
-  gap: 64px;
-  align-items: start;
-}
-.auto-side {
-  position: sticky;
-  top: 100px;
-}
-.auto-num {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--magenta);
-  margin-bottom: 20px;
-}
-.auto-num-pill {
-  background: var(--magenta);
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: var(--r-btn);
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-}
-.auto-side h2 {
-  font-size: clamp(32px, 3.5vw, 44px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.024em;
-  color: var(--ink);
-  margin-bottom: 20px;
-}
-.auto-side p {
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--graphite);
-  margin-bottom: 24px;
-}
-.auto-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-top: 1px solid var(--driftwood);
-  padding-top: 24px;
-}
-.auto-meta-row {
+.viz-head {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--fog);
 }
-.auto-meta-key {
+.viz-title {
   font-family: var(--ff-mono);
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--graphite-soft);
-}
-.auto-meta-val {
-  font-weight: 500;
-  color: var(--ink);
-}
-.auto-content {
+  color: var(--magenta);
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  gap: 8px;
+}
+.viz-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--magenta);
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+.viz-status {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--graphite);
+}
+.viz-status .dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2ed573;
+  margin-right: 6px;
+  vertical-align: middle;
+  animation: pulse-dot 1.6s ease-in-out infinite;
 }
 
-/* === Source grid (Automation 01) === */
-.src-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  border-radius: var(--r-card);
-  padding: 20px;
+/* === VIZ 01 - NETWORK === */
+.viz-01 {
+  height: 360px;
+  position: relative;
 }
-.src-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: var(--r-btn);
-  background: var(--canvas);
-  border: 1px solid transparent;
-  transition: all .2s;
+.viz-01 svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
-.src-card:hover {
-  border-color: var(--magenta-line);
-  background: var(--magenta-soft);
+.viz-01 .src-node {
+  cursor: pointer;
 }
-.src-icon {
-  width: 28px; height: 28px;
-  border-radius: var(--r-btn);
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: var(--ink);
+.viz-01 .src-bg {
+  fill: var(--canvas);
+  stroke: var(--fog);
+  stroke-width: 1;
+  transition: all .25s;
 }
-.src-icon svg { width: 14px; height: 14px; }
-.src-name {
-  font-size: 13px;
+.viz-01 .src-node:hover .src-bg {
+  fill: var(--magenta-soft);
+  stroke: var(--magenta-line);
+}
+.viz-01 .src-text {
+  fill: var(--ink);
+  font-family: var(--ff);
+  font-size: 12px;
   font-weight: 500;
-  color: var(--ink);
+  pointer-events: none;
 }
-.src-meta {
+.viz-01 .src-meta {
+  fill: var(--graphite-soft);
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.viz-01 .flow-path {
+  fill: none;
+  stroke: var(--driftwood);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 4;
+  opacity: .6;
+}
+.viz-01 .flow-path.active {
+  stroke: var(--magenta);
+  opacity: 1;
+  animation: dash-flow 1s linear infinite;
+}
+@keyframes dash-flow { to { stroke-dashoffset: -12; } }
+.viz-01 .src-pulse {
+  fill: var(--magenta);
+  opacity: 0;
+}
+.viz-01 .collector-bg {
+  fill: var(--frame);
+  stroke: var(--magenta);
+  stroke-width: 1.5;
+}
+.viz-01 .collector-text {
+  fill: #fff;
+  font-family: var(--ff-mono);
   font-size: 10px;
   font-weight: 500;
-  color: var(--graphite-soft);
-  font-family: var(--ff-mono);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+.viz-01 .collector-num {
+  fill: var(--magenta);
+  font-family: var(--ff);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+}
+.viz-01 .particle {
+  fill: var(--magenta);
+}
+.viz-01-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--fog);
+}
+.viz-01-stat {
+  text-align: center;
+}
+.viz-01-stat-num {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  font-feature-settings: "tnum";
+}
+.viz-01-stat-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  margin-top: 4px;
 }
 
 .tech-strip {
@@ -976,150 +389,111 @@ nav.scrolled .nav-cta {
   letter-spacing: 0.04em;
   color: var(--ink);
 }
-.tech-pill .sig {
-  width: 5px; height: 5px;
-  background: var(--magenta);
-  border-radius: 50%;
-}
+.tech-pill .sig { width: 5px; height: 5px; background: var(--magenta); border-radius: 50%; }
 
-.live-counter {
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  border-radius: var(--r-card);
-  padding: 28px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  align-items: center;
-}
-.lc-stat-num {
-  font-size: 56px;
-  font-weight: 700;
-  letter-spacing: -0.027em;
-  line-height: 0.96;
-  color: var(--ink);
-  font-feature-settings: "tnum";
-}
-.lc-stat-label {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--graphite);
-  margin-top: 6px;
-}
-.lc-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.lc-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-top: 1px solid var(--fog);
-  font-size: 13px;
-}
-.lc-row:first-child { border-top: none; padding-top: 0; }
-.lc-row-key {
-  color: var(--graphite);
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-.lc-row-val {
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.005em;
-}
-
-/* === Filter / Funnel (Automation 02) === */
-.funnel-card {
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  border-radius: var(--r-card);
-  padding: 32px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
-}
-.funnel-viz {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 220px;
+/* === VIZ 02 - EMBEDDING === */
+.viz-02 {
+  height: 380px;
   position: relative;
 }
-.funnel-svg { width: 200px; height: 200px; }
-.funnel-num-top, .funnel-num-bottom {
-  position: absolute;
-  font-weight: 700;
-  letter-spacing: -0.022em;
-  line-height: 1;
+.viz-02 svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
-.funnel-num-top {
-  top: 22px;
-  font-size: 22px;
-  color: var(--graphite);
+.viz-02 .axis-line {
+  stroke: var(--fog);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
 }
-.funnel-num-bottom {
-  bottom: 22px;
-  font-size: 36px;
-  background: var(--grad-pow);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.funnel-num-label {
+.viz-02 .axis-label {
+  fill: var(--graphite-soft);
   font-family: var(--ff-mono);
   font-size: 9px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--graphite);
-  margin-top: 4px;
-  text-align: center;
 }
-.funnel-rules {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.viz-02 .cluster-bg {
+  fill: url(#clusterGrad);
+  filter: blur(2px);
+  opacity: .85;
 }
-.funnel-rule {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid var(--fog);
+.viz-02 .cluster-ring {
+  fill: none;
+  stroke: var(--magenta);
+  stroke-width: 1;
+  opacity: .3;
+  stroke-dasharray: 3 3;
 }
-.funnel-rule:first-child { border-top: none; padding-top: 0; }
-.funnel-rule-tag {
+.viz-02 .cluster-core {
+  fill: var(--magenta);
+}
+.viz-02 .cluster-label {
+  fill: var(--bone);
   font-family: var(--ff-mono);
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--magenta);
-  flex-shrink: 0;
-  width: 24px;
-  padding-top: 2px;
 }
-.funnel-rule-text {
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--ink);
+.viz-02 .item-dot {
+  cursor: pointer;
+  transition: r .2s, stroke-width .2s;
+}
+.viz-02 .item-dot:hover {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.viz-02 .item-line {
+  stroke: var(--magenta);
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+  opacity: 0;
+  pointer-events: none;
+}
+.viz-02 .item-line.active {
+  opacity: .5;
+  animation: dash-flow 1s linear infinite;
+}
+.viz-02 .item-label {
+  fill: var(--ink);
+  font-family: var(--ff-mono);
+  font-size: 10px;
   font-weight: 500;
+  pointer-events: none;
+  opacity: 0;
 }
-.funnel-rule-sub {
-  display: block;
+.viz-02 .item-label.active {
+  opacity: 1;
+}
+.viz-02 .item-score {
+  fill: var(--magenta);
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.viz-02-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--fog);
+}
+.viz-02-info-block .label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--graphite);
-  font-weight: 400;
-  font-size: 12.5px;
-  margin-top: 2px;
+  margin-bottom: 6px;
+}
+.viz-02-info-block .val {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
 }
 
 .dna-card {
@@ -1205,137 +579,298 @@ nav.scrolled .nav-cta {
   border-radius: var(--r-pill);
 }
 
-/* === Feed (Automation 03) === */
-.browser {
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  border-radius: var(--r-card-lg);
-  overflow: hidden;
+/* === MACOS WINDOW === */
+.macos-wrap {
+  padding: 60px 32px 80px;
+  background: linear-gradient(180deg, var(--canvas-warm), var(--canvas));
+  position: relative;
 }
-.browser-bar {
-  background: var(--canvas);
-  border-bottom: 1px solid var(--fog);
-  padding: 12px 16px;
+.macos-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(226,20,139,.04), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(156,45,143,.03), transparent 40%);
+  pointer-events: none;
+}
+.macos {
+  max-width: 1080px;
+  margin: 0 auto;
+  background: var(--bone);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 0.5px rgba(0,0,0,.18),
+    0 30px 60px -15px rgba(0,0,0,.32),
+    0 16px 24px -12px rgba(0,0,0,.18),
+    0 4px 8px -2px rgba(0,0,0,.08),
+    0 0 0 1px rgba(255,255,255,.6) inset;
+  position: relative;
+  isolation: isolate;
+}
+.macos-titlebar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  height: 38px;
+  padding: 0 14px;
+  background: linear-gradient(180deg, #f6f5f1, #ebe9e3);
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  position: relative;
+  user-select: none;
 }
-.browser-dots {
-  display: flex; gap: 6px;
-}
-.browser-dots span {
-  width: 11px; height: 11px;
-  border-radius: 50%;
-  background: var(--driftwood);
-}
-.browser-url {
-  flex: 1;
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  border-radius: var(--r-btn);
-  padding: 6px 12px;
-  font-family: var(--ff-mono);
-  font-size: 12px;
-  color: var(--graphite);
+.tl-group {
   display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.tl {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: filter .15s;
+  border: 0.5px solid rgba(0,0,0,.12);
+}
+.tl-close { background: #ff5f57; }
+.tl-min { background: #febc2e; }
+.tl-max { background: #28c840; }
+.tl svg {
+  width: 7px;
+  height: 7px;
+  opacity: 0;
+  transition: opacity .15s;
+}
+.macos:hover .tl svg { opacity: 1; }
+.tl-close svg { color: #4d0000; }
+.tl-min svg { color: #995700; }
+.tl-max svg { color: #006500; }
+.tl:hover { filter: brightness(.95); }
+.macos-title {
+  position: absolute;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  pointer-events: none;
+}
+.macos-title-meta {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  max-width: 420px;
 }
-.browser-body {
+.macos-title-meta .live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #2ed573;
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+.macos-actions {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  position: relative;
+  z-index: 2;
+}
+.macos-action {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--graphite);
+  transition: all .15s;
+}
+.macos-action:hover { background: rgba(0,0,0,.06); color: var(--ink); }
+.macos-action svg { width: 14px; height: 14px; }
+
+.macos-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--fog);
+}
+.feed-segment {
+  display: flex;
+  background: var(--canvas-warm);
+  padding: 3px;
+  border-radius: 8px;
+  gap: 2px;
+}
+.feed-seg-btn {
+  font-family: var(--ff);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--graphite);
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: -0.005em;
+}
+.feed-seg-btn:hover { color: var(--ink); }
+.feed-seg-btn.active {
+  background: var(--bone);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 0.5px rgba(0,0,0,.04);
+}
+.feed-region-select {
+  font-family: var(--ff);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--canvas-warm);
+  border: 0.5px solid rgba(0,0,0,.06);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  outline: none;
+}
+.feed-search {
+  margin-left: auto;
+  position: relative;
+}
+.feed-search input {
+  background: var(--canvas-warm);
+  border: 0.5px solid rgba(0,0,0,.06);
+  border-radius: 6px;
+  padding: 5px 10px 5px 28px;
+  font-family: var(--ff);
+  font-size: 12px;
+  color: var(--ink);
+  width: 180px;
+  outline: none;
+  transition: all .15s;
+}
+.feed-search input:focus {
+  background: var(--bone);
+  border-color: var(--magenta);
+  width: 220px;
+}
+.feed-search svg {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  color: var(--graphite);
+}
+
+.macos-body {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  min-height: 640px;
+  grid-template-columns: 220px 1fr;
+  height: 720px;
+  position: relative;
+  overflow: hidden;
 }
-.feed-sidebar {
+.feed-side {
+  background: linear-gradient(180deg, #f6f5f1, #f2f0eb);
   border-right: 1px solid var(--fog);
-  padding: 24px 20px;
+  padding: 16px 12px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  background: var(--canvas);
+  gap: 4px;
+  overflow-y: auto;
 }
-.feed-filter {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.feed-filter label {
+.feed-side h5 {
   font-family: var(--ff-mono);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--graphite);
+  color: var(--graphite-soft);
+  padding: 6px 10px 4px;
+  margin-top: 12px;
 }
-.feed-select {
-  background: var(--bone);
-  border: 1px solid var(--fog);
-  border-radius: var(--r-btn);
-  padding: 8px 10px;
-  font-family: var(--ff);
+.feed-side h5:first-child { margin-top: 0; }
+.feed-side-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
   font-size: 13px;
   font-weight: 500;
   color: var(--ink);
-  cursor: pointer;
+  transition: background .15s;
   letter-spacing: -0.005em;
 }
-.feed-select:focus {
-  outline: none;
-  border-color: var(--magenta);
-  box-shadow: 0 0 0 1px var(--magenta);
+.feed-side-item:hover { background: rgba(0,0,0,.04); }
+.feed-side-item.active { background: var(--magenta); color: #fff; }
+.feed-side-item.active .feed-side-cnt { color: rgba(255,255,255,.7); }
+.feed-side-item svg {
+  width: 14px;
+  height: 14px;
+  color: var(--graphite);
 }
-.feed-stat {
+.feed-side-item.active svg { color: #fff; }
+.feed-side-cnt {
+  margin-left: auto;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--graphite-soft);
+  font-weight: 500;
+}
+.feed-side-stats {
   margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid var(--driftwood);
+  padding: 16px 10px 0;
+  border-top: 1px solid var(--fog);
 }
-.feed-stat-num {
-  font-size: 36px;
+.feed-side-stat-num {
+  font-size: 24px;
   font-weight: 700;
-  letter-spacing: -0.024em;
-  line-height: 1;
+  letter-spacing: -0.014em;
   color: var(--ink);
   font-feature-settings: "tnum";
+  line-height: 1;
 }
-.feed-stat-label {
+.feed-side-stat-label {
   font-family: var(--ff-mono);
   font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--graphite);
   margin-top: 4px;
 }
+
 .feed-main {
-  padding: 24px;
+  background: var(--bone);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-height: 640px;
-  overflow-y: auto;
+  overflow: hidden;
 }
-.feed-main::-webkit-scrollbar { width: 6px; }
-.feed-main::-webkit-scrollbar-track { background: transparent; }
-.feed-main::-webkit-scrollbar-thumb {
-  background: var(--driftwood);
-  border-radius: 3px;
-}
-.feed-toolbar {
+.feed-bar {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
-  padding-bottom: 12px;
+  justify-content: space-between;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--fog);
-  margin-bottom: 4px;
+  background: var(--bone);
 }
-.feed-toolbar h3 {
+.feed-bar h3 {
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.014em;
   color: var(--ink);
 }
-.feed-toolbar .cnt {
+.feed-bar .cnt {
   font-family: var(--ff-mono);
   font-size: 11px;
   font-weight: 500;
@@ -1343,139 +878,147 @@ nav.scrolled .nav-cta {
   text-transform: uppercase;
   color: var(--graphite);
 }
-
-.fc {
-  background: var(--canvas);
-  border: 1px solid transparent;
-  border-radius: var(--r-card);
-  padding: 18px;
+.feed-list {
+  overflow-y: auto;
+  padding: 12px 16px 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  transition: all .2s ease;
+  gap: 8px;
+  flex: 1;
+}
+.feed-list::-webkit-scrollbar { width: 8px; }
+.feed-list::-webkit-scrollbar-track { background: transparent; }
+.feed-list::-webkit-scrollbar-thumb {
+  background: var(--driftwood);
+  border-radius: 4px;
+  border: 2px solid var(--bone);
+}
+.feed-list::-webkit-scrollbar-thumb:hover {
+  background: var(--graphite-soft);
+}
+
+.fc {
+  background: var(--bone);
+  border: 1px solid var(--fog);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   cursor: pointer;
+  transition: all .15s;
+  position: relative;
 }
 .fc:hover {
-  background: var(--bone);
-  border-color: var(--fog);
+  border-color: var(--magenta);
+  background: var(--canvas);
+  transform: translateX(2px);
 }
 .fc-top {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
 }
 .fc-score {
   font-family: var(--ff-mono);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
-  padding: 4px 8px;
-  border-radius: var(--r-btn);
+  padding: 3px 7px;
+  border-radius: 6px;
   flex-shrink: 0;
   font-feature-settings: "tnum";
   letter-spacing: 0.02em;
 }
-.fc-score.hi { background: #1a4d28; color: #b8eecb; }
-.fc-score.mid { background: #4d3d1a; color: #f0d693; }
+.fc-score.hi { background: #1f5132; color: #b8eecb; }
+.fc-score.mid { background: #5c4513; color: #f0d693; }
 .fc-score.lo { background: #2a2a2a; color: #c0c0c0; }
 .fc-title {
   flex: 1;
-  font-size: 16px;
+  font-size: 14.5px;
   font-weight: 600;
-  letter-spacing: -0.014em;
-  line-height: 1.25;
+  letter-spacing: -0.012em;
+  line-height: 1.3;
   color: var(--ink);
 }
 .fc-fav {
   background: none;
   border: none;
   cursor: pointer;
-  width: 28px; height: 28px;
-  border-radius: var(--r-btn);
+  width: 24px; height: 24px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--graphite-soft);
-  transition: all .2s;
+  transition: all .15s;
+  flex-shrink: 0;
 }
-.fc-fav:hover { color: var(--ink); background: var(--bone); }
+.fc-fav:hover { color: var(--ink); background: rgba(0,0,0,.06); }
 .fc-fav.on { color: #d4a017; }
-.fc-fav svg { width: 16px; height: 16px; }
+.fc-fav svg { width: 14px; height: 14px; }
+
 .fc-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
   font-family: var(--ff-mono);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 500;
   color: var(--graphite);
   letter-spacing: 0.02em;
 }
-.fc-meta .sep {
-  width: 3px; height: 3px;
-  background: var(--driftwood);
-  border-radius: 50%;
-}
-.fc-sum {
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--ink-soft);
-}
+.fc-meta .sep { width: 3px; height: 3px; background: var(--driftwood); border-radius: 50%; }
+
 .fc-why {
   background: var(--magenta-soft);
-  border-radius: var(--r-btn);
-  padding: 10px 14px;
+  border-radius: 6px;
+  padding: 8px 10px;
   border-left: 2px solid var(--magenta);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink);
 }
-.fc-why-label {
+.fc-why strong {
+  display: block;
   font-family: var(--ff-mono);
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--magenta);
-  margin-bottom: 4px;
-  display: block;
-}
-.fc-why-text {
-  font-size: 12.5px;
-  font-weight: 500;
-  line-height: 1.45;
-  color: var(--ink);
-  font-style: italic;
+  margin-bottom: 3px;
 }
 .fc-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 .fc-tags {
   display: flex;
-  gap: 6px;
+  gap: 5px;
 }
 .fc-tag {
   font-family: var(--ff-mono);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--graphite);
-  padding: 3px 8px;
+  padding: 3px 7px;
   border: 1px solid var(--fog);
-  border-radius: var(--r-pill);
-  background: var(--bone);
+  border-radius: 4px;
+  background: var(--canvas);
 }
 .fc-action {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   font-family: var(--ff);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
-  padding: 6px 12px;
-  border-radius: var(--r-btn);
+  padding: 4px 10px;
+  border-radius: 6px;
   background: transparent;
   border: 1px solid var(--magenta);
   color: var(--magenta);
@@ -1483,23 +1026,288 @@ nav.scrolled .nav-cta {
   transition: all .15s;
   letter-spacing: -0.005em;
 }
-.fc-action:hover {
-  background: var(--magenta);
-  color: #fff;
-}
-.fc-action svg { width: 12px; height: 12px; }
+.fc-action:hover { background: var(--magenta); color: #fff; }
+.fc-action svg { width: 11px; height: 11px; }
 
-.feed-empty {
-  text-align: center;
-  padding: 80px 20px;
+/* === ARTICLE SHEET === */
+.sheet-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(20,20,20,.4);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 5;
+  display: none;
+  opacity: 0;
+}
+.sheet-bg.open { display: block; }
+.sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bone);
+  border-radius: 12px 12px 0 0;
+  z-index: 6;
+  display: none;
+  flex-direction: column;
+  height: 92%;
+  box-shadow: 0 -10px 30px -10px rgba(0,0,0,.25);
+  transform: translateY(100%);
+}
+.sheet.open { display: flex; }
+.sheet-handle {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 4px;
+  cursor: grab;
+}
+.sheet-handle::before {
+  content: "";
+  width: 36px;
+  height: 4px;
+  background: var(--driftwood);
+  border-radius: 999px;
+}
+.sheet-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px 12px;
+  border-bottom: 1px solid var(--fog);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.sheet-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--ff);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--magenta);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background .15s;
+  letter-spacing: -0.005em;
+}
+.sheet-close:hover { background: var(--magenta-soft); }
+.sheet-close svg { width: 12px; height: 12px; }
+.sheet-actions { display: flex; gap: 4px; }
+.sheet-act {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   color: var(--graphite);
+  transition: all .15s;
+}
+.sheet-act:hover { background: rgba(0,0,0,.06); color: var(--ink); }
+.sheet-act svg { width: 14px; height: 14px; }
+.sheet-body {
+  overflow-y: auto;
+  padding: 32px 48px 80px;
+  flex: 1;
+}
+.sheet-body::-webkit-scrollbar { width: 10px; }
+.sheet-body::-webkit-scrollbar-track { background: transparent; }
+.sheet-body::-webkit-scrollbar-thumb {
+  background: var(--driftwood);
+  border-radius: 5px;
+  border: 3px solid var(--bone);
+}
+.sheet-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   font-family: var(--ff-mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: var(--graphite);
+  margin-bottom: 12px;
+}
+.sheet-meta .pip {
+  width: 4px;
+  height: 4px;
+  background: var(--magenta);
+  border-radius: 50%;
+}
+.sheet h2.sheet-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 16px;
+  max-width: 720px;
+}
+.sheet-byline {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--graphite);
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--fog);
+}
+.sheet-byline strong { color: var(--ink); font-weight: 600; }
+.sheet-byline .pip {
+  width: 3px; height: 3px; background: var(--driftwood); border-radius: 50%;
+}
+.sheet-lead {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+  margin-bottom: 24px;
+  letter-spacing: -0.008em;
+  max-width: 680px;
+}
+.sheet-content {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  max-width: 680px;
+}
+.sheet-content p { margin-bottom: 18px; }
+.sheet-content p strong { color: var(--ink); }
+.sheet-dna-block {
+  margin-top: 32px;
+  background: var(--canvas);
+  border-radius: 12px;
+  padding: 20px 24px;
+  border-left: 3px solid var(--magenta);
+  max-width: 680px;
+}
+.sheet-dna-block .label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  margin-bottom: 8px;
+}
+.sheet-dna-block p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0;
+}
+.sheet-cta {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  max-width: 680px;
 }
 
-/* === Insteek (Automation 04) === */
+/* === VIZ 04 - PIPELINE === */
+.viz-04 {
+  background: var(--frame);
+  color: #fff;
+  border-radius: var(--r-card-lg);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.viz-04::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: 0; right: 0; height: 1px;
+  background: var(--grad-pow);
+}
+.viz-04-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin-top: 16px;
+  position: relative;
+}
+.viz-04-stage {
+  position: relative;
+  padding: 16px 12px;
+  text-align: left;
+}
+.viz-04-stage::after {
+  content: "";
+  position: absolute;
+  top: 36px;
+  right: -6px;
+  width: 12px;
+  height: 1px;
+  background: rgba(255,255,255,.15);
+}
+.viz-04-stage:last-child::after { display: none; }
+.viz-04-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 12px;
+  transition: all .3s;
+}
+.viz-04-stage.active .viz-04-icon {
+  background: var(--magenta-soft);
+  border-color: var(--magenta);
+  color: var(--magenta);
+  box-shadow: 0 0 16px rgba(226,20,139,.3);
+}
+.viz-04-icon svg { width: 16px; height: 16px; }
+.viz-04-num {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+  margin-bottom: 4px;
+}
+.viz-04-stage.active .viz-04-num { color: var(--magenta); }
+.viz-04-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.008em;
+  color: rgba(255,255,255,.85);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.viz-04-stage.active .viz-04-label { color: #fff; }
+.viz-04-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,.4);
+  line-height: 1.4;
+}
+.viz-04-progress {
+  margin-top: 24px;
+  height: 4px;
+  background: rgba(255,255,255,.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.viz-04-progress-bar {
+  height: 100%;
+  background: var(--grad-pow);
+  width: 0%;
+  border-radius: 999px;
+  transition: width .3s;
+}
+
+/* === INSTEEK === */
 .insteek-grid {
   display: grid;
   grid-template-columns: 380px 1fr;
@@ -1536,6 +1344,7 @@ nav.scrolled .nav-cta {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  align-items: center;
   font-family: var(--ff-mono);
   font-size: 11px;
   color: var(--graphite);
@@ -1544,7 +1353,6 @@ nav.scrolled .nav-cta {
   width: 3px; height: 3px;
   background: var(--driftwood);
   border-radius: 50%;
-  align-self: center;
 }
 .in-source-sum {
   font-size: 14px;
@@ -1558,7 +1366,6 @@ nav.scrolled .nav-cta {
   border-left: 2px solid var(--magenta);
   font-size: 12.5px;
   font-weight: 500;
-  font-style: italic;
   color: var(--ink);
   line-height: 1.45;
 }
@@ -1566,6 +1373,50 @@ nav.scrolled .nav-cta {
   display: flex;
   gap: 8px;
   margin-top: 4px;
+}
+.in-jumper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--fog);
+}
+.in-jumper .label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  margin-bottom: 6px;
+}
+.in-jumper-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.in-jumper-btn {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+  border-radius: 5px;
+  background: var(--canvas);
+  border: 1px solid var(--fog);
+  color: var(--graphite);
+  cursor: pointer;
+  transition: all .15s;
+}
+.in-jumper-btn:hover {
+  border-color: var(--magenta);
+  color: var(--magenta);
+}
+.in-jumper-btn.active {
+  background: var(--magenta);
+  border-color: var(--magenta);
+  color: #fff;
 }
 
 .insteek-output {
@@ -1575,7 +1426,7 @@ nav.scrolled .nav-cta {
   padding: 36px;
   position: relative;
   overflow: hidden;
-  min-height: 580px;
+  min-height: 600px;
 }
 .insteek-output::before {
   content: "";
@@ -1625,17 +1476,28 @@ nav.scrolled .nav-cta {
 .in-output-text {
   font-family: var(--ff-mono);
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.75;
   color: rgba(255,255,255,.92);
   white-space: pre-wrap;
   word-wrap: break-word;
   position: relative;
-  min-height: 400px;
+  min-height: 460px;
 }
 .in-output-text strong {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 8px;
   color: var(--magenta);
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.in-output-text strong:first-child { margin-top: 0; }
+.in-output-text em {
+  color: rgba(255,255,255,.55);
+  font-style: italic;
+  font-size: 12px;
 }
 .cursor-blink {
   display: inline-block;
@@ -1648,109 +1510,26 @@ nav.scrolled .nav-cta {
 }
 @keyframes blink { 50% { opacity: 0; } }
 
-.insteek-note {
-  margin-top: 28px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: rgba(255,255,255,.55);
-}
-.insteek-note-block strong {
-  display: block;
-  font-family: var(--ff-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--magenta);
-  margin-bottom: 6px;
-}
-
-/* ========== FOOTER ========== */
-footer {
-  background: var(--frame);
-  color: #fff;
-  padding: 80px 32px 32px;
-}
-.footer-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-}
-.footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 48px;
-  padding-bottom: 48px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-.footer-brand-mark {
-  width: 32px; height: 32px;
-  background: var(--grad-pow);
-  border-radius: 8px;
-  margin-bottom: 16px;
-}
-.footer-brand h3 {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.014em;
-  margin-bottom: 8px;
-}
-.footer-brand p {
-  font-size: 14px;
-  color: rgba(255,255,255,.5);
-  line-height: 1.5;
-  max-width: 320px;
-}
-.footer-col h4 {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.4);
-  margin-bottom: 16px;
-}
-.footer-col ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.footer-col a {
-  color: rgba(255,255,255,.75);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color .2s;
-  cursor: pointer;
-}
+/* === FOOTER === */
+footer { background: var(--frame); color: #fff; padding: 80px 32px 32px; }
+.footer-inner { max-width: var(--max); margin: 0 auto; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.footer-brand-mark { width: 32px; height: 32px; background: var(--grad-pow); border-radius: 8px; margin-bottom: 16px; }
+.footer-brand h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.014em; margin-bottom: 8px; }
+.footer-brand p { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.5; max-width: 320px; }
+.footer-col h4 { font-family: var(--ff-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col a { color: rgba(255,255,255,.75); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; cursor: pointer; }
 .footer-col a:hover { color: #fff; }
-.footer-bot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 32px;
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.4);
-  flex-wrap: wrap;
-  gap: 16px;
-}
+.footer-bot { display: flex; justify-content: space-between; align-items: center; padding-top: 32px; font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,.4); flex-wrap: wrap; gap: 16px; }
 
-/* ========== UTILS ========== */
+/* === UTILS === */
 .reveal { opacity: 0; transform: translateY(20px); }
 .icon { width: 16px; height: 16px; flex-shrink: 0; }
 .icon-sm { width: 12px; height: 12px; }
 .icon-lg { width: 20px; height: 20px; }
 
-/* ========== RESPONSIVE ========== */
+/* === RESPONSIVE === */
 @media (max-width: 1024px) {
   .hero-inner { grid-template-columns: 1fr; gap: 40px; }
   .hero-visual { height: 380px; }
@@ -1759,34 +1538,42 @@ footer {
   .cv-collab { grid-column: span 2; }
   .auto-inner { grid-template-columns: 1fr; gap: 32px; }
   .auto-side { position: relative; top: auto; }
-  .funnel-card { grid-template-columns: 1fr; }
   .insteek-grid { grid-template-columns: 1fr; }
   .insteek-source { position: relative; top: auto; }
-  .browser-body { grid-template-columns: 1fr; }
-  .feed-sidebar {
+  .macos-body { grid-template-columns: 1fr; height: auto; }
+  .feed-side {
     border-right: none;
     border-bottom: 1px solid var(--fog);
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 8px;
   }
-  .feed-filter { flex: 1; min-width: 140px; }
-  .feed-stat { width: 100%; padding-top: 16px; }
+  .feed-side h5 { width: 100%; padding: 4px 10px 0; }
+  .feed-side-stats { width: 100%; margin-top: 8px; padding-top: 12px; }
+  .feed-list { max-height: 600px; }
   .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
   .section-head { grid-template-columns: 1fr; gap: 24px; }
+  .viz-04-grid { grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .viz-04-stage::after { display: none; }
 }
 @media (max-width: 768px) {
   :root { --gap-section: 64px; }
   .canvas-grid { grid-template-columns: 1fr; }
   .cv-collab { grid-column: span 1; }
   .brief-grid { grid-template-columns: 1fr; }
-  .src-grid { grid-template-columns: 1fr; }
-  .live-counter { grid-template-columns: 1fr; gap: 20px; }
   .nav-links { display: none; }
-  .insteek-note { grid-template-columns: 1fr; }
   .footer-top { grid-template-columns: 1fr; }
   .jtbd-block { padding: 32px; }
   .jtbd-block .quote { font-size: 22px; }
+  .viz-04-grid { grid-template-columns: 1fr 1fr; }
+  .feed-search input { width: 120px; }
+  .sheet-body { padding: 24px 24px 80px; }
+  .sheet h2.sheet-title { font-size: 24px; }
+  .sheet-lead { font-size: 16px; }
+  .viz-01 { height: 460px; }
+  .viz-01-stats { grid-template-columns: repeat(2, 1fr); }
+  .viz-02 { height: 320px; }
+  .viz-02-info { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -1808,7 +1595,6 @@ footer {
     <symbol id="i-news" viewBox="0 0 16 16"><rect x="2.5" y="3.5" width="11" height="9" rx="1" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M5 6h6M5 8.5h6M5 11h4" stroke="currentColor" stroke-width="1.3"/></symbol>
     <symbol id="i-tv" viewBox="0 0 16 16"><rect x="2" y="4" width="12" height="8" rx="1" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M5 14l3-2 3 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></symbol>
     <symbol id="i-radio" viewBox="0 0 16 16"><circle cx="8" cy="9" r="3.5" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="8" cy="9" r="1" fill="currentColor"/><path d="M3.5 5.5L11 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><rect x="2" y="5.5" width="12" height="8.5" rx="1" stroke="currentColor" stroke-width="1.3" fill="none"/></symbol>
-    <symbol id="i-feed" viewBox="0 0 16 16"><path d="M2.5 3.5a10 10 0 0 1 10 10M2.5 7a6.5 6.5 0 0 1 6.5 6.5" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/><circle cx="3.5" cy="12.5" r="1" fill="currentColor"/></symbol>
     <symbol id="i-shield" viewBox="0 0 16 16"><path d="M8 1.5l5.5 2v4.5c0 3-2.5 5.5-5.5 6.5C5 13.5 2.5 11 2.5 8V3.5L8 1.5z" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linejoin="round"/><path d="M5.5 8l2 2 3-3" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/></symbol>
     <symbol id="i-x" viewBox="0 0 16 16"><path d="M3 13L13 3M3 3l10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
     <symbol id="i-twitter" viewBox="0 0 16 16"><path d="M2 3l5.5 6.8L2.5 13h1.5l4-4 3.5 4H14L8.5 7.5 13.5 3H12L8 7l-3-4H2z" fill="currentColor"/></symbol>
@@ -1818,17 +1604,26 @@ footer {
     <symbol id="i-flame" viewBox="0 0 16 16"><path d="M8 14c2.8 0 5-2 5-4.5 0-2-1.5-3-2.5-3.5.5 1 0 2-1 1.5-1.5-.7-2-3-1.5-5-2 1-4 3.5-4 6.5C4 12 5.2 14 8 14z" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linejoin="round"/></symbol>
     <symbol id="i-doc" viewBox="0 0 16 16"><path d="M3.5 1.5h6L13 5v9.5h-9.5v-13z" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linejoin="round"/><path d="M9.5 1.5V5H13M5.5 8h5M5.5 10.5h5M5.5 6h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
     <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-share" viewBox="0 0 16 16"><path d="M8 2v8M5 5l3-3 3 3M3 9v4h10V9" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-text" viewBox="0 0 16 16"><path d="M3 4h10M5 8h6M3 12h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+    <symbol id="i-list" viewBox="0 0 16 16"><circle cx="3" cy="4" r="1" fill="currentColor"/><circle cx="3" cy="8" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><path d="M6 4h8M6 8h8M6 12h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 16 16"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3" fill="none"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 16 16"><path d="M5 4a2 2 0 0 1 2-2c1 0 1.5.5 1.5 1 0-.5.5-1 1.5-1a2 2 0 0 1 2 2c.8.4 1 1.2 1 2 0 .6-.3 1.2-.8 1.5.4.4.8 1 .8 1.7 0 1.2-1 2-2 2 0 1-.5 2-2 2-1 0-1.5-.5-1.5-1 0 .5-.5 1-1.5 1-1.5 0-2-1-2-2-1 0-2-.8-2-2 0-.7.4-1.3.8-1.7C2.3 7.2 2 6.6 2 6c0-.8.2-1.6 1-2-.2-.8.5-1.5 1.5-1.5" stroke="currentColor" stroke-width="1.2" fill="none"/></symbol>
+    <symbol id="i-input" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M5 7h6M5 9.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 16 16"><path d="M4 2h8v12l-4-3-4 3z" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linejoin="round"/></symbol>
+    <symbol id="i-output" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4M3 4v8" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cog" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M8 1v2M8 13v2M3 8H1M15 8h-2M3.5 3.5l1.5 1.5M11 11l1.5 1.5M3.5 12.5L5 11M11 5l1.5-1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
   </defs>
 </svg>
 
 <div id="progress"></div>
 
-<!-- Announcement banner -->
+<!-- Banner -->
 <div class="banner">
   <div class="banner-inner">
     <span class="banner-dot"></span>
     <span>Concept-demo voor PowNed, gemaakt door HvA Smart Media Production studenten</span>
-    <a href="#brief" class="banner-link">Bekijk de brief</a>
+    <a class="banner-link" data-to="brief">Bekijk de brief</a>
   </div>
 </div>
 
@@ -1842,7 +1637,7 @@ footer {
     <div class="nav-links">
       <button class="nav-link active" data-to="brief">Brief</button>
       <button class="nav-link" data-to="canvas">Canvas</button>
-      <button class="nav-link" data-to="auto-intro">Automatiseringen</button>
+      <button class="nav-link" data-to="auto-intro">Pipeline</button>
       <button class="nav-link" data-to="auto-3">Feed</button>
       <button class="nav-link" data-to="auto-4">Insteek</button>
     </div>
@@ -1862,7 +1657,7 @@ footer {
         <span>Concept-demo voor PowNed</span>
       </div>
       <h1 class="t-display">
-        Lokaal nieuws met landelijke <span class="accent">potentie</span>, elke ochtend op de redactietafel.
+        Lokaal nieuws met landelijke <span class="accent">potentie</span>, klaar voor het ochtendoverleg.
       </h1>
       <p class="lede">
         Een AI-agent die continu meer dan dertig nieuwsbronnen monitort, items scoort op PowNed-relevantie en de redactie iedere ochtend voor 08:30 een feed van vijftig kansrijke verhalen oplevert.
@@ -1877,39 +1672,28 @@ footer {
         </button>
       </div>
     </div>
-
     <div class="hero-visual">
       <div class="hero-panel hero-panel-1">
-        <div class="hp-head">
-          <span>Top items vandaag</span>
-          <span class="sig"></span>
-        </div>
+        <div class="hp-head"><span>Top items vandaag</span><span class="sig"></span></div>
         <div class="hp-row"><span class="hp-score">94</span><span class="hp-text">Snackbarpersoneel slaat overvaller</span></div>
         <div class="hp-row"><span class="hp-score">89</span><span class="hp-text">Buurt blokkeert asielbus Drenthe</span></div>
         <div class="hp-row"><span class="hp-score">85</span><span class="hp-text">Agent schiet hond neer Tilburg</span></div>
         <div class="hp-row"><span class="hp-score">82</span><span class="hp-text">Wethouder opgepakt voor fraude</span></div>
       </div>
       <div class="hero-panel hero-panel-2">
-        <div class="hp-head">
-          <span>PowNed-DNA score</span>
-          <span class="sig"></span>
-        </div>
+        <div class="hp-head"><span>PowNed-DNA score</span><span class="sig"></span></div>
         <div class="hp-stat">52 / 247</div>
         <div class="hp-stat-sub">items door filter, vandaag 06:14</div>
         <div class="hp-bar"><div class="hp-bar-fill" style="width:21%"></div></div>
       </div>
       <div class="hero-panel hero-panel-3">
-        <div class="hp-head">
-          <span>Bronnen actief</span>
-          <span class="sig"></span>
-        </div>
+        <div class="hp-head"><span>Bronnen actief</span><span class="sig"></span></div>
         <div class="hp-row"><svg class="icon" style="color:rgba(255,255,255,.6)"><use href="#i-news"/></svg><span class="hp-text">Telegraaf, AD, NOS</span></div>
         <div class="hp-row"><svg class="icon" style="color:rgba(255,255,255,.6)"><use href="#i-radio"/></svg><span class="hp-text">NH, AT5, RTV Drenthe</span></div>
         <div class="hp-row"><svg class="icon" style="color:rgba(255,255,255,.6)"><use href="#i-twitter"/></svg><span class="hp-text">Wilders, Baudet, MinPres</span></div>
       </div>
     </div>
   </div>
-
   <div class="hero-trust">
     <span><svg class="icon-sm"><use href="#i-clock"/></svg> Dagelijks 08:30</span>
     <span class="sep"></span>
@@ -1919,7 +1703,7 @@ footer {
   </div>
 </section>
 
-<!-- BRIEF / JTBD -->
+<!-- BRIEF -->
 <section class="section" id="brief">
   <div class="section-inner">
     <div class="section-head">
@@ -1931,14 +1715,12 @@ footer {
         Lokaal nieuws bevat veel potentie om uit te groeien tot landelijke verhalen, maar wordt nu te weinig en te laat gezien. Tientallen bronnen handmatig checken kost de redactie elke ochtend kostbare tijd.
       </p>
     </div>
-
     <div class="jtbd-block reveal">
       <div class="label">Jobs to be Done</div>
       <p class="quote">
         De redactie wil iedere ochtend voor <span class="em">08:30</span> een overzicht van de meest kansrijke lokale verhalen die landelijk potentieel hebben, zonder eerst dertig websites door te vlooien.
       </p>
     </div>
-
     <div class="brief-grid">
       <div class="brief-card reveal">
         <div class="label">Kernvraag</div>
@@ -1959,7 +1741,7 @@ footer {
   </div>
 </section>
 
-<!-- HC AI CANVAS -->
+<!-- CANVAS -->
 <section class="section section-warm" id="canvas">
   <div class="section-inner">
     <div class="section-head">
@@ -1968,71 +1750,20 @@ footer {
         <h2 class="t-h1">Het Human-Centered AI Canvas.</h2>
       </div>
       <p class="section-lede">
-        Onze concept-aanpak gevisualiseerd. De AI suggereert, de mens beslist. Elke beslissing van het systeem is uitlegbaar, terug te draaien en te corrigeren door de redactie.
+        Onze concept-aanpak gevisualiseerd. De AI suggereert, de mens beslist. Elke beslissing is uitlegbaar en terug te draaien.
       </p>
     </div>
-
-    <div class="canvas-grid" id="cGrid">
-      <div class="cv reveal" data-m="jtbd">
-        <div class="label">Jobs-to-be-Done</div>
-        <h4>Wat de redactie wil bereiken</h4>
-        <p>Lokale verhalen met landelijk potentieel snel signaleren.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv reveal" data-m="promise">
-        <div class="label">AI Promise</div>
-        <h4>Wat de technologie kan</h4>
-        <p>Continu monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv reveal" data-m="hact">
-        <div class="label">Human Activities</div>
-        <h4>Wat de mens blijft doen</h4>
-        <p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv reveal" data-m="hreinf">
-        <div class="label">Human Reinforcement</div>
-        <h4>Hoe de AI de mens versterkt</h4>
-        <p>Insteek-suggesties, sprekers aanbevelen, historische context aanleveren.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv reveal" data-m="benefits">
-        <div class="label">Benefits for Humans</div>
-        <h4>Wat het de redactie oplevert</h4>
-        <p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv reveal" data-m="mact">
-        <div class="label">Machine Activities</div>
-        <h4>Wat de machine doet</h4>
-        <p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv cv-collab reveal" data-m="collab">
-        <div class="label">Collaboration</div>
-        <h4>Mens en machine, samen scherp</h4>
-        <p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik. Filtering wordt steeds preciezer, in jullie eigen redactiestijl.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv reveal" data-m="bias">
-        <div class="label">Critical Thinking and Biases</div>
-        <h4>Risico's en blinde vlekken</h4>
-        <p>Filterbubbel risico, transparantie over scoring, bias in trainingsdata.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv reveal" data-m="impl">
-        <div class="label">Considerations and Implications</div>
-        <h4>Juridisch, ethisch, praktisch</h4>
-        <p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
-      <div class="cv reveal" data-m="change">
-        <div class="label">Change Management</div>
-        <h4>Hoe we het invoeren</h4>
-        <p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p>
-        <span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span>
-      </div>
+    <div class="canvas-grid">
+      <div class="cv reveal" data-m="jtbd"><div class="label">Jobs-to-be-Done</div><h4>Wat de redactie wil bereiken</h4><p>Lokale verhalen met landelijk potentieel snel signaleren.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv reveal" data-m="promise"><div class="label">AI Promise</div><h4>Wat de technologie kan</h4><p>Continu monitoren, scoren op PowNed-DNA, paywalls omzeilen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv reveal" data-m="hact"><div class="label">Human Activities</div><h4>Wat de mens blijft doen</h4><p>Eindredactie, invalshoek bepalen, ethiek bewaken, verhaal vertellen.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv reveal" data-m="hreinf"><div class="label">Human Reinforcement</div><h4>Hoe de AI de mens versterkt</h4><p>Insteek-suggesties, sprekers aanbevelen, historische context.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv reveal" data-m="benefits"><div class="label">Benefits for Humans</div><h4>Wat het de redactie oplevert</h4><p>Geen handmatig scrollen, focus op verhalen, sneller op locatie.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv reveal" data-m="mact"><div class="label">Machine Activities</div><h4>Wat de machine doet</h4><p>Scrapen, samenvatten, scoren, dedupliceren, categoriseren.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv cv-collab reveal" data-m="collab"><div class="label">Collaboration</div><h4>Mens en machine, samen scherp</h4><p>De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik. Filtering wordt steeds preciezer, in jullie eigen redactiestijl.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv reveal" data-m="bias"><div class="label">Critical Thinking and Biases</div><h4>Risico's en blinde vlekken</h4><p>Filterbubbel, transparantie over scoring, bias in trainingsdata.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv reveal" data-m="impl"><div class="label">Considerations and Implications</div><h4>Juridisch, ethisch, praktisch</h4><p>Paywall-bypass, privacy, scraping-richtlijnen, hostingkosten.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
+      <div class="cv reveal" data-m="change"><div class="label">Change Management</div><h4>Hoe we het invoeren</h4><p>Pilotfase, redactie-training, feedback-knop, geleidelijke uitbreiding.</p><span class="more">Lees meer <svg class="icon-sm"><use href="#i-arrow-right"/></svg></span></div>
     </div>
   </div>
 </section>
@@ -2040,9 +1771,7 @@ footer {
 <!-- Modal -->
 <div class="modal-bg" id="modal">
   <div class="modal">
-    <button class="modal-close" id="modalClose" aria-label="Sluiten">
-      <svg class="icon-sm"><use href="#i-x"/></svg>
-    </button>
+    <button class="modal-close" id="modalClose" aria-label="Sluiten"><svg class="icon-sm"><use href="#i-x"/></svg></button>
     <div class="label" id="mLabel"></div>
     <h3 id="mTitle"></h3>
     <div class="modal-body" id="mBody"></div>
@@ -2055,31 +1784,13 @@ footer {
     <div>
       <div class="section-eyebrow" style="color:var(--magenta)">Drie automatiseringen, één agent</div>
       <h2 class="t-h1">De Redactie Agent draait op drie verbonden automatiseringen.</h2>
-      <p style="margin-top:24px">
-        Elke automatisering vervangt een stuk handwerk dat de redactie nu doet. Samen leveren ze iedere ochtend voor 08:30 een feed van vijftig items op, gescoord en uitgelegd.
-      </p>
+      <p style="margin-top:24px">Elke automatisering vervangt een stuk handwerk. Samen leveren ze iedere ochtend voor 08:30 een feed van vijftig items op, gescoord en uitgelegd.</p>
     </div>
     <div class="auto-counter">
-      <div class="auto-counter-row">
-        <div class="auto-counter-num">01</div>
-        <div class="auto-counter-label">Dataverzameling</div>
-        <div class="auto-counter-tag">Bronnen + scraping</div>
-      </div>
-      <div class="auto-counter-row">
-        <div class="auto-counter-num">02</div>
-        <div class="auto-counter-label">AI-filtering</div>
-        <div class="auto-counter-tag">PowNed-DNA scoring</div>
-      </div>
-      <div class="auto-counter-row">
-        <div class="auto-counter-num">03</div>
-        <div class="auto-counter-label">Output: redactiefeed</div>
-        <div class="auto-counter-tag">Webapp + push</div>
-      </div>
-      <div class="auto-counter-row">
-        <div class="auto-counter-num">04</div>
-        <div class="auto-counter-label">Verhaalinsteek Generator</div>
-        <div class="auto-counter-tag">Vierde automatisering</div>
-      </div>
+      <div class="auto-counter-row"><div class="auto-counter-num">01</div><div class="auto-counter-label">Dataverzameling</div><div class="auto-counter-tag">Bronnen + scraping</div></div>
+      <div class="auto-counter-row"><div class="auto-counter-num">02</div><div class="auto-counter-label">AI-filtering</div><div class="auto-counter-tag">PowNed-DNA scoring</div></div>
+      <div class="auto-counter-row"><div class="auto-counter-num">03</div><div class="auto-counter-label">Output: redactiefeed</div><div class="auto-counter-tag">macOS-stijl webapp</div></div>
+      <div class="auto-counter-row"><div class="auto-counter-num">04</div><div class="auto-counter-label">Verhaalinsteek Generator</div><div class="auto-counter-tag">Vierde automatisering</div></div>
     </div>
   </div>
 </section>
@@ -2088,68 +1799,114 @@ footer {
 <section class="auto" id="auto-1">
   <div class="auto-inner">
     <aside class="auto-side">
-      <div class="auto-num">
-        <span class="auto-num-pill">01</span>
-        <span>Automatisering</span>
-      </div>
-      <h2>Continu dertig bronnen monitoren.</h2>
-      <p>De agent verzamelt elke ochtend voor 08:30 nieuwsitems uit landelijke titels, regionale omroepen, social feeds en politieberichten. Op aanvraag draait hij ook tussendoor.</p>
+      <div class="auto-num"><span class="auto-num-pill">01</span><span>Automatisering</span></div>
+      <h2>Dertig bronnen, tien minuten.</h2>
+      <p>De agent bevraagt elke ochtend voor 08:30 alle bronnen via RSS, sitemaps en API's. Trafilatura haalt de tekst eruit, een hash dedupliceert, alles gaat naar PostgreSQL.</p>
       <div class="auto-meta">
-        <div class="auto-meta-row">
-          <span class="auto-meta-key">Frequentie</span>
-          <span class="auto-meta-val">Dagelijks 08:30</span>
-        </div>
-        <div class="auto-meta-row">
-          <span class="auto-meta-key">Methode</span>
-          <span class="auto-meta-val">RSS, sitemap, API</span>
-        </div>
-        <div class="auto-meta-row">
-          <span class="auto-meta-key">Paywalls</span>
-          <span class="auto-meta-val">Cache- en printversies</span>
-        </div>
-        <div class="auto-meta-row">
-          <span class="auto-meta-key">Bronnen</span>
-          <span class="auto-meta-val">30+ uitbreidbaar</span>
-        </div>
+        <div class="auto-meta-row"><span class="auto-meta-key">Frequentie</span><span class="auto-meta-val">Dagelijks 08:30</span></div>
+        <div class="auto-meta-row"><span class="auto-meta-key">Methode</span><span class="auto-meta-val">RSS, sitemap, API</span></div>
+        <div class="auto-meta-row"><span class="auto-meta-key">Extractie</span><span class="auto-meta-val">Trafilatura</span></div>
+        <div class="auto-meta-row"><span class="auto-meta-key">Opslag</span><span class="auto-meta-val">PostgreSQL</span></div>
       </div>
     </aside>
-
     <div class="auto-content">
-      <div class="src-grid">
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-news"/></svg></span><div><div class="src-name">De Telegraaf</div><div class="src-meta">RSS</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-news"/></svg></span><div><div class="src-name">AD</div><div class="src-meta">Sitemap</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-tv"/></svg></span><div><div class="src-name">NOS</div><div class="src-meta">RSS</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-radio"/></svg></span><div><div class="src-name">NH Nieuws</div><div class="src-meta">RSS</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-radio"/></svg></span><div><div class="src-name">AT5</div><div class="src-meta">Sitemap</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-radio"/></svg></span><div><div class="src-name">Omroep Brabant</div><div class="src-meta">RSS</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-twitter"/></svg></span><div><div class="src-name">Geert Wilders</div><div class="src-meta">X feed</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-twitter"/></svg></span><div><div class="src-name">Thierry Baudet</div><div class="src-meta">X feed</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-shield"/></svg></span><div><div class="src-name">Politie.nl</div><div class="src-meta">Scraping</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-doc"/></svg></span><div><div class="src-name">Rechtspraak.nl</div><div class="src-meta">RSS</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-search"/></svg></span><div><div class="src-name">Zoekwoorden</div><div class="src-meta">Trends</div></div></div>
-        <div class="src-card"><span class="src-icon"><svg><use href="#i-news"/></svg></span><div><div class="src-name">Crimesite</div><div class="src-meta">Scraping</div></div></div>
-      </div>
+      <div class="viz">
+        <div class="viz-head">
+          <div class="viz-title"><span class="viz-pulse"></span>Live verzameling</div>
+          <div class="viz-status"><span class="dot"></span>06:21 voltooid</div>
+        </div>
+        <div class="viz-01" id="viz01">
+          <svg viewBox="0 0 700 360" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <radialGradient id="collGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#e2148b" stop-opacity=".5"/>
+                <stop offset="100%" stop-color="#e2148b" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <!-- Source nodes (left column) -->
+            <g class="src-node" data-src="0">
+              <rect class="src-bg" x="20" y="20" width="170" height="42" rx="8"/>
+              <text class="src-text" x="36" y="40">De Telegraaf</text>
+              <text class="src-meta" x="36" y="54">RSS · 18 items</text>
+              <circle class="src-pulse" cx="180" cy="41" r="4"/>
+            </g>
+            <g class="src-node" data-src="1">
+              <rect class="src-bg" x="20" y="74" width="170" height="42" rx="8"/>
+              <text class="src-text" x="36" y="94">NOS</text>
+              <text class="src-meta" x="36" y="108">RSS · 12 items</text>
+              <circle class="src-pulse" cx="180" cy="95" r="4"/>
+            </g>
+            <g class="src-node" data-src="2">
+              <rect class="src-bg" x="20" y="128" width="170" height="42" rx="8"/>
+              <text class="src-text" x="36" y="148">AT5 Amsterdam</text>
+              <text class="src-meta" x="36" y="162">Sitemap · 9 items</text>
+              <circle class="src-pulse" cx="180" cy="149" r="4"/>
+            </g>
+            <g class="src-node" data-src="3">
+              <rect class="src-bg" x="20" y="182" width="170" height="42" rx="8"/>
+              <text class="src-text" x="36" y="202">Omroep Brabant</text>
+              <text class="src-meta" x="36" y="216">RSS · 14 items</text>
+              <circle class="src-pulse" cx="180" cy="203" r="4"/>
+            </g>
+            <g class="src-node" data-src="4">
+              <rect class="src-bg" x="20" y="236" width="170" height="42" rx="8"/>
+              <text class="src-text" x="36" y="256">X / Wilders, Baudet</text>
+              <text class="src-meta" x="36" y="270">API · 7 items</text>
+              <circle class="src-pulse" cx="180" cy="257" r="4"/>
+            </g>
+            <g class="src-node" data-src="5">
+              <rect class="src-bg" x="20" y="290" width="170" height="42" rx="8"/>
+              <text class="src-text" x="36" y="310">Politie + RTV</text>
+              <text class="src-meta" x="36" y="324">Scraping · 11 items</text>
+              <circle class="src-pulse" cx="180" cy="311" r="4"/>
+            </g>
 
+            <!-- Flow paths from sources to collector -->
+            <path id="path0" class="flow-path" d="M 190 41 Q 320 41 380 180"/>
+            <path id="path1" class="flow-path" d="M 190 95 Q 300 95 380 180"/>
+            <path id="path2" class="flow-path" d="M 190 149 Q 300 149 380 180"/>
+            <path id="path3" class="flow-path" d="M 190 203 Q 300 203 380 180"/>
+            <path id="path4" class="flow-path" d="M 190 257 Q 300 257 380 180"/>
+            <path id="path5" class="flow-path" d="M 190 311 Q 320 311 380 180"/>
+
+            <!-- Collector glow -->
+            <circle cx="380" cy="180" r="80" fill="url(#collGlow)"/>
+            <!-- Collector node -->
+            <rect class="collector-bg" x="320" y="142" width="120" height="76" rx="12"/>
+            <text class="collector-text" x="380" y="166" text-anchor="middle">Trafilatura</text>
+            <text class="collector-num" x="380" y="200" text-anchor="middle" id="collectorNum">247</text>
+
+            <!-- Path from collector to DB -->
+            <path id="pathDb" class="flow-path active" d="M 440 180 L 540 180"/>
+
+            <!-- Database -->
+            <g>
+              <rect class="src-bg" x="540" y="140" width="140" height="80" rx="10" style="fill: var(--frame); stroke: var(--magenta);"/>
+              <ellipse cx="610" cy="160" rx="50" ry="8" fill="none" stroke="var(--magenta)" stroke-width="1" opacity=".5"/>
+              <ellipse cx="610" cy="180" rx="50" ry="8" fill="none" stroke="var(--magenta)" stroke-width="1" opacity=".4"/>
+              <ellipse cx="610" cy="200" rx="50" ry="8" fill="none" stroke="var(--magenta)" stroke-width="1" opacity=".3"/>
+              <text x="610" y="184" text-anchor="middle" fill="#fff" style="font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;">PostgreSQL</text>
+            </g>
+
+            <!-- Particles will be added by JS -->
+            <g id="particles"></g>
+          </svg>
+        </div>
+        <div class="viz-01-stats">
+          <div class="viz-01-stat"><div class="viz-01-stat-num" id="s01a">31</div><div class="viz-01-stat-label">Bronnen actief</div></div>
+          <div class="viz-01-stat"><div class="viz-01-stat-num" id="s01b">247</div><div class="viz-01-stat-label">Items vandaag</div></div>
+          <div class="viz-01-stat"><div class="viz-01-stat-num" id="s01c">14</div><div class="viz-01-stat-label">Paywalls omzeild</div></div>
+          <div class="viz-01-stat"><div class="viz-01-stat-num" id="s01d">7m 12s</div><div class="viz-01-stat-label">Doorlooptijd</div></div>
+        </div>
+      </div>
       <div class="tech-strip">
         <span class="tech-pill"><span class="sig"></span>RSS</span>
         <span class="tech-pill"><span class="sig"></span>Sitemap-crawl</span>
-        <span class="tech-pill"><span class="sig"></span>API-integratie</span>
-        <span class="tech-pill"><span class="sig"></span>Headless scraping</span>
-        <span class="tech-pill"><span class="sig"></span>Paywall bypass</span>
-        <span class="tech-pill"><span class="sig"></span>Tip-mailbox</span>
-      </div>
-
-      <div class="live-counter">
-        <div>
-          <div class="lc-stat-num" id="lcNum">247</div>
-          <div class="lc-stat-label">Items vandaag verzameld</div>
-        </div>
-        <div class="lc-list">
-          <div class="lc-row"><span class="lc-row-key">Run gestart</span><span class="lc-row-val">06:14</span></div>
-          <div class="lc-row"><span class="lc-row-key">Run voltooid</span><span class="lc-row-val">06:21</span></div>
-          <div class="lc-row"><span class="lc-row-key">Bronnen actief</span><span class="lc-row-val">31 / 31</span></div>
-          <div class="lc-row"><span class="lc-row-key">Paywalls omzeild</span><span class="lc-row-val">14</span></div>
-        </div>
+        <span class="tech-pill"><span class="sig"></span>Trafilatura</span>
+        <span class="tech-pill"><span class="sig"></span>Playwright</span>
+        <span class="tech-pill"><span class="sig"></span>Hash-deduplicatie</span>
+        <span class="tech-pill"><span class="sig"></span>PostgreSQL</span>
+        <span class="tech-pill"><span class="sig"></span>Robots.txt-respect</span>
       </div>
     </div>
   </div>
@@ -2159,195 +1916,201 @@ footer {
 <section class="auto auto-alt" id="auto-2">
   <div class="auto-inner">
     <aside class="auto-side">
-      <div class="auto-num">
-        <span class="auto-num-pill">02</span>
-        <span>Automatisering</span>
-      </div>
-      <h2>Filteren op PowNed-DNA.</h2>
-      <p>De agent vergelijkt elk binnenkomend item met de PowNed YouTube-dataset: titels, beschrijvingen en transcripties van bestaande succesvolle reportages. Wat past krijgt een score, met uitleg waarom.</p>
+      <div class="auto-num"><span class="auto-num-pill">02</span><span>Automatisering</span></div>
+      <h2>Niet alles is PowNed-stof.</h2>
+      <p>Elk binnenkomend item wordt omgezet naar een embedding-vector en vergeleken met de PowNed-corpus van bestaande YouTube-content. Cosine similarity bepaalt de score, BM25 voegt tekstuele relevantie toe.</p>
       <div class="auto-meta">
-        <div class="auto-meta-row">
-          <span class="auto-meta-key">Trainingsdata</span>
-          <span class="auto-meta-val">PowNed YouTube archief</span>
-        </div>
-        <div class="auto-meta-row">
-          <span class="auto-meta-key">Scoring</span>
-          <span class="auto-meta-val">0 tot 100, uitlegbaar</span>
-        </div>
-        <div class="auto-meta-row">
-          <span class="auto-meta-key">Deduplicatie</span>
-          <span class="auto-meta-val">Tussen alle bronnen</span>
-        </div>
-        <div class="auto-meta-row">
-          <span class="auto-meta-key">Lerend</span>
-          <span class="auto-meta-val">Op redactie-feedback</span>
-        </div>
+        <div class="auto-meta-row"><span class="auto-meta-key">Embedding</span><span class="auto-meta-val">e5-large-v2</span></div>
+        <div class="auto-meta-row"><span class="auto-meta-key">Similarity</span><span class="auto-meta-val">Cosine + BM25</span></div>
+        <div class="auto-meta-row"><span class="auto-meta-key">Vector store</span><span class="auto-meta-val">pgvector</span></div>
+        <div class="auto-meta-row"><span class="auto-meta-key">Lerend</span><span class="auto-meta-val">Op redactie-feedback</span></div>
       </div>
     </aside>
-
     <div class="auto-content">
-      <div class="funnel-card">
-        <div>
-          <div class="funnel-viz">
-            <svg class="funnel-svg" viewBox="0 0 200 200">
-              <defs>
-                <linearGradient id="fGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#9c2d8f" stop-opacity=".3"/>
-                  <stop offset="100%" stop-color="#e2148b" stop-opacity=".5"/>
-                </linearGradient>
-              </defs>
-              <polygon points="20,30 180,30 130,140 70,140" fill="url(#fGrad)"/>
-              <polygon points="20,30 180,30 130,140 70,140" fill="none" stroke="#e2148b" stroke-width="1.5"/>
-              <line x1="100" y1="140" x2="100" y2="180" stroke="#e2148b" stroke-width="1.5" stroke-dasharray="3 3"/>
-            </svg>
-            <div class="funnel-num-top">
-              247
-              <div class="funnel-num-label">Verzameld</div>
-            </div>
-            <div class="funnel-num-bottom">
-              52
-              <div class="funnel-num-label" style="color:var(--magenta)">Door filter</div>
-            </div>
-          </div>
+      <div class="viz">
+        <div class="viz-head">
+          <div class="viz-title"><span class="viz-pulse"></span>Embedding space</div>
+          <div class="viz-status"><span class="dot"></span>247 items vergeleken</div>
         </div>
-        <div class="funnel-rules">
-          <div class="funnel-rule">
-            <span class="funnel-rule-tag">A</span>
-            <div>
-              <div class="funnel-rule-text">PowNed-DNA match</div>
-              <div class="funnel-rule-sub">Vergelijk titel, hashtags en transcript met archief.</div>
-            </div>
-          </div>
-          <div class="funnel-rule">
-            <span class="funnel-rule-tag">B</span>
-            <div>
-              <div class="funnel-rule-text">Deduplicatie</div>
-              <div class="funnel-rule-sub">Zelfde verhaal uit verschillende bronnen samenvoegen.</div>
-            </div>
-          </div>
-          <div class="funnel-rule">
-            <span class="funnel-rule-tag">C</span>
-            <div>
-              <div class="funnel-rule-text">Relevantie scoring</div>
-              <div class="funnel-rule-sub">Numerieke score van 0 tot 100 met uitleg.</div>
-            </div>
-          </div>
-          <div class="funnel-rule">
-            <span class="funnel-rule-tag">D</span>
-            <div>
-              <div class="funnel-rule-text">Trending boost</div>
-              <div class="funnel-rule-sub">Live trending op X en TikTok geeft extra punten.</div>
-            </div>
-          </div>
+        <div class="viz-02" id="viz02">
+          <svg viewBox="0 0 700 380" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <radialGradient id="clusterGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#e2148b" stop-opacity=".7"/>
+                <stop offset="40%" stop-color="#9c2d8f" stop-opacity=".4"/>
+                <stop offset="100%" stop-color="#9c2d8f" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <!-- Axes -->
+            <line class="axis-line" x1="40" y1="190" x2="660" y2="190"/>
+            <line class="axis-line" x1="350" y1="20" x2="350" y2="360"/>
+            <text class="axis-label" x="660" y="186" text-anchor="end">Semantic axis</text>
+            <text class="axis-label" x="356" y="20">Topic axis</text>
+
+            <!-- PowNed-DNA cluster -->
+            <ellipse class="cluster-bg" cx="350" cy="190" rx="100" ry="80"/>
+            <circle class="cluster-ring" cx="350" cy="190" r="120"/>
+            <circle class="cluster-ring" cx="350" cy="190" r="160"/>
+            <circle class="cluster-core" cx="350" cy="190" r="6"/>
+            <text class="cluster-label" x="350" y="194" text-anchor="middle">PowNed-DNA</text>
+
+            <!-- Item dots will be added by JS -->
+            <g id="dots"></g>
+            <g id="lines"></g>
+            <g id="labels"></g>
+          </svg>
+        </div>
+        <div class="viz-02-info">
+          <div class="viz-02-info-block"><div class="label">Hover</div><div class="val" id="v02hover">Wijs een dot aan</div></div>
+          <div class="viz-02-info-block"><div class="label">Cosine similarity</div><div class="val" id="v02score">—</div></div>
+          <div class="viz-02-info-block"><div class="label">Beslissing</div><div class="val" id="v02dec">—</div></div>
         </div>
       </div>
-
       <div class="dna-card">
-        <div class="dna-head">
-          <div class="dna-label">Top scores vandaag</div>
-          <div class="dna-stat">06:21 voltooid</div>
-        </div>
+        <div class="dna-head"><div class="dna-label">Top scores vandaag</div><div class="dna-stat">06:21 voltooid</div></div>
         <div class="dna-list">
-          <div class="dna-row">
-            <span class="dna-score">94</span>
-            <span class="dna-text">Snackbarpersoneel slaat overvaller met frituurmand</span>
-            <span class="dna-bar"><span class="dna-bar-fill" style="width:94%"></span></span>
-          </div>
-          <div class="dna-row">
-            <span class="dna-score">89</span>
-            <span class="dna-text">Buurtbewoners blokkeren asielbus in Drenthe</span>
-            <span class="dna-bar"><span class="dna-bar-fill" style="width:89%"></span></span>
-          </div>
-          <div class="dna-row">
-            <span class="dna-score">85</span>
-            <span class="dna-text">Agent schiet hond neer na bijtincident Tilburg</span>
-            <span class="dna-bar"><span class="dna-bar-fill" style="width:85%"></span></span>
-          </div>
-          <div class="dna-row">
-            <span class="dna-score">82</span>
-            <span class="dna-text">Wethouder Den Haag opgepakt voor fraude</span>
-            <span class="dna-bar"><span class="dna-bar-fill" style="width:82%"></span></span>
-          </div>
-          <div class="dna-row">
-            <span class="dna-score">78</span>
-            <span class="dna-text">Festival zonder vergunning ontruimd door ME</span>
-            <span class="dna-bar"><span class="dna-bar-fill" style="width:78%"></span></span>
-          </div>
+          <div class="dna-row"><span class="dna-score">94</span><span class="dna-text">Snackbarpersoneel slaat overvaller met frituurmand</span><span class="dna-bar"><span class="dna-bar-fill" style="width:94%"></span></span></div>
+          <div class="dna-row"><span class="dna-score">89</span><span class="dna-text">Buurtbewoners blokkeren asielbus in Drenthe</span><span class="dna-bar"><span class="dna-bar-fill" style="width:89%"></span></span></div>
+          <div class="dna-row"><span class="dna-score">85</span><span class="dna-text">Agent schiet hond neer na bijtincident Tilburg</span><span class="dna-bar"><span class="dna-bar-fill" style="width:85%"></span></span></div>
+          <div class="dna-row"><span class="dna-score">82</span><span class="dna-text">Wethouder Den Haag opgepakt voor fraude</span><span class="dna-bar"><span class="dna-bar-fill" style="width:82%"></span></span></div>
+          <div class="dna-row"><span class="dna-score">78</span><span class="dna-text">Festival zonder vergunning ontruimd door ME</span><span class="dna-bar"><span class="dna-bar-fill" style="width:78%"></span></span></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- AUTO 03: FEED -->
-<section class="auto" id="auto-3">
-  <div class="auto-inner" style="display:block">
+<!-- AUTO 03: FEED in macOS WINDOW -->
+<section class="auto" id="auto-3" style="background: var(--canvas)">
+  <div class="auto-inner" style="display:block; padding-bottom: 40px;">
     <div style="display:grid;grid-template-columns:380px 1fr;gap:64px;margin-bottom:40px;align-items:end">
       <div>
-        <div class="auto-num">
-          <span class="auto-num-pill">03</span>
-          <span>Automatisering</span>
-        </div>
-        <h2 class="t-h2">De redactiefeed.</h2>
+        <div class="auto-num"><span class="auto-num-pill">03</span><span>Automatisering</span></div>
+        <h2 class="t-h2">Klaar voor het ochtendoverleg.</h2>
       </div>
       <p style="font-size:17px;line-height:1.55;color:var(--graphite);max-width:600px">
-        De output: een afgesloten webapp met de items van vandaag, gesorteerd op score, met filters per regio en categorie. Iedere ochtend voor 08:30 ook als push-notificatie.
+        Een afgesloten webapp met de items van vandaag. Klik op een item voor het volledige artikel. Filter per regio of categorie, sorteer op relevantie of tijd, en sla items op.
       </p>
     </div>
+  </div>
 
-    <div class="browser">
-      <div class="browser-bar">
-        <div class="browser-dots"><span></span><span></span><span></span></div>
-        <div class="browser-url">
-          <svg class="icon-sm"><use href="#i-lock"/></svg>
-          <span>redactie.powned.tv/feed</span>
+  <div class="macos-wrap">
+    <div class="macos" id="macos">
+      <div class="macos-titlebar">
+        <div class="tl-group">
+          <span class="tl tl-close"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M4 12L12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span class="tl tl-min"><svg viewBox="0 0 16 16"><path d="M4 8h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span class="tl tl-max"><svg viewBox="0 0 16 16"><path d="M4 8h8M8 4v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="macos-title">
+          <span class="macos-title-meta">
+            <span class="live-dot"></span>
+            <span>redactie.powned.tv — Feed</span>
+          </span>
+        </div>
+        <div class="macos-actions">
+          <button class="macos-action" title="Vorige"><svg viewBox="0 0 16 16"><path d="M10 4L6 8l4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="macos-action" title="Volgende"><svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
-      <div class="browser-body">
-        <aside class="feed-sidebar">
-          <div class="feed-filter">
-            <label>Regio</label>
-            <select class="feed-select" id="fR">
-              <option value="all">Alle regio's</option>
-              <option>Noord-Holland</option>
-              <option>Zuid-Holland</option>
-              <option>Brabant</option>
-              <option>Drenthe</option>
-              <option>Groningen</option>
-              <option>Utrecht</option>
-              <option>Zeeland</option>
-              <option>Landelijk</option>
-            </select>
+      <div class="macos-toolbar">
+        <div class="feed-segment" id="catSeg">
+          <button class="feed-seg-btn active" data-cat="all">Alles</button>
+          <button class="feed-seg-btn" data-cat="Misdaad">Misdaad</button>
+          <button class="feed-seg-btn" data-cat="Politiek">Politiek</button>
+          <button class="feed-seg-btn" data-cat="Bizar">Bizar</button>
+          <button class="feed-seg-btn" data-cat="Evenement">Evenement</button>
+        </div>
+        <select class="feed-region-select" id="regSel">
+          <option value="all">Alle regio's</option>
+          <option>Noord-Holland</option>
+          <option>Zuid-Holland</option>
+          <option>Brabant</option>
+          <option>Drenthe</option>
+          <option>Groningen</option>
+          <option>Utrecht</option>
+          <option>Zeeland</option>
+          <option>Gelderland</option>
+          <option>Landelijk</option>
+        </select>
+        <select class="feed-region-select" id="sortSel">
+          <option value="score">Sorteer: relevantie</option>
+          <option value="time">Sorteer: tijd</option>
+        </select>
+        <div class="feed-search">
+          <svg><use href="#i-search"/></svg>
+          <input type="text" id="searchInput" placeholder="Zoeken in feed">
+        </div>
+      </div>
+      <div class="macos-body">
+        <aside class="feed-side">
+          <h5>Feed</h5>
+          <div class="feed-side-item active" data-side="all">
+            <svg><use href="#i-feed-icon"/></svg>
+            <span>Vandaag</span>
+            <span class="feed-side-cnt" id="cntAll">52</span>
           </div>
-          <div class="feed-filter">
-            <label>Categorie</label>
-            <select class="feed-select" id="fC">
-              <option value="all">Alle categorieën</option>
-              <option>Misdaad</option>
-              <option>Politiek</option>
-              <option>Evenement</option>
-              <option>Bizar</option>
-            </select>
+          <div class="feed-side-item" data-side="favs">
+            <svg><use href="#i-star"/></svg>
+            <span>Favorieten</span>
+            <span class="feed-side-cnt" id="cntFav">0</span>
           </div>
-          <div class="feed-filter">
-            <label>Sorteer op</label>
-            <select class="feed-select" id="fS">
-              <option value="score">Relevantie</option>
-              <option value="time">Nieuwste eerst</option>
-            </select>
+          <div class="feed-side-item" data-side="recent">
+            <svg><use href="#i-clock"/></svg>
+            <span>Recent</span>
+            <span class="feed-side-cnt">12</span>
           </div>
-          <div class="feed-stat">
-            <div class="feed-stat-num" id="statNum">52</div>
-            <div class="feed-stat-label">Items vandaag</div>
+          <h5>Categorieën</h5>
+          <div class="feed-side-item" data-side="cat" data-cat="Misdaad">
+            <svg><use href="#i-shield"/></svg>
+            <span>Misdaad</span>
+            <span class="feed-side-cnt">14</span>
+          </div>
+          <div class="feed-side-item" data-side="cat" data-cat="Politiek">
+            <svg><use href="#i-doc"/></svg>
+            <span>Politiek</span>
+            <span class="feed-side-cnt">11</span>
+          </div>
+          <div class="feed-side-item" data-side="cat" data-cat="Bizar">
+            <svg><use href="#i-flame"/></svg>
+            <span>Bizar</span>
+            <span class="feed-side-cnt">8</span>
+          </div>
+          <div class="feed-side-item" data-side="cat" data-cat="Evenement">
+            <svg><use href="#i-spark"/></svg>
+            <span>Evenement</span>
+            <span class="feed-side-cnt">9</span>
+          </div>
+          <div class="feed-side-stats">
+            <div class="feed-side-stat-num" id="sideStatNum">52</div>
+            <div class="feed-side-stat-label">Items vandaag</div>
           </div>
         </aside>
         <main class="feed-main">
-          <div class="feed-toolbar">
-            <h3>Vandaag, 03 mei 2026</h3>
+          <div class="feed-bar">
+            <h3 id="feedTitle">Vandaag, 03 mei 2026</h3>
             <div class="cnt" id="fCnt">10 items</div>
           </div>
-          <div id="fList"></div>
+          <div class="feed-list" id="fList"></div>
         </main>
+      </div>
+
+      <!-- Article Sheet -->
+      <div class="sheet-bg" id="sheetBg"></div>
+      <div class="sheet" id="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-toolbar">
+          <button class="sheet-close" id="sheetClose">
+            <svg><use href="#i-arrow-down"/></svg>
+            <span>Sluit artikel</span>
+          </button>
+          <div class="sheet-actions">
+            <button class="sheet-act" title="Favoriet"><svg><use href="#i-star"/></svg></button>
+            <button class="sheet-act" title="Delen"><svg><use href="#i-share"/></svg></button>
+            <button class="sheet-act" title="Markeren"><svg><use href="#i-bookmark"/></svg></button>
+          </div>
+        </div>
+        <div class="sheet-body" id="sheetBody"></div>
       </div>
     </div>
   </div>
@@ -2356,17 +2119,55 @@ footer {
 <!-- AUTO 04: INSTEEK -->
 <section class="auto auto-alt" id="auto-4">
   <div class="auto-inner" style="display:block">
-    <div style="display:grid;grid-template-columns:380px 1fr;gap:64px;margin-bottom:40px;align-items:end">
+    <div style="display:grid;grid-template-columns:380px 1fr;gap:64px;margin-bottom:24px;align-items:end">
       <div>
-        <div class="auto-num">
-          <span class="auto-num-pill">04</span>
-          <span>Vierde automatisering</span>
-        </div>
-        <h2 class="t-h2">De Verhaalinsteek Generator.</h2>
+        <div class="auto-num"><span class="auto-num-pill">04</span><span>Vierde automatisering</span></div>
+        <h2 class="t-h2">Het verhaal achter de kop.</h2>
       </div>
       <p style="font-size:17px;line-height:1.55;color:var(--graphite);max-width:600px">
-        Klik op een item in de feed en de agent levert binnen seconden een complete journalistieke aanpak: invalshoek, vragen voor de verslaggever, lijst met sprekers en een visueel productievoorstel. Op te slaan, aan te passen en te delen met het team.
+        Klik op een item en de agent levert binnen seconden een journalistieke aanpak: locatie, invalshoek, vragen en sprekers. Op te slaan, aan te passen, te delen.
       </p>
+    </div>
+
+    <!-- Pipeline visualization -->
+    <div class="viz-04" style="margin-bottom: 24px;">
+      <div class="viz-head" style="border-bottom-color: rgba(255,255,255,.08); padding-bottom: 0; margin-bottom: 0;">
+        <div class="viz-title" style="color: var(--magenta)"><span class="viz-pulse"></span>AI-pipeline</div>
+        <div class="viz-status" style="color: rgba(255,255,255,.4)" id="pipeStatus">Klaar</div>
+      </div>
+      <div class="viz-04-grid">
+        <div class="viz-04-stage" data-stage="0">
+          <div class="viz-04-icon"><svg><use href="#i-input"/></svg></div>
+          <div class="viz-04-num">Stap 01</div>
+          <div class="viz-04-label">Input</div>
+          <div class="viz-04-sub">Artikel + metadata</div>
+        </div>
+        <div class="viz-04-stage" data-stage="1">
+          <div class="viz-04-icon"><svg><use href="#i-search"/></svg></div>
+          <div class="viz-04-num">Stap 02</div>
+          <div class="viz-04-label">Context</div>
+          <div class="viz-04-sub">Vergelijkbare PowNed-cases ophalen</div>
+        </div>
+        <div class="viz-04-stage" data-stage="2">
+          <div class="viz-04-icon"><svg><use href="#i-cog"/></svg></div>
+          <div class="viz-04-num">Stap 03</div>
+          <div class="viz-04-label">Prompt</div>
+          <div class="viz-04-sub">Role + few-shot template invullen</div>
+        </div>
+        <div class="viz-04-stage" data-stage="3">
+          <div class="viz-04-icon"><svg><use href="#i-brain"/></svg></div>
+          <div class="viz-04-num">Stap 04</div>
+          <div class="viz-04-label">Reasoning</div>
+          <div class="viz-04-sub">Chain-of-thought met PowNed-toon</div>
+        </div>
+        <div class="viz-04-stage" data-stage="4">
+          <div class="viz-04-icon"><svg><use href="#i-output"/></svg></div>
+          <div class="viz-04-num">Stap 05</div>
+          <div class="viz-04-label">Structured</div>
+          <div class="viz-04-sub">JSON: locatie, invalshoek, vragen, sprekers</div>
+        </div>
+      </div>
+      <div class="viz-04-progress"><div class="viz-04-progress-bar" id="pipeBar"></div></div>
     </div>
 
     <div class="insteek-grid">
@@ -2381,7 +2182,7 @@ footer {
           <span>Score 94</span>
         </div>
         <div class="in-source-sum" id="inS">Twee medewerkers van snackbar De Gildehof overmeesterden gisteravond een gewapende overvaller met een gloeiend hete frituurmand. De man van 32 zit in voorlopige hechtenis.</div>
-        <div class="in-source-why" id="inW">Gewone burger versus crimineel. Typisch PowNed-underdog verhaal, visueel sterk, hoge viral potentie.</div>
+        <div class="in-source-why" id="inW">Personeel verdedigt zichzelf, politie kwam later. Het soort beeld waar het straatgesprek vanzelf op gang komt.</div>
         <div class="in-actions">
           <button class="btn btn-iris" id="inGo">
             <svg class="icon-sm"><use href="#i-play"/></svg>
@@ -2392,27 +2193,18 @@ footer {
             <span>Reset</span>
           </button>
         </div>
+        <div class="in-jumper">
+          <div class="label">Wissel item</div>
+          <div class="in-jumper-row" id="jumperRow"></div>
+        </div>
       </div>
 
       <div class="insteek-output">
         <div class="in-out-head">
-          <div class="in-out-title">
-            <span class="in-out-pulse"></span>
-            <span>Verhaalinsteek Generator</span>
-          </div>
+          <div class="in-out-title"><span class="in-out-pulse"></span><span>Verhaalinsteek Generator</span></div>
           <span class="in-out-status" id="inStatus">Klaar</span>
         </div>
         <div class="in-output-text" id="inOut"></div>
-        <div class="insteek-note">
-          <div class="insteek-note-block">
-            <strong>Hoe werkt het</strong>
-            De agent leest het nieuwsitem, vergelijkt het met soortgelijke succesvolle reportages, en stelt op basis daarvan een complete journalistieke aanpak voor.
-          </div>
-          <div class="insteek-note-block">
-            <strong>Wat de redactie ermee doet</strong>
-            De insteek dient als startpunt. De verslaggever past hem aan, kiest sprekers, voegt eigen invalshoek toe, en gaat de straat op.
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -2432,7 +2224,7 @@ footer {
         <ul>
           <li><a data-to="brief">Brief</a></li>
           <li><a data-to="canvas">HC AI Canvas</a></li>
-          <li><a data-to="auto-intro">Automatiseringen</a></li>
+          <li><a data-to="auto-intro">Pipeline</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -2461,133 +2253,397 @@ footer {
 </footer>
 
 <script>
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, MotionPathPlugin);
 
-/* ============= DATA ============= */
+/* ============================================================
+   DATA
+   ============================================================ */
 const ITEMS = [
-  {id:1,score:94,cat:'Misdaad',regio:'Noord-Holland',loc:'Apeldoorn',src:'De Stentor',time:'06:42',title:'Snackbarpersoneel slaat overvaller met frituurmand',sum:"Twee medewerkers van snackbar De Gildehof overmeesterden gisteravond een gewapende overvaller met een gloeiend hete frituurmand. De man van 32 zit in voorlopige hechtenis.",why:'Gewone burger versus crimineel. Typisch PowNed-underdog verhaal, visueel sterk, hoge viral potentie.'},
-  {id:2,score:89,cat:'Politiek',regio:'Drenthe',loc:'Hoogeveen',src:'RTV Drenthe',time:'07:11',title:"Buurtbewoners blokkeren asielbus: 'Wij zijn niet gehoord'",sum:'Tientallen omwonenden voorkwamen vanmorgen de aankomst van een bus met asielzoekers bij een tijdelijke noodopvang. De gemeente zegt geen andere optie te hebben.',why:'Asiel, burgerprotest en lokaal bestuur in één verhaal. Confrontatiepotentieel hoog.'},
-  {id:3,score:85,cat:'Misdaad',regio:'Brabant',loc:'Tilburg',src:'Omroep Brabant',time:'05:58',title:'Agent schiet hond neer na bijtincident, baasje woedend',sum:"Een politieagent schoot dinsdagavond een Staffordshire dood die zijn collega had aangevallen. De eigenaar spreekt van moord op zijn beste vriend en eist excuses.",why:'Emotioneel, visueel, confrontatie met autoriteit. Hond plus politie scoort hoog op klikvee.'},
-  {id:4,score:82,cat:'Politiek',regio:'Zuid-Holland',loc:'Den Haag',src:'AD Den Haag',time:'06:17',title:'Wethouder opgepakt voor subsidie-fraude van 2,3 miljoen',sum:"Wethouder M. (48, GroenLinks-PvdA) is op verdenking van langdurige fraude in voorlopige hechtenis genomen. Het Openbaar Ministerie spreekt van systematische zelfverrijking.",why:'Corruptie, politiek en belastinggeld. PowNed-kernthema dat om confrontatie vraagt.'},
-  {id:5,score:78,cat:'Bizar',regio:'Zuid-Holland',loc:'Rotterdam',src:'Rijnmond',time:'04:33',title:'Festival zonder vergunning ontruimd door ME, bezoekers in boom',sum:'Een illegaal techno-festival in het Kralingse Bos werd vannacht ontruimd. Enkele bezoekers verschansten zich urenlang in een eik en moesten door de brandweer worden bevrijd.',why:'Absurd beeld plus handhaving. Het verhaal in één foto, dus viral.'},
-  {id:6,score:75,cat:'Evenement',regio:'Noord-Holland',loc:'Amsterdam',src:'AT5',time:'07:45',title:'Extinction Rebellion blokkeert A10 tijdens spits',sum:'Ongeveer 200 activisten zijn vanmorgen de snelweg opgelopen ter hoogte van de RAI. Het verkeer staat al twee uur muurvast, de politie heeft 47 mensen aangehouden.',why:'Activisme, overlast en maatschappelijk debat. Polariserend, dus klikt.'},
-  {id:7,score:71,cat:'Misdaad',regio:'Groningen',loc:'Groningen',src:'Sikkom',time:'06:02',title:"Inbraakgolf studenten: twaalf woningen in één nacht",sum:'In de Korrewegwijk werden afgelopen nacht twaalf studentenhuizen overvallen door een groep van vermoedelijk vier daders. De politie tast nog in het duister.',why:'Lokale reeks, menselijk leed, veiligheid. Sterk regio-verhaal.'},
-  {id:8,score:68,cat:'Politiek',regio:'Landelijk',loc:'Den Haag',src:'NOS',time:'07:30',title:"Wilders reageert op Schoof: 'Dit is verraad'",sum:'PVV-leider Geert Wilders heeft op X fel uitgehaald naar premier Schoof na het uitlekken van een interne notitie over migratiequota. Een breuk dreigt.',why:'Politieke confrontatie, herkenbare figuren. Standaard PowNed-onderwerp.'},
-  {id:9,score:62,cat:'Bizar',regio:'Zeeland',loc:'Goes',src:'PZC',time:'06:58',title:"Man rijdt met tractor door drive-through McDonald's",sum:"Een 67-jarige boer reed gistermiddag met zijn John Deere door de drive-through van de Goese McDonald's. Volgens hemzelf had hij gewoon trek in een McKroket.",why:'Licht, grappig, deelbaar op socials. Goed voor een korte item.'},
-  {id:10,score:55,cat:'Evenement',regio:'Utrecht',loc:'Utrecht',src:'RTV Utrecht',time:'07:22',title:'Demonstratie tegen woningnood trekt 5000 mensen',sum:'Op het Domplein verzamelden zich gisteren ongeveer 5000 demonstranten. De organisatoren eisen een bouwoffensief en een einde aan beleggershypotheken.',why:'Groot maatschappelijk thema, maar minder PowNed-specifiek. Achterhandoptie.'}
+  {
+    id: 1, score: 94, cat: 'Misdaad', regio: 'Gelderland', loc: 'Apeldoorn',
+    src: 'De Stentor', time: '06:42',
+    title: 'Snackbarpersoneel slaat overvaller met frituurmand',
+    sum: "Twee medewerkers van snackbar De Gildehof overmeesterden gisteravond een gewapende overvaller met een gloeiend hete frituurmand. De man van 32 zit in voorlopige hechtenis.",
+    body: [
+      "Twee medewerkers van snackbar De Gildehof aan de Bekafstraat in Apeldoorn hebben gisteravond rond 21:30 een gewapende overvaller weten te overmeesteren. De 32-jarige Apeldoorner werd door de politie aangehouden en zit nu in voorlopige hechtenis.",
+      "De man liep volgens eigenaar Halil Yildiz (54) rond sluitingstijd de zaak binnen met een mes en duivelsmasker. \"Hij riep dat we de kassa moesten openen. Maar mijn neef Mehmet stond toevallig achter de friteuse. Die heeft de frituurmand uit het vet gehaald en hem op de overvaller gegooid.\"",
+      "De man liep brandwonden op aan zijn handen en gezicht en kon door de andere medewerker tegen de grond worden gewerkt. \"We hebben hem vastgehouden tot de politie er was\", zegt Yildiz. \"Dat duurde een minuut of twintig, denk ik. Voelde langer.\"",
+      "De politie bevestigt dat de aanhouding zonder verdere incidenten verliep. De overvaller wordt morgen voorgeleid aan de rechter-commissaris.",
+      "Yildiz wil de naam van zijn neef niet in de krant: \"Hij is gewoon mijn neef, geen held.\" De snackbar was vandaag gewoon weer open."
+    ],
+    why: "Personeel verdedigt zichzelf, politie kwam later. Het soort beeld waar het straatgesprek vanzelf op gang komt."
+  },
+  {
+    id: 2, score: 89, cat: 'Politiek', regio: 'Drenthe', loc: 'Hoogeveen',
+    src: 'RTV Drenthe', time: '07:11',
+    title: "Buurtbewoners blokkeren asielbus: 'Wij zijn niet gehoord'",
+    sum: 'Tientallen omwonenden voorkwamen vanmorgen de aankomst van een bus met asielzoekers bij een tijdelijke noodopvang. De gemeente zegt geen andere optie te hebben.',
+    body: [
+      "Tientallen omwonenden hebben vanmorgen de aankomst van een bus met asielzoekers bij een tijdelijke noodopvang in Hoogeveen verhinderd. De bus, met 38 mensen aan boord, draaide na drie kwartier wachten weg richting Ter Apel.",
+      "Op een protestbord stond: \"Wij zijn niet gehoord.\" De gemeente had de buurt vorige week per brief geïnformeerd dat in de leegstaande sporthal aan de Edisonstraat tijdelijk vluchtelingen zouden worden opgevangen, voor maximaal zes maanden.",
+      "Bewoonster Annet Visser (52): \"Een brief in de bus, that's it. Geen inspraak, geen overleg. We willen best meedenken, maar niet dit.\" Visser woont al achttien jaar in de wijk en zegt zich nooit eerder zo overruled gevoeld te hebben.",
+      "Burgemeester Karel Loohuis erkent dat de communicatie \"beter had gekund\". Hij benadrukt dat de gemeente weinig keus had: \"Het COA heeft de wettelijke taakstelling. Wij moeten leveren.\"",
+      "Het is onduidelijk wat er nu met de groep asielzoekers gebeurt. Vanavond is er crisisoverleg op het stadhuis."
+    ],
+    why: "Bewoners voelen zich gepasseerd. De gemeente zegt dat het niet anders kon. Twee verhalen, één straat."
+  },
+  {
+    id: 3, score: 85, cat: 'Misdaad', regio: 'Brabant', loc: 'Tilburg',
+    src: 'Omroep Brabant', time: '05:58',
+    title: 'Agent schiet hond neer na bijtincident, baasje woedend',
+    sum: "Een politieagent schoot dinsdagavond een Staffordshire dood die zijn collega had aangevallen. De eigenaar spreekt van moord op zijn beste vriend en eist excuses.",
+    body: [
+      "Een politieagent heeft dinsdagavond rond 19:00 in het Reeshofpark in Tilburg een Staffordshire-terriër doodgeschoten. De hond had volgens de politie een collega-agent aangevallen tijdens een routinecontrole.",
+      "De eigenaar, Marco van den Heuvel (38), spreekt van \"moord op mijn beste vriend\" en eist excuses van de politie. \"Bo was geen gevaarlijke hond. Hij was acht jaar en hij speelde met kinderen. Die agent heeft direct geschoten zonder waarschuwing.\"",
+      "Volgens de politie ging het anders. \"Onze collega werd in zijn arm gebeten en kon zich niet bevrijden. Het schot was de enige optie om verdere verwondingen te voorkomen\", aldus woordvoerder Petra Hagen.",
+      "Ooggetuige Joost de Wilde (29) zegt dat het allemaal heel snel ging. \"De hond rende los, dat klopt. Maar of hij echt aanviel of gewoon enthousiast was, durf ik niet te zeggen. Het schot kwam binnen tien seconden.\"",
+      "Van den Heuvel heeft een advocaat ingeschakeld. Op de plek waar de hond stierf liggen sinds gistermiddag bloemen en een rode halsband."
+    ],
+    why: "Een agent schiet, een baasje zegt dat het nooit nodig was. Tussen woord en woord wat we accepteren van een uniform."
+  },
+  {
+    id: 4, score: 82, cat: 'Politiek', regio: 'Zuid-Holland', loc: 'Den Haag',
+    src: 'AD Den Haag', time: '06:17',
+    title: 'Wethouder opgepakt voor subsidie-fraude van 2,3 miljoen',
+    sum: "Wethouder M. (48, GroenLinks-PvdA) is op verdenking van langdurige fraude in voorlopige hechtenis genomen. Het OM spreekt van systematische zelfverrijking.",
+    body: [
+      "De Haagse wethouder Marlies Visser (48, GroenLinks-PvdA) is op verdenking van langdurige subsidie-fraude in voorlopige hechtenis genomen. Het Openbaar Ministerie spreekt van \"systematische zelfverrijking\" over een periode van zeven jaar, voor een bedrag van naar schatting 2,3 miljoen euro.",
+      "Visser, sinds 2018 verantwoordelijk voor cultuur en welzijn, zou subsidies hebben uitgekeerd aan stichtingen die werden bestuurd door familieleden en haar partner. De stichtingen leverden volgens het OM nauwelijks tot geen daadwerkelijke activiteiten.",
+      "De fraude kwam aan het licht na een tip van een ambtenaar bij het stadhuis. \"Het is verbijsterend dat dit zo lang heeft kunnen doorgaan\", zegt burgemeester Jan van Zanen. \"We gaan alle verstrekte subsidies van de afgelopen tien jaar opnieuw tegen het licht houden.\"",
+      "GroenLinks-PvdA-fractievoorzitter Mariska Verburg liet weten \"geschokt\" te zijn en het partijlidmaatschap van Visser per direct op te schorten. \"Als dit klopt, is het een kaakslag voor iedereen die zich inzet voor de publieke zaak.\"",
+      "Visser zelf heeft via haar advocaat laten weten alle aantijgingen te ontkennen. Ze blijft tot zeker volgende week dinsdag vastzitten."
+    ],
+    why: "Familie als bestuurders, partner in de stichting. Belastinggeld zeven jaar lang langs het toezicht."
+  },
+  {
+    id: 5, score: 78, cat: 'Bizar', regio: 'Zuid-Holland', loc: 'Rotterdam',
+    src: 'Rijnmond', time: '04:33',
+    title: 'Festival zonder vergunning ontruimd door ME, bezoekers in boom',
+    sum: 'Een illegaal techno-festival in het Kralingse Bos werd vannacht ontruimd. Enkele bezoekers verschansten zich urenlang in een eik en moesten door de brandweer worden bevrijd.',
+    body: [
+      "Een illegaal techno-festival in het Kralingse Bos in Rotterdam is vannacht door de Mobiele Eenheid ontruimd. De politie schat dat er ongeveer 800 bezoekers aanwezig waren. Acht mensen werden aangehouden, onder wie vermoedelijk de organisatoren.",
+      "Het feest was opgezet zonder vergunning, aldus de gemeente. Klachten over harde muziek begonnen rond middernacht binnen te komen. Toen de politie arriveerde verschansten enkele bezoekers zich in een grote eik in het park, om aanhouding te ontlopen.",
+      "\"Ze klommen tot zeker tien meter hoog\", zegt brandweerwoordvoerder Erik van der Meer. \"Wij hebben drie mensen met de hoogwerker naar beneden moeten halen. Een van hen had te veel gedronken en kon niet meer zelf naar beneden.\"",
+      "De organisatoren hadden volgens omstanders via Telegram en Signal gewerkt om de locatie geheim te houden. De feestende bezoekers, voornamelijk twintigers en dertigers, kwamen uit het hele land.",
+      "Schade aan het bos lijkt mee te vallen. De gemeente Rotterdam laat weten boetes uit te delen aan de organisatoren en sluit niet uit dat ook bezoekers gerechtelijk worden vervolgd."
+    ],
+    why: "800 mensen wisten waar ze moesten zijn, de gemeente niet. Acht in een boom, één in handboeien."
+  },
+  {
+    id: 6, score: 75, cat: 'Evenement', regio: 'Noord-Holland', loc: 'Amsterdam',
+    src: 'AT5', time: '07:45',
+    title: 'Extinction Rebellion blokkeert A10 tijdens spits',
+    sum: 'Ongeveer 200 activisten zijn vanmorgen de snelweg opgelopen ter hoogte van de RAI. Het verkeer staat al twee uur muurvast, de politie heeft 47 mensen aangehouden.',
+    body: [
+      "Ongeveer 200 activisten van Extinction Rebellion zijn vanmorgen om 07:30 de A10 opgelopen ter hoogte van de RAI in Amsterdam. Het verkeer kwam tijdens de spits volledig tot stilstand. De ME hield 47 mensen aan voor het verstoren van de openbare orde.",
+      "De actie was bedoeld om aandacht te vragen voor wat de organisatie \"het falen van het kabinet op klimaatbeleid\" noemt. Demonstranten ketenden zich vast aan elkaar en aan vangrails. De ontruiming kostte de politie ruim twee uur.",
+      "\"Wij zien geen andere weg meer\", zegt actievoerder Sophie van Eyck (24). \"De politiek doet niets, dus moeten wij de boel verstoren tot ze wel luisteren.\"",
+      "ANWB-woordvoerder Pieter Boon noemt de actie \"asociaal\" en wijst op de gevolgen voor weggebruikers. \"Mensen kwamen niet op hun werk, in het ziekenhuis, op school. Dit raakt mensen die niets met het klimaatdebat te maken hebben.\"",
+      "Burgemeester Femke Halsema kondigde aan dat de gemeente de schade en de inzet van de politie op de organisatoren wil verhalen. Het verkeer rond de A10 was rond 11:00 weer hervat."
+    ],
+    why: "Activisten op het asfalt, ouders niet bij hun kind in het ziekenhuis. Zelfde stad, twee belangen, geen winnaar."
+  },
+  {
+    id: 7, score: 71, cat: 'Misdaad', regio: 'Groningen', loc: 'Groningen',
+    src: 'Sikkom', time: '06:02',
+    title: "Inbraakgolf studenten: twaalf woningen in één nacht",
+    sum: 'In de Korrewegwijk werden afgelopen nacht twaalf studentenhuizen overvallen door een groep van vermoedelijk vier daders. De politie tast nog in het duister.',
+    body: [
+      "In de Groningse Korrewegwijk zijn afgelopen nacht twaalf studentenhuizen overvallen door waarschijnlijk dezelfde groep daders. Buit: laptops, telefoons, fietsen en in enkele gevallen contant geld. De politie tast nog in het duister.",
+      "De inbraken vonden plaats tussen 02:00 en 04:30, allemaal in straten rond de Korreweg. In een aantal gevallen werd er ingebroken terwijl de bewoners thuis sliepen.",
+      "Studente Lieke Bos (21): \"Ik werd wakker omdat de voordeur dichtsloeg. Ik dacht dat het mijn huisgenoot was. Pas vanmorgen zag ik dat mijn laptop weg was, mijn portemonnee, en de fiets uit de gang.\"",
+      "De daders zouden volgens getuigen in een donkere bestelbus rondrijden. Ze gingen volgens de politie systematisch te werk: rugzakken, joints, telefoons, alles wat snel mee te nemen was. Geen bivakmutsen, geen geweld.",
+      "De universiteit roept studenten op om ramen en deuren te checken en afgesloten fietsen niet in de gang te zetten. De wijkagent houdt vanavond een spreekuur in studentencafé De Pintelier."
+    ],
+    why: "Twaalf studentenhuizen, één nacht. Routine, niet ruzie. Een wijk waar geen muur meer veilig is."
+  },
+  {
+    id: 8, score: 68, cat: 'Politiek', regio: 'Landelijk', loc: 'Den Haag',
+    src: 'NOS', time: '07:30',
+    title: "Wilders reageert op Schoof: 'Dit is verraad'",
+    sum: 'PVV-leider Wilders heeft op X fel uitgehaald naar premier Schoof na het uitlekken van een interne notitie over migratiequota. Een breuk dreigt.',
+    body: [
+      "PVV-leider Geert Wilders heeft op X (voorheen Twitter) fel uitgehaald naar premier Dick Schoof, na het uitlekken van een interne notitie over migratiequota. Wilders spreekt van \"verraad\" en \"het einde van het kabinet\". Coalitiebronnen bevestigen dat een breuk dreigt.",
+      "In de notitie, gepubliceerd door Nieuwsuur, staat dat het ministerie van Asiel een hogere instroom voorziet dan eerder gemeld. De PVV had bij het regeerakkoord harde toezeggingen geëist over migratiebeperking.",
+      "\"Schoof heeft tegen ons gelogen\", schreef Wilders in een serie posts. \"De cijfers waren bekend. We zijn als PVV gebruikt om dit kabinet te formeren en daarna in de hoek gezet. Genoeg is genoeg.\"",
+      "Schoof ontkent in een korte verklaring dat hij iets heeft achtergehouden. \"De cijfers in de notitie zijn ramingen, geen vaststaande feiten. We hebben hierover op tijd gecommuniceerd met alle coalitiepartners.\"",
+      "VVD-fractievoorzitter Dilan Yesilgöz roept op tot \"kalmte aan tafel\" maar lijkt niet te kunnen voorkomen dat de PVV vandaag een spoeddebat aanvraagt. Een kabinetsval is voor het eerst sinds de val van Rutte IV niet uit te sluiten."
+    ],
+    why: "Cijfers waren ramingen. Wilders noemt het verraad. De vraag is niet of het kabinet valt, maar waarom dit nu uitkomt."
+  },
+  {
+    id: 9, score: 62, cat: 'Bizar', regio: 'Zeeland', loc: 'Goes',
+    src: 'PZC', time: '06:58',
+    title: "Boer rijdt met tractor door drive-through McDonald's",
+    sum: "Een 67-jarige boer reed gistermiddag met zijn John Deere door de drive-through van de Goese McDonald's. Volgens hemzelf had hij gewoon trek in een McKroket.",
+    body: [
+      "Een 67-jarige akkerbouwer uit Yerseke is gistermiddag rond 13:30 met zijn John Deere-tractor door de drive-through van de McDonald's in Goes gereden. Hij bestelde een McKroket met fritessaus en een grote koffie.",
+      "De man, Jan Wisse, zegt dat hij \"gewoon trek had\" en de tractor toch al in de berm had staan. \"Ik kom net van een stuk gerooid land, en bij ons in Yerseke zit geen Mac. In Goes was het gewoon zo even rijden.\"",
+      "Personeel van de McDonald's wist niet wat hen overkwam toen de bandentractor de drive-through in draaide. \"We hebben hem netjes geholpen\", zegt filiaalmanager Anouk de Pauw. \"Hij betaalde contant. Geen probleem.\"",
+      "De politie kreeg melding van de tractor in de bebouwde kom, maar besloot niet in te grijpen. \"Meneer reed netjes en heeft zich aan alle regels gehouden\", aldus woordvoerder Wim van der Linde. \"Het is geen schoonheid om te zien, maar wettelijk mag het.\"",
+      "Op TikTok werd het filmpje, door een achterligger gemaakt, in 24 uur ruim 300.000 keer bekeken. Wisse zelf zegt zich er niets van aan te trekken: \"Komen ze allemaal mijn aardappels eten? Mooi.\""
+    ],
+    why: "Boer met John Deere bestelt McKroket. Politie laat het toe. Internet doet de rest."
+  },
+  {
+    id: 10, score: 55, cat: 'Evenement', regio: 'Utrecht', loc: 'Utrecht',
+    src: 'RTV Utrecht', time: '07:22',
+    title: 'Demonstratie tegen woningnood trekt 5000 mensen',
+    sum: 'Op het Domplein verzamelden zich gisteren ongeveer 5000 demonstranten. De organisatoren eisen een bouwoffensief en een einde aan beleggershypotheken.',
+    body: [
+      "Op het Domplein in Utrecht hebben gisteren ongeveer 5000 mensen gedemonstreerd tegen de woningnood. De organisatie eist een \"bouwoffensief van honderdduizend sociale huurwoningen per jaar\" en een einde aan \"de uitverkoop aan beleggers\".",
+      "De demonstratie werd georganiseerd door een coalitie van Woonprotest, FNV en de Bond Precaire Woonvormen. Onder de demonstranten waren veel jongeren, maar ook gezinnen en ouderen.",
+      "\"Ik woon nog bij mijn moeder, ik ben 31\", zegt Jasper Klaverdijk uit Utrecht. \"Ik verdien meer dan modaal en ik kom gewoon niet aan een huis. Iets klopt hier niet.\"",
+      "Wethouder wonen Linda Voortman erkent dat \"de situatie nijpend is\" maar wijst op landelijk beleid. \"De gemeente kan niet alles. We doen wat we kunnen, maar de bouwopgave moet ook landelijk geregeld worden.\"",
+      "Minister De Jonge laat in een reactie weten dat het kabinet \"volop bezig is met de opgave\". Hij verwijst naar de prestatieafspraken met corporaties. Critici noemen die afspraken \"tandeloos\". De demonstratie werd om 17:00 vreedzaam beëindigd."
+    ],
+    why: "Vijfduizend op het Domplein. Een 31-jarige bij zijn moeder. Een wethouder zonder begroting. Wie heeft de bal?"
+  }
 ];
 
-/* ============= NAV ============= */
+/* ============================================================
+   INSTEKEN (alle 10)
+   ============================================================ */
+const INSTEKEN = {
+  1: {
+    locatie: "Snackbar De Gildehof, Bekafstraat, Apeldoorn",
+    invalshoek: "Het personeel hield de overvaller twintig minuten vast. De politie kwam later. De neef wil niet 'held' genoemd worden, dat is precies waar de spanning zit. Familie achter de toonbank versus een overvaller met een mes, en daarbovenop de vraag wat de buurt eigenlijk verwacht van handhaving die er niet was.",
+    vragen: [
+      "Wat ging er door je hoofd toen je die mand pakte?",
+      "Heb je een seconde getwijfeld of je het zou doen?",
+      "Hoe lang duurde het écht voor de politie er was?",
+      "Wat zou er gebeurd zijn als jullie niets hadden gedaan?",
+      "Voelt u zich nu nog veilig in deze straat?"
+    ],
+    sprekers: [
+      ["Mehmet, de neef", "terughoudend, neem de tijd, geen camera vol in zijn gezicht"],
+      ["Halil Yildiz, eigenaar", "open en vertelt graag, laat hem zijn verhaal kwijt"],
+      ["Wijkagent", "kort, vraag specifiek naar reactietijd"],
+      ["Buurtbewoner", "straatinterview, plopkap erbij"]
+    ]
+  },
+  2: {
+    locatie: "Edisonstraat, Hoogeveen",
+    invalshoek: "Twee verhalen langs één straat. De buurt voelt zich gepasseerd, de gemeente zegt dat ze geen keus had. Kies geen kant, laat beide zien. De brief in de bus is het detail dat blijft hangen: vorm zonder inhoud. Bij wie ligt de regie eigenlijk, en wat staat er over deze opvang in de notulen die de raad nooit heeft gezien.",
+    vragen: [
+      "Wat staat er precies in die brief van de gemeente?",
+      "Wanneer hoorde u het écht voor het eerst?",
+      "Wat zou voor u acceptabel zijn geweest?",
+      "Hoe kijkt u nu naar uw burgemeester?",
+      "Is het de mensen in de bus, of de manier waarop dit is geregeld?"
+    ],
+    sprekers: [
+      ["Annet Visser", "woordvoerder van de blokkade, recht op de man af"],
+      ["Burgemeester Loohuis", "bestuurlijk, niet meegaan in retoriek"],
+      ["Iemand uit de bus", "als het kan, waardig, geen slachtofferrol"],
+      ["COA-woordvoerder", "feiten over taakstelling, kort houden"]
+    ]
+  },
+  3: {
+    locatie: "Reeshofpark, Tilburg",
+    invalshoek: "De politie heeft een verhaal, het baasje een ander. De ooggetuige zegt dat het binnen tien seconden ging. Welk woord weegt hier zwaarder, 'aanviel' of 'enthousiast'? Dit gaat niet alleen over een hond. Dit gaat over wat we accepteren van iemand met een vergunning om te schieten.",
+    vragen: [
+      "Hoe heeft Bo zich gisteren gedragen, voor het incident?",
+      "Was er ruimte om hem te bedwingen zonder schot?",
+      "Wat heeft u in die seconden tegen de agent gezegd?",
+      "Wat verwacht u nu, een excuus of meer?",
+      "Kent u de protocollen waar de politie naar verwijst?"
+    ],
+    sprekers: [
+      ["Marco van den Heuvel", "emotioneel, geef ruimte, niet te lang doorvragen"],
+      ["Joost de Wilde, ooggetuige", "neutraal, vraag naar timing"],
+      ["Politiewoordvoerder", "vasthouden aan inhoud, niet aan vorm"],
+      ["Hondengedragsdeskundige", "context, geen partij"]
+    ]
+  },
+  4: {
+    locatie: "Stadhuis Den Haag, persmoment OM",
+    invalshoek: "Volg het geld. Reconstrueer de fraude jaar voor jaar: welke subsidies, welke begunstigden, welke familieband. Dit duurde zeven jaar, iemand heeft dingen gezien en gezwegen. Stel daarna aan iedereen die ernaast zat één eenvoudige vraag: hoe heeft u dit gemist?",
+    vragen: [
+      "Wanneer kwam dit voor het eerst op uw bureau?",
+      "Welke ambtenaar heeft de tip gegeven, en waarom nu?",
+      "Was er één externe accountantscontrole die hier doorheen had moeten komen?",
+      "Wat zegt dit over uw eigen toezicht?",
+      "Wat doet u om het geld terug te halen?"
+    ],
+    sprekers: [
+      ["Officier van Justitie", "feitelijk, persmoment afwachten"],
+      ["Burgemeester Van Zanen", "politiek verantwoordelijk, druk handhaven"],
+      ["Klokkenluider/ambtenaar", "beschermen, off-the-record waar nodig"],
+      ["Coalitiegenoot", "vraag specifiek wie wat wist"]
+    ]
+  },
+  5: {
+    locatie: "Kralingse Bos, Rotterdam",
+    invalshoek: "800 mensen wisten waar ze moesten zijn, de gemeente niet. Iemand had een betere plek dan de officiële organisatoren. Dat zegt iets over het culturele aanbod in de stad. De boom is het beeld, het feest is het verhaal. Hoe ver wijkt het illegale aanbod af van wat de gemeente faciliteert.",
+    vragen: [
+      "Hoe wist je waar je naartoe moest gaan?",
+      "Waarom geen vergunning, was het geprobeerd?",
+      "Hoe lang heb je in die boom gezeten?",
+      "Was het moment dat de ME kwam je beste deel van de avond?",
+      "Wat is het verschil met een gemeentelijk festival, voor jou?"
+    ],
+    sprekers: [
+      ["Bezoeker uit de boom", "humor werkt, jong publiek, kort"],
+      ["Organisator", "anoniem, kort, niet opjagen"],
+      ["Brandweer", "feitelijk, geen mening"],
+      ["Wethouder cultuur", "doorvragen op aanbod gemeente"]
+    ]
+  },
+  6: {
+    locatie: "A10 ter hoogte van RAI, Amsterdam",
+    invalshoek: "Activisten zien geen andere weg, weggebruikers willen naar werk. Beide hebben gelijk en daar zit het in. Vraag de activist niet of dit moeite kost, dat weet hij. Vraag de man die niet op tijd was bij zijn vader in het ziekenhuis. Pak de politiek pas daarna, en stel die de simpelste vraag: wat moet er nu gebeuren.",
+    vragen: [
+      "Begrijpt u dat sommigen u als asociaal zien?",
+      "Wat is uw plan B als dit niets verandert?",
+      "Aan de geblokkeerde automobilist: kunt u zich voorstellen dat ze geen andere uitweg zien?",
+      "Hoeveel kost deze inzet de politie vandaag?",
+      "Bij wie ligt de bal nu?"
+    ],
+    sprekers: [
+      ["Sophie van Eyck", "articulaat, ideologisch, daag uit"],
+      ["Geblokkeerde automobilist", "straatinterview, emotie ophalen"],
+      ["Politievertegenwoordiger", "kosten en uitvoering"],
+      ["Kabinetslid klimaat", "tegenstem, de bal terugleggen"]
+    ]
+  },
+  7: {
+    locatie: "Korrewegwijk, Groningen",
+    invalshoek: "Twaalf huizen, één nacht, niemand zag iets. Een wijk waarin iedereen elkaar kent op naam, behalve ineens niet meer. De daders waren snel en niet gewelddadig. Dit is geen overval, dit is operatie. Wat weet de politie eigenlijk al, en hoeveel wil ze daarvan kwijt.",
+    vragen: [
+      "Hoe ben je erachter gekomen dat er was ingebroken?",
+      "Heb je achteraf iets gehoord wat je nu anders interpreteert?",
+      "Bent u bekend met soortgelijke series in andere steden?",
+      "Wat doe je nu anders dan vorige week?",
+      "Aan de wijkagent: hoe kennen jullie deze daders niet?"
+    ],
+    sprekers: [
+      ["Lieke Bos, slachtoffer", "maak het kleiner, niet drama"],
+      ["Andere bewoners", "straatinterview, plopkap, lokaal gevoel"],
+      ["Wijkagent", "feitelijk, niet beleggen op patroon zonder bewijs"],
+      ["Buurtwacht-coördinator", "nuance, oplossingen"]
+    ]
+  },
+  8: {
+    locatie: "Tweede Kamer, Den Haag",
+    invalshoek: "Wilders zegt 'verraad', maar de cijfers waren ramingen. Was dit echt een verrassing of komt het hem goed uit. Een spoeddebat is theater. Vraag niet of het kabinet valt, dat weet hij ook niet. Vraag waarom hij dit nu naar buiten brengt en niet drie weken geleden, toen de notitie volgens insiders al rondging.",
+    vragen: [
+      "Wanneer wist u van deze notitie?",
+      "Heeft u zelf om die ramingen gevraagd?",
+      "Wat is verraad, en wat is gewoon politiek?",
+      "Schoof zegt dat hij niets heeft achtergehouden. Was hij erbij toen u het hoorde?",
+      "Wat is uw verantwoordelijkheid voor dit kabinet?"
+    ],
+    sprekers: [
+      ["Wilders", "niet dwepen, één vraag, dan doorvragen"],
+      ["Schoof of woordvoerder", "uitspraken vasthouden"],
+      ["Yesilgöz", "coalitie-positie scherp krijgen"],
+      ["Politiek redacteur Nieuwsuur", "context van de notitie"]
+    ]
+  },
+  9: {
+    locatie: "McDonald's, Goes",
+    invalshoek: "Boer rijdt naar de Mac, niemand grijpt in, internet vindt het geweldig. Onder de glimlach een eenvoudige vraag: wat is hier wel en niet toegestaan? Wisse heeft gelijk gehad, juridisch. Maar mocht het ook? En waar zit de grens. Geen probleem maken, wel doorzetten.",
+    vragen: [
+      "Hoe vaak rijdt u eigenlijk de stad in?",
+      "Was die McKroket lekker?",
+      "Aan de manager: krijgt iedereen die op een tractor komt voorrang?",
+      "Aan de politie: wat als iedereen dit gaat doen?",
+      "Aan een achterligger: was dit storend of grappig?"
+    ],
+    sprekers: [
+      ["Jan Wisse", "laat hem zijn verhaal doen, geef ruimte voor humor"],
+      ["Anouk de Pauw, manager", "corporate praat doorprikken"],
+      ["Wim van der Linde, politie", "formeel, blijf doorvragen"],
+      ["Achterligger met TikTok", "kort, viral context"]
+    ]
+  },
+  10: {
+    locatie: "Domplein, Utrecht",
+    invalshoek: "Vijfduizend mensen, geen rel, geen voorpagina-beeld. Daarom is dit ook het verhaal. Een 31-jarige bij zijn moeder, een wethouder die zegt 'de gemeente kan niet alles'. Wie kan wel? Volg de trap omhoog tot iemand bij naam zegt: ik ben verantwoordelijk. Dat is meestal precies waar het stopt.",
+    vragen: [
+      "Aan een demonstrant: hoe lang loop je hier al mee?",
+      "Heb je ooit een verandering gezien na een demonstratie?",
+      "Aan de wethouder: hoeveel huizen levert de gemeente deze maand op?",
+      "Aan de minister: wie kan dit precies regelen, mocht u willen?",
+      "Op straat: bent u gepensioneerd, en zou u uw eigen huis nu nog kunnen kopen?"
+    ],
+    sprekers: [
+      ["Jasper Klaverdijk", "herkenbaar verhaal, geef tijd"],
+      ["Wethouder Voortman", "bestuurlijk, vraag naar concrete getallen"],
+      ["Minister De Jonge", "niet bij verklaring laten, doorvragen"],
+      ["Oudere bewoner", "straatinterview, generaties tegenover elkaar"]
+    ]
+  }
+};
+
+/* ============================================================
+   CANVAS MODAL DATA
+   ============================================================ */
+const CANVAS_DATA = {
+  jtbd: { label: 'Jobs-to-be-Done', title: 'Wat de redactie wil bereiken', body: 'De redactie mist dagelijks lokale verhalen met landelijk potentieel, omdat ze handmatig tientallen bronnen moeten checken en paywalls in de weg staan.\n\nElke ochtend opnieuw begint het doorvlooien. Kostbare tijd die niet aan échte journalistiek wordt besteed.' },
+  promise: { label: 'AI Promise', title: 'Wat de technologie kan', body: 'Continu meer dan dertig bronnen monitoren.\nAutomatisch scoren op basis van PowNed-DNA.\nPaywalls omzeilen waar dat juridisch en redactioneel verantwoord is.\nDeduplicatie tussen bronnen.\nElke ochtend voor 08:30 een feed klaar.' },
+  hact: { label: 'Human Activities', title: 'Wat de mens blijft doen', body: 'Eindredactionele beslissing.\nInvalshoek bepalen.\nVerslaggever aansturen en briefen.\nEthische afweging maken.\nBronverificatie en interview-uitvoering.\nHet verhaal vertellen.' },
+  hreinf: { label: 'Human Reinforcement', title: 'Hoe de AI de mens versterkt', body: 'Suggesties voor invalshoek.\nVoorstellen voor sprekers en gespreksonderwerpen.\nHistorische context bij een lopend item.\nDe redactie wordt scherper en sneller, zonder dat de AI de regie overneemt.' },
+  benefits: { label: 'Benefits for Humans', title: 'Wat het de redactie oplevert', body: 'Geen handmatig scrollen meer door tientallen websites.\nFocus verschuift naar verhalen maken in plaats van zoeken.\nSneller op locatie, sneller op straat.\nGeen relevante stories meer missen.\nMinder frustratie over paywalls en vergeten favorieten.' },
+  mact: { label: 'Machine Activities', title: 'Wat de machine doet', body: 'RSS, sitemap en API-scraping.\nPaywall-omzeiling via cache- en printversies.\nNLP-analyse van titels en content.\nRelevantie scoring op basis van PowNed YouTube dataset.\nDeduplicatie tussen bronnen.\nCategorisering en regio-tagging.\nTrending topic detectie.' },
+  collab: { label: 'Collaboration', title: 'Mens en machine, samen scherp', body: 'De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik, elke favoriet, elke afgewezen suggestie.\n\nDe filtering wordt steeds preciezer in de eigen redactiestijl. Human in the loop: de AI suggereert, de mens beslist. Altijd.' },
+  bias: { label: 'Critical Thinking and Biases', title: "Risico's en blinde vlekken", body: 'Filterbubbel: de AI toont vooral wat hij kent als PowNed-relevant. Risico op tunnelvisie.\n\nOplossing: diverse bronnenlijst plus een wildcard-sectie met onverwachte items.\n\nTransparantie: bij elk item staat waarom het hoog scoort, zodat de redactie de keuze kan controleren en bijsturen.' },
+  impl: { label: 'Considerations and Implications', title: 'Juridisch, ethisch, praktisch', body: 'Paywall-omzeiling: juridisch grijs gebied, alleen voor redactioneel gebruik.\nScraping: respecteer robots.txt waar mogelijk.\nPrivacy: geen persoonsgegevens opslaan.\nBias: trainingsdata bevat bestaande PowNed-bias, dus filtering reproduceert die.\nKosten: API-calls en hosting blijven binnen budget.' },
+  change: { label: 'Change Management', title: 'Hoe we het invoeren', body: 'Pilotfase met drie tot vijf redactieleden.\nKorte handleiding plus een walkthrough.\nFeedback-loop: dagelijks een knop om aan te geven of de feed nuttig was.\nGeleidelijke uitbreiding van bronnen en regio\'s.\nRedactieleden worden bot-trainers door items te beoordelen, en zien hun input direct terug in de filtering.' }
+};
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function escape(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function badgeClass(s){ return s >= 80 ? 'hi' : s >= 60 ? 'mid' : 'lo'; }
+
+/* ============================================================
+   NAV + SCROLL
+   ============================================================ */
 const navEl = document.getElementById('nav');
-const links = document.querySelectorAll('[data-to]');
 function scrollTo(id){
   const t = document.getElementById(id);
-  if (t) gsap.to(window, {duration:0.9, scrollTo:{y:t, offsetY:48}, ease:'power3.inOut'});
+  if (t) gsap.to(window, { duration: 0.9, scrollTo: { y: t, offsetY: 48 }, ease: 'power3.inOut' });
 }
-links.forEach(l => l.addEventListener('click', e => {
+document.querySelectorAll('[data-to]').forEach(l => l.addEventListener('click', e => {
   e.preventDefault();
   scrollTo(l.dataset.to);
 }));
 
+const sections = ['hero','brief','canvas','auto-intro','auto-1','auto-2','auto-3','auto-4'];
+const navMap = { 'hero':'brief', 'brief':'brief', 'canvas':'canvas', 'auto-intro':'auto-intro', 'auto-1':'auto-intro', 'auto-2':'auto-intro', 'auto-3':'auto-3', 'auto-4':'auto-4' };
 window.addEventListener('scroll', () => {
   navEl.classList.toggle('scrolled', window.scrollY > 80);
-}, {passive:true});
-
-/* progress + active nav */
-const sections = ['hero','brief','canvas','auto-intro','auto-1','auto-2','auto-3','auto-4'];
-const navMap = {'hero':'brief','brief':'brief','canvas':'canvas','auto-intro':'auto-intro','auto-1':'auto-intro','auto-2':'auto-intro','auto-3':'auto-3','auto-4':'auto-4'};
-window.addEventListener('scroll', () => {
   const h = document.documentElement.scrollHeight - window.innerHeight;
   document.getElementById('progress').style.width = (window.scrollY / h * 100) + '%';
-
   const sy = window.scrollY + window.innerHeight * 0.4;
   let active = 'brief';
   sections.forEach(id => {
     const el = document.getElementById(id);
     if (el && el.offsetTop <= sy) active = navMap[id] || id;
   });
-  document.querySelectorAll('.nav-link').forEach(l =>
-    l.classList.toggle('active', l.dataset.to === active));
-}, {passive:true});
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.to === active));
+}, { passive: true });
 
-/* ============= REVEAL ============= */
+/* ============================================================
+   REVEAL + HERO PANELS
+   ============================================================ */
 gsap.utils.toArray('.reveal').forEach(el => {
   gsap.to(el, {
     y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
     scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
   });
 });
-
-/* ============= HERO PANELS FLOAT ============= */
 gsap.utils.toArray('.hero-panel').forEach((p, i) => {
-  gsap.from(p, {
-    opacity: 0, y: 30,
-    duration: 1, ease: 'power3.out',
-    delay: 0.4 + i * 0.15
-  });
-  gsap.to(p, {
-    y: '+=8',
-    duration: 3 + i * 0.4,
-    ease: 'sine.inOut',
-    repeat: -1, yoyo: true,
-    delay: i * 0.3
-  });
+  gsap.from(p, { opacity: 0, y: 30, duration: 1, ease: 'power3.out', delay: 0.4 + i * 0.15 });
+  gsap.to(p, { y: '+=8', duration: 3 + i * 0.4, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: i * 0.3 });
 });
 
-/* ============= CANVAS MODAL ============= */
-const CANVAS_DATA = {
-  jtbd: {
-    label: 'Jobs-to-be-Done',
-    title: 'Wat de redactie wil bereiken',
-    body: 'De redactie mist dagelijks lokale verhalen met landelijk potentieel, omdat ze handmatig tientallen bronnen moeten checken en paywalls in de weg staan.\n\nElke ochtend opnieuw begint het doorvlooien. Kostbare tijd die niet aan échte journalistiek wordt besteed.'
-  },
-  promise: {
-    label: 'AI Promise',
-    title: 'Wat de technologie kan',
-    body: 'Continu meer dan dertig bronnen monitoren.\nAutomatisch scoren op basis van PowNed-DNA.\nPaywalls omzeilen waar dat juridisch en redactioneel verantwoord is.\nDeduplicatie tussen bronnen.\nElke ochtend voor 08:30 een feed klaar.'
-  },
-  hact: {
-    label: 'Human Activities',
-    title: 'Wat de mens blijft doen',
-    body: 'Eindredactionele beslissing.\nInvalshoek bepalen.\nVerslaggever aansturen en briefen.\nEthische afweging maken.\nBronverificatie en interview-uitvoering.\nHet verhaal vertellen.'
-  },
-  hreinf: {
-    label: 'Human Reinforcement',
-    title: 'Hoe de AI de mens versterkt',
-    body: 'Suggesties voor invalshoek.\nVoorstellen voor sprekers en gespreksonderwerpen.\nHistorische context bij een lopend item.\nDe redactie wordt scherper en sneller, zonder dat de AI de regie overneemt.'
-  },
-  benefits: {
-    label: 'Benefits for Humans',
-    title: 'Wat het de redactie oplevert',
-    body: 'Geen handmatig scrollen meer door tientallen websites.\nFocus verschuift naar verhalen maken in plaats van zoeken.\nSneller op locatie, sneller op straat.\nGeen relevante stories meer missen.\nMinder frustratie over paywalls en vergeten favorieten.'
-  },
-  mact: {
-    label: 'Machine Activities',
-    title: 'Wat de machine doet',
-    body: 'RSS, sitemap en API-scraping.\nPaywall-omzeiling via cache- en printversies.\nNLP-analyse van titels en content.\nRelevantie scoring op basis van PowNed YouTube dataset.\nDeduplicatie tussen bronnen.\nCategorisering en regio-tagging.\nTrending topic detectie.'
-  },
-  collab: {
-    label: 'Collaboration',
-    title: 'Mens en machine, samen scherp',
-    body: 'De redactie markeert items als waardevol of irrelevant. Het systeem leert van elke klik, elke favoriet, elke afgewezen suggestie.\n\nDe filtering wordt steeds preciezer in de eigen redactiestijl. Human in the loop: de AI suggereert, de mens beslist. Altijd.'
-  },
-  bias: {
-    label: 'Critical Thinking and Biases',
-    title: "Risico's en blinde vlekken",
-    body: 'Filterbubbel: de AI toont vooral wat hij kent als PowNed-relevant. Risico op tunnelvisie.\n\nOplossing: diverse bronnenlijst plus een wildcard-sectie met onverwachte items.\n\nTransparantie: bij elk item staat waarom het hoog scoort, zodat de redactie de keuze kan controleren en bijsturen.'
-  },
-  impl: {
-    label: 'Considerations and Implications',
-    title: 'Juridisch, ethisch, praktisch',
-    body: 'Paywall-omzeiling: juridisch grijs gebied, alleen voor redactioneel gebruik.\nScraping: respecteer robots.txt waar mogelijk.\nPrivacy: geen persoonsgegevens opslaan.\nBias: trainingsdata bevat bestaande PowNed-bias, dus filtering reproduceert die.\nKosten: API-calls en hosting blijven binnen budget.'
-  },
-  change: {
-    label: 'Change Management',
-    title: 'Hoe we het invoeren',
-    body: 'Pilotfase met drie tot vijf redactieleden.\nKorte handleiding plus een walkthrough.\nFeedback-loop: dagelijks een knop om aan te geven of de feed nuttig was.\nGeleidelijke uitbreiding van bronnen en regio\'s.\nRedactieleden worden bot-trainers door items te beoordelen, en zien hun input direct terug in de filtering.'
-  }
-};
-
+/* ============================================================
+   CANVAS MODAL
+   ============================================================ */
 const modal = document.getElementById('modal');
 const modalInner = modal.querySelector('.modal');
 document.querySelectorAll('.cv').forEach(c => {
@@ -2598,73 +2654,211 @@ document.querySelectorAll('.cv').forEach(c => {
     document.getElementById('mTitle').textContent = d.title;
     document.getElementById('mBody').textContent = d.body;
     modal.classList.add('open');
-    gsap.fromTo(modal, {opacity:0}, {opacity:1, duration:0.25});
-    gsap.fromTo(modalInner, {y:20, opacity:0}, {y:0, opacity:1, duration:0.4, ease:'power3.out'});
+    gsap.fromTo(modal, { opacity: 0 }, { opacity: 1, duration: 0.25 });
+    gsap.fromTo(modalInner, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
   });
 });
-function closeModal() {
-  gsap.to(modal, {opacity:0, duration:0.2, onComplete:() => modal.classList.remove('open')});
-}
+function closeModal(){ gsap.to(modal, { opacity: 0, duration: 0.2, onComplete: () => modal.classList.remove('open') }); }
 document.getElementById('modalClose').addEventListener('click', closeModal);
 modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeSheet(); } });
 
-/* ============= LIVE COUNTER ============= */
-let lcCounted = false;
-ScrollTrigger.create({
-  trigger: '#auto-1',
-  start: 'top 60%',
-  onEnter: () => {
-    if (lcCounted) return;
-    lcCounted = true;
-    const el = document.getElementById('lcNum');
-    const o = {v: 0};
-    gsap.to(o, {v: 247, duration: 1.6, ease: 'power3.out',
-      onUpdate: () => el.textContent = Math.round(o.v)
-    });
+/* ============================================================
+   VIZ 01 - NETWORK FLOW PARTICLES
+   ============================================================ */
+const particlesG = document.getElementById('particles');
+const collectorNumEl = document.getElementById('collectorNum');
+let v01Started = false;
+let v01Counter = 0;
+
+function spawnParticle(srcIdx) {
+  const path = document.getElementById('path' + srcIdx);
+  if (!path) return;
+  const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  c.setAttribute('r', '3');
+  c.setAttribute('class', 'particle');
+  particlesG.appendChild(c);
+
+  // Activate path briefly
+  path.classList.add('active');
+
+  // Pulse the source
+  const pulse = document.querySelector(`.src-node[data-src="${srcIdx}"] .src-pulse`);
+  if (pulse) {
+    gsap.fromTo(pulse, { opacity: 1, attr: { r: 4 } }, { opacity: 0, attr: { r: 12 }, duration: 0.8, ease: 'power2.out' });
   }
+
+  gsap.to(c, {
+    duration: 1.4,
+    ease: 'power1.inOut',
+    motionPath: { path: path, autoRotate: false, align: path },
+    onComplete: () => {
+      c.remove();
+      // Counter ticks
+      v01Counter++;
+      if (collectorNumEl) collectorNumEl.textContent = (247 + v01Counter % 12);
+      // Pulse the database path
+      const dbPath = document.getElementById('pathDb');
+      if (dbPath) {
+        gsap.fromTo(dbPath, { opacity: 0.4 }, { opacity: 1, duration: 0.2, yoyo: true, repeat: 1 });
+      }
+      setTimeout(() => path.classList.remove('active'), 200);
+    }
+  });
+}
+
+function startViz01() {
+  if (v01Started) return;
+  v01Started = true;
+  // Counter animation to 247
+  const o = { v: 0 };
+  gsap.to(o, { v: 247, duration: 1.6, ease: 'power3.out', onUpdate: () => collectorNumEl.textContent = Math.round(o.v) });
+  // Particle stream
+  let tick = 0;
+  setInterval(() => {
+    const src = tick % 6;
+    spawnParticle(src);
+    tick++;
+  }, 500);
+}
+ScrollTrigger.create({ trigger: '#auto-1', start: 'top 60%', onEnter: startViz01 });
+
+// Source node click highlighting
+document.querySelectorAll('.viz-01 .src-node').forEach(n => {
+  n.addEventListener('click', () => {
+    const idx = n.dataset.src;
+    for (let i = 0; i < 4; i++) setTimeout(() => spawnParticle(idx), i * 200);
+  });
 });
 
-/* ============= STAT NUM (FEED) ============= */
-let statCounted = false;
-ScrollTrigger.create({
-  trigger: '#auto-3',
-  start: 'top 60%',
-  onEnter: () => {
-    if (statCounted) return;
-    statCounted = true;
-    const el = document.getElementById('statNum');
-    const o = {v: 0};
-    gsap.to(o, {v: 52, duration: 1.2, ease: 'power3.out',
-      onUpdate: () => el.textContent = Math.round(o.v)
-    });
-  }
-});
+/* ============================================================
+   VIZ 02 - EMBEDDING SCATTER PLOT
+   ============================================================ */
+const dotsG = document.getElementById('dots');
+const linesG = document.getElementById('lines');
+const labelsG = document.getElementById('labels');
+const v02hover = document.getElementById('v02hover');
+const v02score = document.getElementById('v02score');
+const v02dec = document.getElementById('v02dec');
 
-/* ============= FEED ============= */
-const fR = document.getElementById('fR');
-const fC = document.getElementById('fC');
-const fS = document.getElementById('fS');
+const EMBED_ITEMS = [
+  { id: 1, score: 94, x: 365, y: 195, t: "Snackbar overval Apeldoorn" },
+  { id: 2, score: 89, x: 340, y: 205, t: "Asielbus Hoogeveen" },
+  { id: 3, score: 85, x: 380, y: 175, t: "Hond Tilburg" },
+  { id: 4, score: 82, x: 325, y: 180, t: "Wethouder fraude" },
+  { id: 5, score: 78, x: 410, y: 215, t: "Festival Rotterdam" },
+  { id: 6, score: 75, x: 295, y: 220, t: "A10 blokkade" },
+  { id: 7, score: 71, x: 415, y: 160, t: "Inbraken Groningen" },
+  { id: 8, score: 68, x: 285, y: 165, t: "Wilders versus Schoof" },
+  { id: 9, score: 62, x: 445, y: 230, t: "Tractor McDonald's" },
+  { id: 10, score: 55, x: 270, y: 245, t: "Demonstratie woningnood" },
+  { id: 11, score: 42, x: 200, y: 280, t: "Aandelenkoers ASML" },
+  { id: 12, score: 38, x: 510, y: 110, t: "Tentoonstelling Rijksmuseum" },
+  { id: 13, score: 34, x: 165, y: 110, t: "EU-vergadering Brussel" },
+  { id: 14, score: 28, x: 540, y: 290, t: "Beurs van Frankfurt" },
+  { id: 15, score: 22, x: 130, y: 320, t: "Olifant geboren in Artis" },
+  { id: 16, score: 15, x: 580, y: 60, t: "Kunstmest-prijzen Gelderland" },
+  { id: 17, score: 12, x: 100, y: 80, t: "Zonnepanelen-statistiek" }
+];
+
+function colorForScore(s) {
+  if (s >= 80) return '#e2148b';
+  if (s >= 60) return '#c45a9c';
+  if (s >= 40) return '#9a7895';
+  return '#a8a8a8';
+}
+function radiusForScore(s) {
+  return 4 + (s / 100) * 5;
+}
+
+let v02Spawned = false;
+function spawnViz02() {
+  if (v02Spawned) return;
+  v02Spawned = true;
+
+  EMBED_ITEMS.forEach((it, i) => {
+    // Line from dot to cluster (initially hidden)
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('class', 'item-line');
+    line.setAttribute('x1', it.x);
+    line.setAttribute('y1', it.y);
+    line.setAttribute('x2', 350);
+    line.setAttribute('y2', 190);
+    line.setAttribute('data-id', it.id);
+    linesG.appendChild(line);
+
+    // Dot
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('class', 'item-dot');
+    c.setAttribute('cx', it.x);
+    c.setAttribute('cy', it.y);
+    c.setAttribute('r', 0);
+    c.setAttribute('fill', colorForScore(it.score));
+    c.setAttribute('data-id', it.id);
+    dotsG.appendChild(c);
+
+    // Label (initially hidden)
+    const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lbl.setAttribute('class', 'item-label');
+    lbl.setAttribute('x', it.x + 8);
+    lbl.setAttribute('y', it.y - 6);
+    lbl.setAttribute('data-id', it.id);
+    lbl.textContent = it.t;
+    labelsG.appendChild(lbl);
+
+    // Animate dot in
+    gsap.fromTo(c, { attr: { r: 0 } }, { attr: { r: radiusForScore(it.score) }, duration: 0.6, ease: 'back.out(1.6)', delay: i * 0.04 });
+
+    // Hover handlers
+    c.addEventListener('mouseenter', () => {
+      line.classList.add('active');
+      lbl.classList.add('active');
+      v02hover.textContent = it.t;
+      v02score.textContent = (it.score / 100).toFixed(2) + ' (van -1 tot 1)';
+      v02dec.textContent = it.score >= 60 ? 'In feed' : 'Afgewezen';
+    });
+    c.addEventListener('mouseleave', () => {
+      line.classList.remove('active');
+      lbl.classList.remove('active');
+    });
+  });
+}
+ScrollTrigger.create({ trigger: '#auto-2', start: 'top 60%', onEnter: spawnViz02 });
+
+/* ============================================================
+   FEED (macOS window)
+   ============================================================ */
 const fList = document.getElementById('fList');
 const fCnt = document.getElementById('fCnt');
-const favs = new Set();
+const catSeg = document.getElementById('catSeg');
+const regSel = document.getElementById('regSel');
+const sortSel = document.getElementById('sortSel');
+const searchInput = document.getElementById('searchInput');
+const sideStatNum = document.getElementById('sideStatNum');
+const cntFav = document.getElementById('cntFav');
 
-function badgeClass(s) { return s >= 80 ? 'hi' : s >= 60 ? 'mid' : 'lo'; }
-function escape(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+let activeCat = 'all';
+let activeSide = 'all';
+let activeSideCat = null;
+const favs = new Set();
 
 function renderFeed() {
   let list = ITEMS.filter(it => {
-    if (fR.value !== 'all' && it.regio !== fR.value) return false;
-    if (fC.value !== 'all' && it.cat !== fC.value) return false;
+    if (activeSide === 'favs') { if (!favs.has(it.id)) return false; }
+    if (activeSide === 'cat' && activeSideCat) { if (it.cat !== activeSideCat) return false; }
+    if (activeCat !== 'all' && it.cat !== activeCat) return false;
+    if (regSel.value !== 'all' && it.regio !== regSel.value) return false;
+    const q = searchInput.value.trim().toLowerCase();
+    if (q && !(it.title.toLowerCase().includes(q) || it.sum.toLowerCase().includes(q) || it.loc.toLowerCase().includes(q))) return false;
     return true;
   });
-  if (fS.value === 'time') list.sort((a,b) => b.time.localeCompare(a.time));
-  else list.sort((a,b) => b.score - a.score);
+  if (sortSel.value === 'time') list.sort((a, b) => b.time.localeCompare(a.time));
+  else list.sort((a, b) => b.score - a.score);
 
   fCnt.textContent = list.length + ' items';
 
   if (!list.length) {
-    fList.innerHTML = '<div class="feed-empty">Geen items voor deze filters</div>';
+    fList.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--graphite);font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Geen items voor deze filters</div>';
     return;
   }
 
@@ -2678,31 +2872,33 @@ function renderFeed() {
         </button>
       </div>
       <div class="fc-meta">
-        <span>${escape(it.loc)}</span>
-        <span class="sep"></span>
-        <span>${escape(it.src)}</span>
-        <span class="sep"></span>
+        <span>${escape(it.loc)}</span><span class="sep"></span>
+        <span>${escape(it.src)}</span><span class="sep"></span>
         <span>${it.time}</span>
       </div>
-      <p class="fc-sum">${escape(it.sum)}</p>
-      <div class="fc-why">
-        <span class="fc-why-label">PowNed-DNA</span>
-        <span class="fc-why-text">${escape(it.why)}</span>
-      </div>
+      <div class="fc-why"><strong>PowNed-DNA</strong>${escape(it.why)}</div>
       <div class="fc-bottom">
         <div class="fc-tags">
           <span class="fc-tag">${escape(it.cat)}</span>
           <span class="fc-tag">${escape(it.regio)}</span>
         </div>
         <button class="fc-action" data-go="${it.id}">
-          <svg><use href="#i-spark"/></svg>
-          <span>Genereer insteek</span>
+          <svg><use href="#i-spark"/></svg><span>Insteek</span>
         </button>
       </div>
     </article>
   `).join('');
 
-  // hookup
+  // Article click => sheet
+  fList.querySelectorAll('.fc').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('[data-fav]') || e.target.closest('[data-go]')) return;
+      const id = +card.dataset.i;
+      openSheet(id);
+    });
+  });
+
+  // Fav buttons
   fList.querySelectorAll('[data-fav]').forEach(b => {
     b.addEventListener('click', e => {
       e.stopPropagation();
@@ -2715,204 +2911,240 @@ function renderFeed() {
         favs.add(id);
         b.classList.add('on');
         b.querySelector('use').setAttribute('href', '#i-star-fill');
-        gsap.fromTo(b, {scale:1.3}, {scale:1, duration:0.3, ease:'back.out(2)'});
+        gsap.fromTo(b, { scale: 1.3 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
       }
+      cntFav.textContent = favs.size;
     });
   });
+
+  // Insteek shortcut
   fList.querySelectorAll('[data-go]').forEach(b => {
     b.addEventListener('click', e => {
       e.stopPropagation();
       const id = +b.dataset.go;
       selectInsteek(id);
       scrollTo('auto-4');
-      setTimeout(startType, 800);
+      setTimeout(() => startPipeline(), 800);
     });
   });
 }
-[fR, fC, fS].forEach(el => el.addEventListener('change', renderFeed));
+
+// Filter handlers
+catSeg.querySelectorAll('.feed-seg-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    catSeg.querySelectorAll('.feed-seg-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    renderFeed();
+  });
+});
+regSel.addEventListener('change', renderFeed);
+sortSel.addEventListener('change', renderFeed);
+searchInput.addEventListener('input', renderFeed);
+
+// Sidebar handlers
+document.querySelectorAll('.feed-side-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.feed-side-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    activeSide = item.dataset.side;
+    activeSideCat = item.dataset.cat || null;
+    renderFeed();
+  });
+});
+
 renderFeed();
 
-/* ============= INSTEEK ============= */
-const INSTEEK_OUT = {
-  1: `**LOCATIE**
-Snackbar De Gildehof, Apeldoorn
+/* ============================================================
+   ARTICLE SHEET (macOS-style)
+   ============================================================ */
+const sheetEl = document.getElementById('sheet');
+const sheetBg = document.getElementById('sheetBg');
+const sheetBody = document.getElementById('sheetBody');
+const sheetCloseBtn = document.getElementById('sheetClose');
 
-**INVALSHOEK**
-Straatinterview en confrontatie. Ga naar de snackbar, interview het personeel over het moment zelf. Vraag naar de emotie, de angst, en het heldengevoel. Confronteer daarna de politie: waarom duurde het zo lang?
+function openSheet(id) {
+  const it = ITEMS.find(x => x.id === id);
+  if (!it) return;
+  sheetBody.innerHTML = `
+    <div class="sheet-meta">
+      <span>${escape(it.cat)}</span><span class="pip"></span>
+      <span>${escape(it.regio)}</span><span class="pip"></span>
+      <span>Score ${it.score}</span>
+    </div>
+    <h2 class="sheet-title">${escape(it.title)}</h2>
+    <div class="sheet-byline">
+      <strong>${escape(it.src)}</strong>
+      <span class="pip"></span>
+      <span>${escape(it.loc)}</span>
+      <span class="pip"></span>
+      <span>${it.time}</span>
+    </div>
+    <p class="sheet-lead">${escape(it.sum)}</p>
+    <div class="sheet-content">
+      ${it.body.map(p => `<p>${escape(p)}</p>`).join('')}
+    </div>
+    <div class="sheet-dna-block">
+      <div class="label">PowNed-DNA — Waarom dit voor de redactie?</div>
+      <p>${escape(it.why)}</p>
+    </div>
+    <div class="sheet-cta">
+      <button class="btn btn-iris" data-sheet-go="${it.id}">
+        <svg class="icon-sm"><use href="#i-spark"/></svg>
+        <span>Genereer verhaalinsteek</span>
+      </button>
+      <button class="btn btn-ghost" style="color:var(--graphite);border-color:var(--driftwood)" id="sheetCloseBottom">
+        <span>Sluit</span>
+      </button>
+    </div>
+  `;
+  sheetEl.classList.add('open');
+  sheetBg.classList.add('open');
+  gsap.fromTo(sheetEl, { y: '100%' }, { y: '0%', duration: 0.5, ease: 'power3.out' });
+  gsap.fromTo(sheetBg, { opacity: 0 }, { opacity: 1, duration: 0.3 });
 
-**VRAGEN VOOR DE VERSLAGGEVER**
-1. Wat ging er door je heen toen je die man met de duivelsmasker zag?
-2. Had je het gevoel dat je geen keus had?
-3. Hoe snel was de politie er?
-4. Voelt u zich nog veilig in deze buurt?
+  sheetBody.querySelector('[data-sheet-go]').addEventListener('click', e => {
+    const id = +e.currentTarget.dataset.sheetGo;
+    closeSheet();
+    selectInsteek(id);
+    scrollTo('auto-4');
+    setTimeout(() => startPipeline(), 800);
+  });
+  const bottomClose = document.getElementById('sheetCloseBottom');
+  if (bottomClose) bottomClose.addEventListener('click', closeSheet);
+}
 
-**SPREKERS**
-Personeel snackbar (held van het verhaal)
-Eigenaar snackbar (financiële schade)
-Buurtbewoners (veiligheidsgevoel)
-Wijkagent (reactietijd, structurele context)
+function closeSheet() {
+  gsap.to(sheetEl, { y: '100%', duration: 0.4, ease: 'power3.in', onComplete: () => sheetEl.classList.remove('open') });
+  gsap.to(sheetBg, { opacity: 0, duration: 0.3, onComplete: () => sheetBg.classList.remove('open') });
+}
+sheetCloseBtn.addEventListener('click', closeSheet);
+sheetBg.addEventListener('click', closeSheet);
 
-**VISUEEL**
-Beveiligingscamera-beelden checken bij de eigenaar.
-Straatinterview voor de snackbar, plopkap in beeld.
-B-roll van de buurt, bij avond.
-Slot: het personeel achter de toonbank, weer aan het werk alsof er niks gebeurd is.
-
-**PRODUCTIE**
-Geschatte tijd: 1 dag
-Viral potentie: hoog (held-verhaal, visueel sterk)`,
-  2: `**LOCATIE**
-Hoogeveen, opvanglocatie noodgebouw
-
-**INVALSHOEK**
-Twee kanten van het verhaal. De buurt: waarom voelen ze zich niet gehoord? De gemeente: waarom kon het niet anders? Geen oordeel, wél confrontatie. Laat de spanning zien zonder te kiezen.
-
-**VRAGEN VOOR DE VERSLAGGEVER**
-1. Wat is precies uw bezwaar tegen deze opvang?
-2. Wanneer bent u door de gemeente geïnformeerd?
-3. Wat zou u hebben willen dat er anders ging?
-4. Hoe kijkt u naar de mensen in de bus?
-
-**SPREKERS**
-Bewoner uit de eerste rij (organisator van de blokkade)
-Burgemeester of wethouder (verantwoording)
-Een asielzoeker uit de bus (gezicht achter het cijfer)
-COA-woordvoerder (procedure)
-
-**VISUEEL**
-Drone-shot van de blokkade.
-Close-ups van borden en gezichten.
-Interview met bewoners ín de menigte.
-Tegenshot: de bus die wegrijdt.
-Slotbeeld: lege parkeerplaats bij avond.
-
-**PRODUCTIE**
-Geschatte tijd: 1 tot 2 dagen
-Viral potentie: hoog (polariserend, herkenbaar)`,
-  3: `**LOCATIE**
-Reeshofpark, Tilburg
-
-**INVALSHOEK**
-Emotie centraal. Het baasje aan het woord, foto's en filmpjes van de hond, de plek waar het gebeurde. Daarna confrontatie met de politie. Mocht het direct? Zijn er protocollen geschonden?
-
-**VRAGEN VOOR DE VERSLAGGEVER**
-1. Hoe heeft uw hond zich gisteren gedragen?
-2. Was er ruimte om hem te bedwingen zonder schot?
-3. Wat doet dit met u?
-4. Wat verwacht u nu van de politie?
-
-**SPREKERS**
-Eigenaar van de hond (centraal)
-Getuige van het incident
-Politiewoordvoerder of de betrokken agent
-Hondengedragsdeskundige (context)
-
-**VISUEEL**
-Foto's van de hond bij leven.
-De plek met bloemen en kaarsjes.
-Eigenaar met halsband in de hand.
-Politiebureau van buiten, gesloten gevel.
-Parallelmontage tussen verdriet en officieel statement.
-
-**PRODUCTIE**
-Geschatte tijd: 1 dag
-Viral potentie: hoog (emotioneel, dier en autoriteit)`,
-  4: `**LOCATIE**
-Stadhuis Den Haag, persconferentie OM
-
-**INVALSHOEK**
-Volg het geld. Reconstructie van de fraude: welke subsidies, welke begunstigden, hoe lang ging het door zonder dat iemand het zag? Confronteer collega-wethouders en de burgemeester met de vraag: hoe heeft dit kunnen gebeuren?
-
-**VRAGEN VOOR DE VERSLAGGEVER**
-1. Wanneer waren er voor het eerst signalen?
-2. Wie wist ervan en zweeg?
-3. Welke projecten zijn in totaal getroffen?
-4. Wat doet u om het terug te halen?
-
-**SPREKERS**
-Officier van Justitie
-Burgemeester
-Coalitiegenoten (collega-wethouders)
-Oppositie (in de raad)
-Klokkenluider, indien bereikbaar
-
-**VISUEEL**
-Stadhuis bij avond, lichten aan.
-Documenten over tafel, anoniem in beeld.
-Persconferentie OM, frontaal opgenomen.
-Slotshot: leeg bureau van de wethouder.
-
-**PRODUCTIE**
-Geschatte tijd: 2 tot 3 dagen
-Viral potentie: gemiddeld (politiek nieuws, minder beeldend, maar diep)`
-};
-
-const ITEM_META = {
-  1: {t:'Snackbarpersoneel slaat overvaller met frituurmand', loc:'Apeldoorn', cat:'Misdaad', score:94, sum:"Twee medewerkers van snackbar De Gildehof overmeesterden gisteravond een gewapende overvaller met een gloeiend hete frituurmand. De man van 32 zit in voorlopige hechtenis.", why:'Gewone burger versus crimineel. Typisch PowNed-underdog verhaal, visueel sterk, hoge viral potentie.'},
-  2: {t:"Buurtbewoners blokkeren asielbus: 'Wij zijn niet gehoord'", loc:'Hoogeveen', cat:'Politiek', score:89, sum:'Tientallen omwonenden voorkwamen vanmorgen de aankomst van een bus met asielzoekers bij een tijdelijke noodopvang. De gemeente zegt geen andere optie te hebben.', why:'Asiel, burgerprotest en lokaal bestuur in één verhaal.'},
-  3: {t:'Agent schiet hond neer na bijtincident, baasje woedend', loc:'Tilburg', cat:'Misdaad', score:85, sum:"Een politieagent schoot dinsdagavond een Staffordshire dood die zijn collega had aangevallen. De eigenaar spreekt van moord op zijn beste vriend en eist excuses.", why:'Emotioneel, visueel, confrontatie met autoriteit.'},
-  4: {t:'Wethouder opgepakt voor subsidie-fraude van 2,3 miljoen', loc:'Den Haag', cat:'Politiek', score:82, sum:"Wethouder M. (48, GroenLinks-PvdA) is op verdenking van langdurige fraude in voorlopige hechtenis genomen.", why:'Corruptie, politiek en belastinggeld. PowNed-kernthema.'}
-};
+/* ============================================================
+   INSTEEK PIPELINE + GENERATOR
+   ============================================================ */
+const inT = document.getElementById('inT');
+const inM = document.getElementById('inM');
+const inS = document.getElementById('inS');
+const inW = document.getElementById('inW');
+const inOut = document.getElementById('inOut');
+const inStatus = document.getElementById('inStatus');
+const pipeStatus = document.getElementById('pipeStatus');
+const pipeBar = document.getElementById('pipeBar');
+const jumperRow = document.getElementById('jumperRow');
 
 let curId = 1;
 let typeTimer = null;
+let pipeTimer = null;
+
+// Build jumper buttons
+ITEMS.forEach(it => {
+  const b = document.createElement('button');
+  b.className = 'in-jumper-btn' + (it.id === 1 ? ' active' : '');
+  b.dataset.id = it.id;
+  b.textContent = String(it.id).padStart(2, '0');
+  b.title = it.title;
+  b.addEventListener('click', () => {
+    selectInsteek(it.id);
+    setTimeout(() => startPipeline(), 200);
+  });
+  jumperRow.appendChild(b);
+});
 
 function selectInsteek(id) {
-  const m = ITEM_META[id];
-  if (m) {
-    curId = id;
-    document.getElementById('inT').textContent = m.t;
-    document.getElementById('inM').innerHTML = `<span><svg class="icon-sm" style="vertical-align:-2px"><use href="#i-pin"/></svg> ${escape(m.loc)}</span><span class="sep"></span><span>${escape(m.cat)}</span><span class="sep"></span><span>Score ${m.score}</span>`;
-    document.getElementById('inS').textContent = m.sum;
-    document.getElementById('inW').textContent = m.why;
-  } else {
-    curId = id;
-    document.getElementById('inT').textContent = 'Geen demo voor dit item';
-    document.getElementById('inS').textContent = 'Voor deze demo zijn de eerste vier items voorzien van een gegenereerde insteek. Klik op een ander item in de feed.';
-  }
+  const it = ITEMS.find(x => x.id === id);
+  if (!it) return;
+  curId = id;
+  inT.textContent = it.title;
+  inM.innerHTML = `<span><svg class="icon-sm" style="vertical-align:-2px"><use href="#i-pin"/></svg> ${escape(it.loc)}</span><span class="sep"></span><span>${escape(it.cat)}</span><span class="sep"></span><span>Score ${it.score}</span>`;
+  inS.textContent = it.sum;
+  inW.textContent = it.why;
   resetType();
+  // Update jumper active state
+  document.querySelectorAll('.in-jumper-btn').forEach(b => {
+    b.classList.toggle('active', +b.dataset.id === id);
+  });
 }
 
 function resetType() {
   if (typeTimer) clearTimeout(typeTimer);
-  document.getElementById('inOut').innerHTML = '';
-  document.getElementById('inStatus').textContent = 'Klaar';
+  if (pipeTimer) clearTimeout(pipeTimer);
+  inOut.innerHTML = '';
+  inStatus.textContent = 'Klaar';
+  pipeStatus.textContent = 'Klaar';
+  pipeBar.style.width = '0%';
+  document.querySelectorAll('.viz-04-stage').forEach(s => s.classList.remove('active'));
+}
+
+function buildInsteekText(id) {
+  const ins = INSTEKEN[id];
+  if (!ins) return null;
+  const vragen = ins.vragen.map((v, i) => `${i + 1}. ${v}`).join('\n');
+  const sprekers = ins.sprekers.map(s => `${s[0]} — ${s[1]}`).join('\n');
+  return `**LOCATIE**\n${ins.locatie}\n\n**INVALSHOEK**\n${ins.invalshoek}\n\n**VRAGEN**\n${vragen}\n\n**SPREKERS**\n${sprekers}`;
+}
+
+function formatInsteek(txt) {
+  return escape(txt).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+function runPipelineStages(callback) {
+  const stages = document.querySelectorAll('.viz-04-stage');
+  let i = 0;
+  pipeStatus.textContent = 'Verwerken...';
+  function next() {
+    if (i > 0) stages[i - 1].classList.remove('active');
+    if (i >= stages.length) {
+      pipeBar.style.width = '100%';
+      pipeStatus.textContent = 'Voltooid';
+      callback && callback();
+      return;
+    }
+    stages[i].classList.add('active');
+    pipeBar.style.width = `${((i + 1) / stages.length) * 100}%`;
+    i++;
+    pipeTimer = setTimeout(next, 600);
+  }
+  next();
+}
+
+function startPipeline() {
+  resetType();
+  runPipelineStages(() => {
+    setTimeout(() => startType(), 200);
+  });
 }
 
 function startType() {
-  const txt = INSTEEK_OUT[curId];
+  const txt = buildInsteekText(curId);
   if (!txt) {
-    document.getElementById('inOut').innerHTML = '<div style="color:rgba(255,255,255,.5);text-align:center;padding:60px 20px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Selecteer een item uit de feed</div>';
+    inOut.innerHTML = '<div style="color:rgba(255,255,255,.5);text-align:center;padding:60px 20px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Geen insteek beschikbaar</div>';
     return;
   }
-  resetType();
-  document.getElementById('inStatus').textContent = 'Genereren...';
-  const el = document.getElementById('inOut');
+  inStatus.textContent = 'Genereren...';
   let i = 0;
   function type() {
     if (i > txt.length) {
-      el.innerHTML = formatInsteek(txt) + '<span class="cursor-blink"></span>';
-      document.getElementById('inStatus').textContent = 'Voltooid';
+      inOut.innerHTML = formatInsteek(txt) + '<span class="cursor-blink"></span>';
+      inStatus.textContent = 'Voltooid';
       return;
     }
-    el.innerHTML = formatInsteek(txt.slice(0, i)) + '<span class="cursor-blink"></span>';
+    inOut.innerHTML = formatInsteek(txt.slice(0, i)) + '<span class="cursor-blink"></span>';
     i++;
-    const ch = txt[i-1];
-    let d = 12;
-    if (ch === '\n') d = 50;
-    else if ('.!?'.includes(ch)) d = 140;
-    else if (ch === ',') d = 60;
-    else if (ch === ' ') d = 8;
+    const ch = txt[i - 1];
+    let d = 8;
+    if (ch === '\n') d = 30;
+    else if ('.!?'.includes(ch)) d = 80;
+    else if (ch === ',') d = 40;
+    else if (ch === ' ') d = 5;
     else if (ch === '*') d = 0;
     typeTimer = setTimeout(type, d);
   }
   type();
 }
-function formatInsteek(txt) {
-  return txt.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-}
 
-document.getElementById('inGo').addEventListener('click', startType);
+document.getElementById('inGo').addEventListener('click', startPipeline);
 document.getElementById('inReset').addEventListener('click', resetType);
 
 let autoStarted = false;
@@ -2921,12 +3153,14 @@ ScrollTrigger.create({
   onEnter: () => {
     if (!autoStarted) {
       autoStarted = true;
-      setTimeout(startType, 400);
+      setTimeout(startPipeline, 400);
     }
   }
 });
 
-/* ============= INIT ============= */
+/* ============================================================
+   INIT
+   ============================================================ */
 window.addEventListener('load', () => {
   ScrollTrigger.refresh();
 });
