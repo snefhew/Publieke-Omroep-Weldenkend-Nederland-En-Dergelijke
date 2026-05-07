@@ -65,15 +65,16 @@ nav.topnav {
   border-bottom: 1px solid var(--driftwood);
 }
 .nav-side {
-  position: absolute;
-  left: 32px; top: 50%; transform: translateY(-50%);
   display: flex; align-items: center; gap: 4px;
 }
 .nav-inner {
   max-width: var(--max); margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
 }
-.nav-right { display: flex; align-items: center; gap: 4px; }
+.nav-right { display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
 .nav-brand {
   font-family: var(--ff); font-weight: 700; font-size: 18px;
   letter-spacing: -0.02em; color: var(--ink);
@@ -93,7 +94,7 @@ nav.topnav {
 }
 .nav-link:hover { color: var(--ink); background: rgba(0,0,0,.05); }
 .nav-link.active { background: var(--ink); color: #fff; }
-@media (max-width: 1280px) { .nav-side { display: none; } }
+@media (min-width: 769px) { .nav-burger { display: none !important; } }
 
 /* Mobile hamburger + drawer */
 .nav-burger {
@@ -581,10 +582,10 @@ nav.topnav {
 }
 @media (max-width: 768px) {
   nav.topnav { padding: 10px 16px; }
+  .nav-inner { display: flex; justify-content: space-between; align-items: center; }
   .nav-side { display: none; }
-  .nav-right { display: none; }
-  .nav-inner { gap: 8px; }
-  .nav-burger { display: inline-flex; }
+  .nav-right > :not(.nav-burger) { display: none; }
+  .nav-burger { display: inline-flex !important; }
   .hero { padding: 90px 20px 60px; }
   .hero p.lede { font-size: 16px; }
   .section { padding: 56px 20px; }
@@ -660,20 +661,20 @@ nav.topnav {
 <div id="progress"></div>
 
 <nav class="topnav">
-  <div class="nav-side">
-    <a class="nav-link" href="index.html">Redactie Agent</a>
-    <a class="nav-link" href="brand-guide.html">Brand Guide</a>
-  </div>
   <div class="nav-inner">
+    <div class="nav-side">
+      <a class="nav-link" href="index.html">Redactie Agent</a>
+      <a class="nav-link" href="brand-guide.html">Brand Guide</a>
+    </div>
     <a href="#top" class="nav-brand">Deliverables</a>
     <div class="nav-right">
       <a class="nav-link" href="#doelgroep">Doelgroep</a>
       <a class="nav-link" href="#tools">Tools</a>
       <a class="nav-link" href="#workflow">Workflow</a>
+      <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navDrawer">
+        <span class="bar"></span>
+      </button>
     </div>
-    <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navDrawer">
-      <span class="bar"></span>
-    </button>
   </div>
   <div class="nav-drawer" id="navDrawer" role="menu">
     <a class="nav-link" href="index.html" role="menuitem">Redactie Agent</a>
