@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Deliverables van de PowNed Redactie Agent: doelgroepanalyse, best practice tools en workflow-mapping.">
-<title>Deliverables</title>
+<title>Deliverables — PowNed Redactie Agent</title>
+<link rel="canonical" href="https://snefhew.github.io/Publieke-Omroep-Weldenkend-Nederland-En-Dergelijke/deliverables.html">
+<meta property="og:title" content="Deliverables — PowNed Redactie Agent">
+<meta property="og:description" content="Doelgroepanalyse, best practice toolkeuze en workflow-mapping voor de PowNed Redactie Agent.">
+<meta property="og:url" content="https://snefhew.github.io/Publieke-Omroep-Weldenkend-Nederland-En-Dergelijke/deliverables.html">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -104,7 +109,6 @@ nav.topnav {
   width: 44px; height: 44px;
   align-items: center; justify-content: center;
   cursor: pointer; color: var(--ink);
-  font-size: 22px; line-height: 1;
   padding: 0;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -671,17 +675,17 @@ nav.topnav {
       <a class="nav-link" href="#doelgroep">Doelgroep</a>
       <a class="nav-link" href="#tools">Tools</a>
       <a class="nav-link" href="#workflow">Workflow</a>
-      <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navDrawer">
+      <button class="nav-burger" id="navBurger" aria-label="Menu openen of sluiten" aria-expanded="false" aria-controls="navDrawer">
         <span class="bar"></span>
       </button>
     </div>
   </div>
-  <div class="nav-drawer" id="navDrawer" role="menu">
-    <a class="nav-link" href="index.html" role="menuitem">Redactie Agent</a>
-    <a class="nav-link" href="brand-guide.html" role="menuitem">Brand Guide</a>
-    <a class="nav-link" href="#doelgroep" role="menuitem">Doelgroep</a>
-    <a class="nav-link" href="#tools" role="menuitem">Tools</a>
-    <a class="nav-link" href="#workflow" role="menuitem">Workflow</a>
+  <div class="nav-drawer" id="navDrawer" aria-hidden="true">
+    <a class="nav-link" href="index.html">Redactie Agent</a>
+    <a class="nav-link" href="brand-guide.html">Brand Guide</a>
+    <a class="nav-link" href="#doelgroep">Doelgroep</a>
+    <a class="nav-link" href="#tools">Tools</a>
+    <a class="nav-link" href="#workflow">Workflow</a>
   </div>
 </nav>
 
@@ -1012,10 +1016,12 @@ const navDrawer = document.getElementById('navDrawer');
 function closeDrawer() {
   navDrawer.classList.remove('open');
   navBurger.setAttribute('aria-expanded', 'false');
+  navDrawer.setAttribute('aria-hidden', 'true');
 }
 function openDrawer() {
   navDrawer.classList.add('open');
   navBurger.setAttribute('aria-expanded', 'true');
+  navDrawer.removeAttribute('aria-hidden');
 }
 navBurger.addEventListener('click', () => {
   if (navDrawer.classList.contains('open')) closeDrawer();

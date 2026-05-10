@@ -3,8 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lede. · Brand Guide</title>
+<title>Lede. · Brand Guide — PowNed Redactie Agent</title>
 <meta name="description" content="De huisstijl van Lede., een growth hacking agency die AI-systemen bouwt voor mediaorganisaties." />
+<link rel="canonical" href="https://snefhew.github.io/Publieke-Omroep-Weldenkend-Nederland-En-Dergelijke/brand-guide.html">
+<meta property="og:title" content="Lede. · Brand Guide">
+<meta property="og:description" content="De huisstijl van Lede., een growth hacking agency die AI-systemen bouwt voor mediaorganisaties.">
+<meta property="og:url" content="https://snefhew.github.io/Publieke-Omroep-Weldenkend-Nederland-En-Dergelijke/brand-guide.html">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
@@ -1210,7 +1215,7 @@ body {
   .color-bar { height: auto; flex-direction: column; }
   .color-bar-segment { padding: 14px 12px; min-height: 44px; font-size: 11px; }
   .footer-cta { font-size: 14px; padding: 14px 20px; min-height: 44px; }
-  .gha-block, .footer-meta { gap: 16px; }
+  .footer-meta { gap: 16px; }
   .type-scale-row { flex-wrap: wrap; gap: 12px; padding: 14px 0; }
   .type-scale-text { width: 100%; flex-basis: 100%; word-break: break-word; }
   .type-scale-text[style*="font-size: 56px"] { font-size: 36px !important; }
@@ -1274,18 +1279,18 @@ body {
       <a href="#logo" class="nav-link">Logo</a>
       <a href="#kleurpalet" class="nav-link">Kleuren</a>
       <a href="#typografie" class="nav-link">Typografie</a>
-      <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navDrawer">
+      <button class="nav-burger" id="navBurger" aria-label="Menu openen of sluiten" aria-expanded="false" aria-controls="navDrawer">
         <span class="bar"></span>
       </button>
     </div>
   </div>
-  <div class="nav-drawer" id="navDrawer" role="menu">
-    <a class="nav-link" href="index.html" role="menuitem">Redactie Agent</a>
-    <a class="nav-link" href="deliverables.html" role="menuitem">Deliverables</a>
-    <a class="nav-link" href="#manifesto" role="menuitem">Manifesto</a>
-    <a class="nav-link" href="#logo" role="menuitem">Logo</a>
-    <a class="nav-link" href="#kleurpalet" role="menuitem">Kleuren</a>
-    <a class="nav-link" href="#typografie" role="menuitem">Typografie</a>
+  <div class="nav-drawer" id="navDrawer" aria-hidden="true">
+    <a class="nav-link" href="index.html">Redactie Agent</a>
+    <a class="nav-link" href="deliverables.html">Deliverables</a>
+    <a class="nav-link" href="#manifesto">Manifesto</a>
+    <a class="nav-link" href="#logo">Logo</a>
+    <a class="nav-link" href="#kleurpalet">Kleuren</a>
+    <a class="nav-link" href="#typografie">Typografie</a>
   </div>
 </nav>
 
@@ -1803,10 +1808,12 @@ const navDrawer = document.getElementById('navDrawer');
 function closeDrawer() {
   navDrawer.classList.remove('open');
   navBurger.setAttribute('aria-expanded', 'false');
+  navDrawer.setAttribute('aria-hidden', 'true');
 }
 function openDrawer() {
   navDrawer.classList.add('open');
   navBurger.setAttribute('aria-expanded', 'true');
+  navDrawer.removeAttribute('aria-hidden');
 }
 if (navBurger && navDrawer) {
   navBurger.addEventListener('click', () => {

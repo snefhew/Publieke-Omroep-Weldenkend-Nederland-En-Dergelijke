@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="PowNed Redactie Agent. Een AI-agent die elke ochtend lokaal nieuws met landelijke potentie naar de redactie brengt.">
 <title>PowNed Redactie Agent</title>
+<link rel="canonical" href="https://snefhew.github.io/Publieke-Omroep-Weldenkend-Nederland-En-Dergelijke/">
+<meta property="og:title" content="PowNed Redactie Agent">
+<meta property="og:description" content="Een AI-agent die elke ochtend lokaal nieuws met landelijke potentie naar de redactie brengt.">
+<meta property="og:url" content="https://snefhew.github.io/Publieke-Omroep-Weldenkend-Nederland-En-Dergelijke/">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -176,6 +181,7 @@ nav {
 }
 nav.nav-hidden { transform: translateY(-100%); }
 nav { transition: transform .3s ease; }
+nav.scrolled { border-bottom-color: var(--driftwood); box-shadow: 0 1px 8px rgba(0,0,0,.06); }
 
 @media (min-width: 769px) { .nav-burger { display: none !important; } }
 
@@ -2297,7 +2303,6 @@ nav { transition: transform .3s ease; }
   .dna-bar { width: 100%; flex: 0 0 100%; }
   .cosine-demo { padding: 16px; }
   .cosine-demo-body { gap: 14px; }
-  .cosine-vec svg { height: 180px; }
   .cosine-score-val, .cosine-angle-val { font-size: 20px; }
   .cosine-vec svg { height: 200px; }
   .cosine-opt { padding: 12px 14px; min-height: 44px; touch-action: manipulation; font-size: 13px; }
@@ -2429,7 +2434,7 @@ nav { transition: transform .3s ease; }
       <a class="nav-link" href="deliverables.html">Deliverables</a>
       <a class="nav-link" href="brand-guide.html">Brand Guide</a>
     </div>
-    <div class="nav-brand" data-to="hero">Redactie Agent</div>
+    <button class="nav-brand" data-to="hero" aria-label="Ga naar begin van de pagina">Redactie Agent</button>
     <div class="nav-right">
       <button class="nav-link active" data-to="brief">Brief</button>
       <button class="nav-link" data-to="canvas">Canvas</button>
@@ -3009,7 +3014,7 @@ nav { transition: transform .3s ease; }
         </aside>
         <main class="feed-main">
           <div class="feed-bar">
-            <h3 id="feedTitle">Vandaag, 03 mei 2026</h3>
+            <h3 id="feedTitle">Vandaag</h3>
             <div class="cnt" id="fCnt">10 items</div>
           </div>
           <div class="feed-list" id="fList"></div>
@@ -3547,7 +3552,7 @@ function openDrawer() {
   navEl.classList.add('drawer-open');
   navEl.classList.remove('nav-hidden');
   navBurger.setAttribute('aria-expanded', 'true');
-  navDrawer.setAttribute('aria-hidden', 'false');
+  navDrawer.removeAttribute('aria-hidden');
 }
 if (navBurger) {
   navBurger.addEventListener('click', () => {
@@ -3890,6 +3895,15 @@ document.querySelectorAll('.feed-side-item').forEach(item => {
     renderFeed();
   });
 });
+
+// Set dynamic date in feed header
+(function() {
+  const el = document.getElementById('feedTitle');
+  if (!el) return;
+  const now = new Date();
+  const opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  el.textContent = 'Vandaag, ' + now.toLocaleDateString('nl-NL', opts);
+})();
 
 renderFeed();
 
