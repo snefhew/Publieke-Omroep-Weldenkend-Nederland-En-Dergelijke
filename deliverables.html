@@ -1177,5 +1177,14 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 </script>
+
+<footer style="background:#0a0a0a;color:rgba(255,255,255,0.4);padding:40px 32px;text-align:center;border-top:1px solid rgba(255,255,255,.08);font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:24px;flex-wrap:wrap;justify-content:center;">
+    <span>© <span class="footer-year"></span> PowNed Redactie Agent</span>
+    <span style="opacity:0.3">·</span>
+    <span>Publieke Omroep Weldenkend Nederland En Dergelijke</span>
+  </div>
+</footer>
+<script>document.querySelectorAll('.footer-year').forEach(el=>el.textContent=new Date().getFullYear());</script>
 </body>
 </html>

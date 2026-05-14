@@ -103,7 +103,9 @@ nav {
   letter-spacing: -0.02em; color: var(--ink);
   cursor: pointer; text-decoration: none;
   display: inline-flex; align-items: center;
+  border: none; outline: none; padding: 0; background: none;
 }
+.nav-brand:focus-visible { outline: 2px solid var(--magenta); outline-offset: 3px; }
 .nav-link {
   background: none; border: none; cursor: pointer;
   font-family: var(--ff); font-size: 13px; font-weight: 500;
@@ -208,8 +210,8 @@ nav.scrolled { border-bottom-color: var(--driftwood); box-shadow: 0 1px 8px rgba
 .btn-dark { background: var(--ink); color: #fff; }
 .btn-dark:hover { background: var(--magenta); }
 
-.hero-visual { position: relative; height: 520px; }
-.hero-panel { position: absolute; background: rgba(255,255,255,.04); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); border: 1px solid rgba(255,255,255,.12); border-radius: var(--r-card-lg); padding: 20px; color: #fff; max-width: 100%; }
+.hero-visual { position: relative; height: 520px; opacity: 1; min-height: 520px; }
+.hero-panel { position: absolute; background: rgba(255,255,255,.04); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); border: 1px solid rgba(255,255,255,.12); border-radius: var(--r-card-lg); padding: 20px; color: #fff; max-width: 100%; opacity: 1; transform: none; }
 .hero-panel-1 { top: 10%; left: 0; width: 320px; }
 .hero-panel-2 { top: 38%; right: 0; width: 280px; }
 .hero-panel-3 { bottom: 5%; left: 18%; width: 300px; }
@@ -1029,9 +1031,9 @@ nav.scrolled { border-bottom-color: var(--driftwood); box-shadow: 0 1px 8px rgba
   font-feature-settings: "tnum";
   letter-spacing: 0.02em;
 }
-.fc-score.hi { background: #1f5132; color: #b8eecb; }
-.fc-score.mid { background: #5c4513; color: #f0d693; }
-.fc-score.lo { background: #2a2a2a; color: #c0c0c0; }
+.fc-score.hi { background: #0d3320; color: #4ade80; font-weight: 600; }
+.fc-score.mid { background: #422d08; color: #fbbf24; font-weight: 600; }
+.fc-score.lo { background: #1e1e1e; color: #a0a0a0; font-weight: 600; }
 .fc-title {
   flex: 1;
   font-size: 14.5px;
@@ -2362,6 +2364,20 @@ nav.scrolled { border-bottom-color: var(--driftwood); box-shadow: 0 1px 8px rgba
   .feed-seg-btn { padding: 7px 12px; min-height: 32px; touch-action: manipulation; }
   body { font-size: 15px; }
 }
+/* === PIN-SPACER MOBILE FIX === */
+@media (max-width: 768px) {
+  .pin-spacer {
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+    position: static !important;
+  }
+  .pin-spacer > * {
+    position: static !important;
+    width: 100% !important;
+  }
+}
+
 @media (max-width: 480px) {
   nav { padding: 8px 10px; }
   .nav-brand { font-size: 15px; }
@@ -3136,6 +3152,15 @@ nav.scrolled { border-bottom-color: var(--driftwood); box-shadow: 0 1px 8px rgba
   </div>
 </section>
 
+<footer style="background:var(--frame);color:rgba(255,255,255,0.4);padding:40px 32px;text-align:center;border-top:1px solid var(--frame-line);font-family:var(--ff-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:24px;flex-wrap:wrap;justify-content:center;">
+    <span>© <span class="footer-year"></span> PowNed Redactie Agent</span>
+    <span style="opacity:0.3">·</span>
+    <span>Publieke Omroep Weldenkend Nederland En Dergelijke</span>
+  </div>
+</footer>
+<script>document.querySelectorAll('.footer-year').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
 <script>
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, MotionPathPlugin);
 
@@ -3487,13 +3512,13 @@ function badgeClass(s){ return s >= 80 ? 'hi' : s >= 60 ? 'mid' : 'lo'; }
    NAV + SCROLL
    ============================================================ */
 const navEl = document.getElementById('nav');
-function scrollTo(id){
+function scrollToSection(id){
   const t = document.getElementById(id);
   if (t) gsap.to(window, { duration: 0.9, scrollTo: { y: t, offsetY: 48 }, ease: 'power3.inOut' });
 }
 document.querySelectorAll('[data-to]').forEach(l => l.addEventListener('click', e => {
   e.preventDefault();
-  scrollTo(l.dataset.to);
+  scrollToSection(l.dataset.to);
 }));
 
 const sections = ['hero','brief','canvas','auto-intro','auto-1','auto-2','auto-3','auto-4'];
@@ -3799,6 +3824,9 @@ function renderFeed() {
   else list.sort((a, b) => b.score - a.score);
 
   fCnt.textContent = list.length + ' items';
+  if (sideStatNum) sideStatNum.textContent = list.length;
+  const cntAll = document.getElementById('cntAll');
+  if (cntAll && activeSide === 'all') cntAll.textContent = list.length;
 
   if (!list.length) {
     fList.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--graphite);font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase">Geen items voor deze filters</div>';
@@ -3866,7 +3894,7 @@ function renderFeed() {
       e.stopPropagation();
       const id = +b.dataset.go;
       selectInsteek(id);
-      scrollTo('auto-4');
+      scrollToSection('auto-4');
       setTimeout(() => startPipeline(), 800);
     });
   });
@@ -3884,6 +3912,7 @@ catSeg.querySelectorAll('.feed-seg-btn').forEach(btn => {
 regSel.addEventListener('change', renderFeed);
 sortSel.addEventListener('change', renderFeed);
 searchInput.addEventListener('input', renderFeed);
+searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') renderFeed(); });
 
 // Sidebar handlers
 document.querySelectorAll('.feed-side-item').forEach(item => {
@@ -3959,7 +3988,7 @@ function openSheet(id) {
     const id = +e.currentTarget.dataset.sheetGo;
     closeSheet();
     selectInsteek(id);
-    scrollTo('auto-4');
+    scrollToSection('auto-4');
     setTimeout(() => startPipeline(), 800);
   });
   const bottomClose = document.getElementById('sheetCloseBottom');
@@ -3967,6 +3996,8 @@ function openSheet(id) {
 }
 
 function closeSheet() {
+  gsap.killTweensOf(sheetEl);
+  gsap.killTweensOf(sheetBg);
   gsap.to(sheetEl, { y: '100%', duration: 0.4, ease: 'power3.in', onComplete: () => sheetEl.classList.remove('open') });
   gsap.to(sheetBg, { opacity: 0, duration: 0.3, onComplete: () => sheetBg.classList.remove('open') });
 }
@@ -4082,6 +4113,7 @@ function startType() {
       inStatus.textContent = 'Voltooid';
       return;
     }
+    if (i === 1) inStatus.textContent = '';
     inOut.innerHTML = formatInsteek(txt.slice(0, i)) + '<span class="cursor-blink"></span>';
     i++;
     const ch = txt[i - 1];
@@ -4099,16 +4131,7 @@ function startType() {
 document.getElementById('inGo').addEventListener('click', startPipeline);
 document.getElementById('inReset').addEventListener('click', resetType);
 
-let autoStarted = false;
-ScrollTrigger.create({
-  trigger: '#auto-4', start: 'top 50%',
-  onEnter: () => {
-    if (!autoStarted) {
-      autoStarted = true;
-      setTimeout(startPipeline, 400);
-    }
-  }
-});
+// Auto-run on scroll removed — generator only runs on button click (#inGo)
 
 /* ============================================================
    HC AI CANVAS — orbital constellation
